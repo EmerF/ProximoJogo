@@ -8,6 +8,20 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Agenda Fragment -->
+    <string name="local">Local</string>
+    <string name="evento">Evento</string>
+    <string name="inicio">Inicio</string>
+    <string name="fim">Fim</string>
+    <string name="valor">Valor</string>
+    <string name="equipe">Equipe</string>
+    <string name="versus">X</string>
+    <string name="adversario">Adversário</string>
+    <string name="observacao">Observação</string>
+    <string name="salvar">Salvar</string>
+    <string name="listar">Listar</string>
+    <string name="excluir">Excluir</string>
+    <string name="dia_semana">Dia Semana</string>
+    <string name="criar_evento">Criar Evento</string>
+
 </resources>
