@@ -13,11 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.lang.ref.WeakReference;
 
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.helper.FormularioHelper;
 
-public class AgendaFragment extends Fragment implements View.OnClickListener{
+public class AgendaFragment extends Fragment implements View.OnClickListener {
+
+    private DatabaseReference mDatabase;
+    private FormularioHelper helper;
 
     private Button btSalvar;
     private Button btExcluir;
@@ -29,7 +35,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        
+
     }
 
     static class AgendaHandler extends Handler {
@@ -62,11 +68,13 @@ public class AgendaFragment extends Fragment implements View.OnClickListener{
             }
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         handler = new AgendaHandler(this);
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
+        helper = new FormularioHelper(agendaView, handler);
 
 
         btSalvar = (Button) agendaView.findViewById(R.id.bt_salvar_agenda);
