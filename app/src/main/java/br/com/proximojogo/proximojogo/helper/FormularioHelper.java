@@ -11,6 +11,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -29,6 +38,8 @@ import br.com.proximojogo.proximojogo.utils.FormatarData;
  */
 
 public class FormularioHelper {
+
+    private static final String TAG = "ASYNC_DAO_AGENDA";
     //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
     //private final EditText campoEvento;
@@ -54,6 +65,8 @@ public class FormularioHelper {
     //private final ImageView campoFoto;
     private AgendaDO agenda;
     private Handler handler = null;
+
+    private DatabaseReference mDatabase;
 
     /*
     * Captura valores inseridos no formulário...
@@ -103,23 +116,30 @@ public class FormularioHelper {
         campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
         campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
         campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
-//        agenda = new AgendaDO();
+        agenda = new AgendaDO();
 
 
     }
 
-    public void salvar(Activity activity) {
+    public void salvar(AgendaDO agenda) {
         try {
-//            AgendaDO agenda = pegaAgenda();
-//            boolean salvou = new UsuarioDynamoDBDAO(activity, handler).salvar(agenda);
-
-//            if (salvou) {
-//                Toast.makeText(activity, "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(activity, "Erro ao cadastrar!", Toast.LENGTH_SHORT).show();
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            final String userId = agenda.getIdAgenda();
+            final AgendaDO agendaDO = agenda;
+            mDatabase.child("agendas").child(userId).addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            AgendaDO noBanco = dataSnapshot.getValue(AgendaDO.class);
+                            if (noBanco == null) {
+                                mDatabase.child("agendas").child(userId).setValue(agendaDO);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        }
+                    });
         } catch (Exception e) {
             e.printStackTrace();
         }

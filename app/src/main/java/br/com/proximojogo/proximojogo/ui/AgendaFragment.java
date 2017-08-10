@@ -14,10 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.helper.FormularioHelper;
 
 public class AgendaFragment extends Fragment implements View.OnClickListener {
@@ -35,7 +38,19 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
+        int i = v.getId();
+        if (i == R.id.bt_salvar_agenda) {
+            try {
+                AgendaDO agendaDO = helper.pegaAgenda();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                String key = mDatabase.child("agendas").push().getKey();
+                agendaDO.setIdAgenda(key);
+                agendaDO.setIdUser(key);
+                helper.salvar(agendaDO);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     static class AgendaHandler extends Handler {
