@@ -120,12 +120,21 @@ public class FormularioHelper {
 
 
     }
-
-    public void salvar(AgendaDO agenda) {
+    //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
+    public void salvar(Activity activity) {
         try {
             mDatabase = FirebaseDatabase.getInstance().getReference();
+            AgendaDO agenda = pegaAgenda();
+            if (agenda.getIdAgenda() == null) {
+                String key = mDatabase.child("agendas").push().getKey();
+                agenda.setIdAgenda(key);
+                agenda.setIdUser(key);
+            }
+
+
             final String userId = agenda.getIdAgenda();
             final AgendaDO agendaDO = agenda;
+            final boolean[] salvou = {false};
             mDatabase.child("agendas").child(userId).addListenerForSingleValueEvent(
                     new ValueEventListener() {
                         @Override
@@ -133,13 +142,22 @@ public class FormularioHelper {
                             AgendaDO noBanco = dataSnapshot.getValue(AgendaDO.class);
                             if (noBanco == null) {
                                 mDatabase.child("agendas").child(userId).setValue(agendaDO);
+                                salvou[0] = true;
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                            salvou[0] = false;
                         }
+
                     });
+            if (salvou[0]) {
+                Toast.makeText(activity, "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(activity, "Erro ao Cadastradar Agenda!", Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

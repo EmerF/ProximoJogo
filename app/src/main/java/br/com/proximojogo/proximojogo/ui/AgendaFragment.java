@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
+import java.util.Collections;
 
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
@@ -35,23 +36,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     //estava usando só no Dynamo
     private Handler handler;
     private Activity activity;
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.bt_salvar_agenda) {
-            try {
-                AgendaDO agendaDO = helper.pegaAgenda();
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-                String key = mDatabase.child("agendas").push().getKey();
-                agendaDO.setIdAgenda(key);
-                agendaDO.setIdUser(key);
-                helper.salvar(agendaDO);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -113,5 +97,21 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             activity = (Activity) context;
         }
 
+    }
+
+    public void salvarAgenda() {
+        try {
+            helper.salvar(activity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.bt_salvar_agenda) {
+            salvarAgenda();
+        }
     }
 }
