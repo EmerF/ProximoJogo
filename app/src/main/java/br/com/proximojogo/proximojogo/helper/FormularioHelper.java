@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.joda.time.LocalDate;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,53 +75,8 @@ public class FormularioHelper {
     * Captura valores inseridos no formulário...
     * */
     public FormularioHelper(View activity, Handler handler) {
-
         this.handler = handler;
-
-        //spinner Arenas
-        ArrayAdapter<NomeArena> adapter = new ArrayAdapter<NomeArena>(activity.getContext(), R.layout.support_simple_spinner_dropdown_item,
-                NomeArena.values());
-        adapter.setDropDownViewResource(android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        sp = (Spinner) activity.findViewById(R.id.formulario_local);
-        sp.setAdapter(adapter);
-
-        //Times/Times
-        ArrayAdapter<Times> adapterTimes = new ArrayAdapter<Times>
-                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Times.values());
-        adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spTimes = (Spinner) activity.findViewById(R.id.formulario_time);
-        spTimes.setAdapter(adapterTimes);
-
-        //Tipo do evento
-
-        ArrayAdapter<Eventos> adapterEvento = new ArrayAdapter<Eventos>
-                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Eventos.values());
-        adapterEvento.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
-        spEvento.setAdapter(adapterEvento);
-
-        data = (EditText) activity.findViewById(R.id.formulario_Data);
-        data.setText("01/08/2017");
-        hora = (EditText) activity.findViewById(R.id.formulario_hora);
-        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
-        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
-
-
-        campoEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
-        //campoStatus = (EditText)activity.findViewById(R.id.formulario_status);
-        campoDat = (EditText) activity.findViewById(R.id.formulario_Data);
-        campoHora = (EditText) activity.findViewById(R.id.formulario_hora);
-        campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
-        campoAdversario = (EditText) activity.findViewById(R.id.formulario_adversario);
-        //campoFoto = (ImageView)activity.findViewById(R.id.formulario_foto);
-
-        campoValor = (EditText) activity.findViewById(R.id.formulario_valor);
-        campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
-        campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
-        campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
-        agenda = new AgendaDO();
-
-
+        inicializaCamposTela(activity);
     }
 
     //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
@@ -138,6 +94,7 @@ public class FormularioHelper {
                 mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
+            limparCamposTela();
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("ERRO_SALVAR_AGENDA", "Erro ao salvar Agenda." + e.getStackTrace());
@@ -216,30 +173,6 @@ public class FormularioHelper {
 
     }
 
-    public void limpaFormularioAgenda(View activity) throws ParseException {
-//        agenda.setIdAgenda(null);
-//        Date inicio = new Date();
-//        agenda.setEvento(Eventos.JOGO.name());
-//        agenda.setData(inicio.getTime());
-//
-//        //String fim = (campoHora.getText().toString());
-//        Date hora = new Date();
-//        agenda.setHora(hora.getTime());
-//        agenda.setDiaSemana(diaDaSemana(inicio));
-//        agenda.setAdversario("");
-//        agenda.setValor(0.0);
-//        agenda.setArena(NomeArena.CEREJEIRA.name());
-//        agenda.setTimes(Times.AUDAX.name());
-//        agenda.setObservacao(campoObservacao.getText().toString());
-//        agenda.setStatus("Status");
-        Message message = new Message();
-        message.obj = agenda;
-        handler.sendMessage(message);
-        new FormularioHelper(activity, handler);
-
-    }
-
-
     public void preencheFormulario(AgendaDO agenda) throws ParseException {
         int item;
         //Eventos.values();
@@ -299,5 +232,58 @@ public class FormularioHelper {
             dia = dia + (diaAtual - dia);
         }
         return dia;
+    }
+
+    public void limparCamposTela() throws ParseException {
+        data.setText(new LocalDate().toString("dd/MM/yyyy"));
+        campoValor.setText("");
+        campoAdversario.setText("");
+        campoObservacao.setText("");
+    }
+
+    public void inicializaCamposTela(View activity) {
+        //spinner Arenas
+        ArrayAdapter<NomeArena> adapter = new ArrayAdapter<NomeArena>(activity.getContext(), R.layout.support_simple_spinner_dropdown_item,
+                NomeArena.values());
+        adapter.setDropDownViewResource(android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        sp = (Spinner) activity.findViewById(R.id.formulario_local);
+        sp.setAdapter(adapter);
+
+        //Times/Times
+        ArrayAdapter<Times> adapterTimes = new ArrayAdapter<Times>
+                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Times.values());
+        adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spTimes = (Spinner) activity.findViewById(R.id.formulario_time);
+        spTimes.setAdapter(adapterTimes);
+
+        //Tipo do evento
+
+        ArrayAdapter<Eventos> adapterEvento = new ArrayAdapter<Eventos>
+                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Eventos.values());
+        adapterEvento.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
+        spEvento.setAdapter(adapterEvento);
+
+        data = (EditText) activity.findViewById(R.id.formulario_Data);
+        //sempre pego o dia atual
+        data.setText(new LocalDate().toString("dd/MM/yyyy"));
+        hora = (EditText) activity.findViewById(R.id.formulario_hora);
+        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
+        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
+
+
+        campoEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
+        //campoStatus = (EditText)activity.findViewById(R.id.formulario_status);
+        campoDat = (EditText) activity.findViewById(R.id.formulario_Data);
+        campoHora = (EditText) activity.findViewById(R.id.formulario_hora);
+        campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
+        campoAdversario = (EditText) activity.findViewById(R.id.formulario_adversario);
+        //campoFoto = (ImageView)activity.findViewById(R.id.formulario_foto);
+
+        campoValor = (EditText) activity.findViewById(R.id.formulario_valor);
+        campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
+        campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
+        campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
+        agenda = new AgendaDO();
     }
 }
