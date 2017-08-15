@@ -46,22 +46,23 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
         @SuppressWarnings("unchecked")
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(final Message msg) {
             super.handleMessage(msg);
             if (weakAgendaFragment != null) {
                 new AlertDialog.Builder(weakAgendaFragment.get().activity)
                         .setTitle("Aviso")
-                        .setMessage("Registro Salvo com Sucesso!!!")
+                        .setMessage("Agenda Salva com Sucesso!!!")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // continue with delete
                             }
                         })
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })
+//                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // do nothing
+//
+//                            }
+//                        })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
@@ -99,9 +100,9 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void salvarAgenda() {
+    public void salvarAgenda(View v) {
         try {
-            helper.salvar(activity);
+            helper.salvar(v);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,7 +112,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.bt_salvar_agenda) {
-            salvarAgenda();
+            salvarAgenda(v);
         }
     }
 }

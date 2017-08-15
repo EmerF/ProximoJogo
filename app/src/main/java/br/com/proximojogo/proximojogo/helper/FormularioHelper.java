@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +68,7 @@ public class FormularioHelper {
     private AgendaDO agenda;
     private Handler handler = null;
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseAgenda;
 
     /*
     * Captura valores inseridos no formulário...
@@ -120,46 +122,27 @@ public class FormularioHelper {
 
 
     }
+
     //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
-    public void salvar(Activity activity) {
+    public void salvar(View activity) {
         try {
-            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             AgendaDO agenda = pegaAgenda();
             if (agenda.getIdAgenda() == null) {
-                String key = mDatabase.child("agendas").push().getKey();
+                String key = mDatabaseAgenda.push().getKey();
                 agenda.setIdAgenda(key);
                 agenda.setIdUser(key);
-            }
-
-
-            final String userId = agenda.getIdAgenda();
-            final AgendaDO agendaDO = agenda;
-            final boolean[] salvou = {false};
-            mDatabase.child("agendas").child(userId).addListenerForSingleValueEvent(
-                    new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            AgendaDO noBanco = dataSnapshot.getValue(AgendaDO.class);
-                            if (noBanco == null) {
-                                mDatabase.child("agendas").child(userId).setValue(agendaDO);
-                                salvou[0] = true;
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-                            salvou[0] = false;
-                        }
-
-                    });
-            if (salvou[0]) {
-                Toast.makeText(activity, "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
+                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(activity, "Erro ao Cadastradar Agenda!", Toast.LENGTH_SHORT).show();
+                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
+            Log.e("ERRO_SALVAR_AGENDA", "Erro ao salvar Agenda." + e.getStackTrace());
+            Toast.makeText(activity.getContext(), "Erro ao Salvar Agenda." + e.getStackTrace(), Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -206,7 +189,7 @@ public class FormularioHelper {
     }
 
     public AgendaDO pegaAgenda() throws ParseException {
-
+//        agenda.setIdAgenda("-KrYLr6m0kc9TH_TJhaZ");
         if (campoDat.getText().toString().equals("")) {
             campoDat.setError("Informe a data!!");
         }
@@ -233,6 +216,30 @@ public class FormularioHelper {
 
     }
 
+    public void limpaFormularioAgenda(View activity) throws ParseException {
+//        agenda.setIdAgenda(null);
+//        Date inicio = new Date();
+//        agenda.setEvento(Eventos.JOGO.name());
+//        agenda.setData(inicio.getTime());
+//
+//        //String fim = (campoHora.getText().toString());
+//        Date hora = new Date();
+//        agenda.setHora(hora.getTime());
+//        agenda.setDiaSemana(diaDaSemana(inicio));
+//        agenda.setAdversario("");
+//        agenda.setValor(0.0);
+//        agenda.setArena(NomeArena.CEREJEIRA.name());
+//        agenda.setTimes(Times.AUDAX.name());
+//        agenda.setObservacao(campoObservacao.getText().toString());
+//        agenda.setStatus("Status");
+        Message message = new Message();
+        message.obj = agenda;
+        handler.sendMessage(message);
+        new FormularioHelper(activity, handler);
+
+    }
+
+
     public void preencheFormulario(AgendaDO agenda) throws ParseException {
         int item;
         //Eventos.values();
@@ -248,6 +255,7 @@ public class FormularioHelper {
         campoObservacao.setText(agenda.getObservacao());
         this.agenda = agenda;
     }
+
 
     public void imprimeValores(AgendaDO agenda) {
        /* Log.d("Evento", agenda.getEvento().name());
