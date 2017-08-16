@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ui.ClickRecyclerViewInterface;
 
@@ -30,17 +31,19 @@ public class RecyclerAdapterEventosDaAgenda extends RecyclerView.Adapter<Recycle
 
     @Override
     public RecyclerTesteViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_tabela_abastecimentos, viewGroup, false);
+        View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_tabela_eventos_agenda, viewGroup, false);
         return new RecyclerTesteViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(RecyclerTesteViewHolder viewHolder, int i) {
-        Abastecimento tabelaModelo = mList.get(i);
+        AgendaDO tabelaModelo = mList.get(i);
 
-        viewHolder.preco.setText(tabelaModelo.getPrecoCombustivel().toString());
-        viewHolder.valor.setText(tabelaModelo.getValorPago().toString());
-        viewHolder.litros.setText(tabelaModelo.getQuantidadeLitros().toString());
+        viewHolder.time.setText(tabelaModelo.getTimes().toString());
+        viewHolder.adversario.setText(tabelaModelo.getAdversario().toString());
+        viewHolder.dataEvento.setText(tabelaModelo.getData().toString());
+        viewHolder.horaEvento.setText(tabelaModelo.getHora().toString());
+        viewHolder.localEvento.setText(tabelaModelo.getArena().toString());
 
     }
 
@@ -52,16 +55,20 @@ public class RecyclerAdapterEventosDaAgenda extends RecyclerView.Adapter<Recycle
 
     protected class RecyclerTesteViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView preco;
-        protected TextView valor;
-        protected TextView litros;
+        protected TextView time;
+        protected TextView adversario;
+        protected TextView dataEvento;
+        protected TextView horaEvento;
+        protected TextView localEvento;
 
         public RecyclerTesteViewHolder(final View itemView) {
             super(itemView);
 
-            valor = (TextView) itemView.findViewById(R.id.valor);
-            preco = (TextView) itemView.findViewById(R.id.preco);
-            litros = (TextView) itemView.findViewById(R.id.litros);
+            time = (TextView) itemView.findViewById(R.id.time_evento);
+            adversario = (TextView) itemView.findViewById(R.id.adversario_evento);
+            dataEvento = (TextView) itemView.findViewById(R.id.data_evento);
+            horaEvento = (TextView) itemView.findViewById(R.id.hora_evento);
+            localEvento = (TextView) itemView.findViewById(R.id.local_evento);
 
             //Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
