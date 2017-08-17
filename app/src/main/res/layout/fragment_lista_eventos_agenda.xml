@@ -6,26 +6,40 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_lista_atletas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="br.com.easygame.easygame.ui.ListaAgenda">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_eventos_agenda"
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:elevation="0dp"
-            android:paddingBottom="80dp" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/list_view_agenda" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_fabteste"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Button
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:id="@+id/novo_agenda"
+            android:text="+"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_margin="18dp"
-            android:clickable="true" />
-
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:textColor="#ffffff"
+            android:textSize="40sp"
+            android:background="@drawable/fundo"
+            android:elevation="6dp"
+            android:stateListAnimator="@null"
+            />
     </RelativeLayout>
 
 </FrameLayout>

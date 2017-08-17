@@ -34,6 +34,7 @@ import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.enuns.Times;
+import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 
 /**
