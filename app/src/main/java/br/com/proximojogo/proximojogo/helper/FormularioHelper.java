@@ -104,42 +104,18 @@ public class FormularioHelper {
         }
     }
 
-    public void excluir(Activity activity) {
+    public void excluir(View activity, String idAgenda) {
         try {
-            AgendaDO agenda = pegaAgenda();
-//            final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-            // Retrieve an item by passing the partition key using the object mapper.
-            //  AgendaDO agendaDOAux = new AgendaDO();
-            //agendaDOAux.setIdUser("1c6cbbd9-7b2f-484e-a1b2-050b7eb49a86");
-            //   agenda = mapper.load(AgendaDO.class,agendaDOAux);
-//            AgendaDO agendaBD = mapper.load(AgendaDO.class, "a2800964-55a3-4673-833b-fb8f47f55edd", "Status");
-
-//            boolean apagou = new UsuarioDynamoDBDAO(activity, handler).apagar(agendaBD);
-//            if (apagou) {
-//                Toast.makeText(activity, "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Toast.makeText(activity, "Erro ao apagar!", Toast.LENGTH_SHORT).show();
-//            }
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+            mDatabaseAgenda.removeValue();
+            limparCamposTela();
+            Toast.makeText(activity.getContext(), "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(activity.getContext(), "Erro ao Apagadar Agenda!", Toast.LENGTH_SHORT).show();
         }
-//        catch (ParseException e) {
-//            e.printStackTrace();
-//        }
     }
 
-//    public AgendaDO listar(Activity activity) {
-//        try {
-//            PaginatedScanList<AgendaDO> agendas = new UsuarioDynamoDBDAO(activity, handler).listar();
-//            for (AgendaDO agendaDO : agendas) {
-//                Log.d("Agendas", "ID agenda: " + agendaDO.getIdAgenda() + " Status: " + agendaDO.getStatus());
-//            }
-//            return agendas.get(0);
-//        } catch (EasyGameException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
     public boolean validarCampos() {
 
@@ -174,20 +150,34 @@ public class FormularioHelper {
 
     }
 
-    public void preencheFormulario(AgendaDO agenda) throws ParseException {
-        int item;
-        //Eventos.values();
-        //item = setValorSpinner(agenda.getEvento(),Eventos.values());
-        campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
-        campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
-        campoTime.setSelection(Times.valueOf(agenda.getTimes()).ordinal());
-        campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
-        campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
-        campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
-        campoAdversario.setText(String.valueOf(agenda.getAdversario()));
-        campoValor.setText(String.valueOf(agenda.getValor()));
-        campoObservacao.setText(agenda.getObservacao());
-        this.agenda = agenda;
+    public void preencheFormulario(String idAgenda) throws ParseException {
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+        mDatabaseAgenda.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                agenda = dataSnapshot.getValue(AgendaDO.class);
+                if (agenda != null) {
+                    int item;
+                    //Eventos.values();
+                    //item = setValorSpinner(agenda.getEvento(),Eventos.values());
+                    campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
+                    campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
+                    campoTime.setSelection(Times.valueOf(agenda.getTimes()).ordinal());
+                    campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
+                    campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
+                    campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
+                    campoAdversario.setText(String.valueOf(agenda.getAdversario()));
+                    campoValor.setText(String.valueOf(agenda.getValor()));
+                    campoObservacao.setText(agenda.getObservacao());
+//                this.agenda = agenda;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+            }
+        });
     }
 
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -36,6 +37,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     //estava usando só no Dynamo
     private Handler handler;
     private Activity activity;
+    private String idAgenda;
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -76,7 +78,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
         helper = new FormularioHelper(agendaView, handler);
 
-
         btSalvar = (Button) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
 
@@ -90,10 +91,24 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            idAgenda = bundle.getString("agenda");
+            if (idAgenda != null) {
+                try {
+                    helper.preencheFormulario(idAgenda);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-
         if (context instanceof Activity) {
             activity = (Activity) context;
         }
@@ -113,6 +128,14 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         int i = v.getId();
         if (i == R.id.bt_salvar_agenda) {
             salvarAgenda(v);
+        } else if (i == R.id.bt_excluir_agenda) {
+            if (idAgenda != null) {
+                helper.excluir(v, idAgenda);
+            } else {
+                Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
+            }
+        } else if (i == R.id.bt_listar_agenda) {
+            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
     }
 }

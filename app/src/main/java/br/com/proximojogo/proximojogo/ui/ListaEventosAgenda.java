@@ -34,20 +34,24 @@ public class ListaEventosAgenda extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
                 AgendaDO agenda = (AgendaDO) lista.getItemAtPosition(position);
-                getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
-//                intentVaiProFormulario.putExtra("Agenda", agenda); // passa valor como parametro
-//                startActivity(intentVaiProFormulario);
+                /**
+                 * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                 * utilizar uma interface) mas não vi necessidade aqui.
+                 */
+                Bundle bundle = new Bundle();
+                AgendaFragment agendaFragment = new AgendaFragment();
+                bundle.putString("agenda", agenda.getIdAgenda());
+                agendaFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
 
             }
         });
 
-        Button novaAgenda = (Button)eventosDaAgendaView.findViewById(R.id.novo_agenda);
+        Button novaAgenda = (Button) eventosDaAgendaView.findViewById(R.id.novo_agenda);
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
-//                Intent vaiPFormulario = new Intent(ListaAgenda.this,AgendaActivityUI.class);
-//                startActivity(vaiPFormulario);
             }
         });
 
