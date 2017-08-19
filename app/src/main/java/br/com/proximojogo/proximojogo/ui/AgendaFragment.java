@@ -128,6 +128,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         int i = v.getId();
         if (i == R.id.bt_salvar_agenda) {
             salvarAgenda(v);
+            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         } else if (i == R.id.bt_excluir_agenda) {
             if (idAgenda != null) {
                 helper.excluir(v, idAgenda);

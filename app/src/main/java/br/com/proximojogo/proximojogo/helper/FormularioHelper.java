@@ -86,9 +86,11 @@ public class FormularioHelper {
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             AgendaDO agenda = pegaAgenda();
             if (agenda.getIdAgenda() == null) {
+                //getUser id do Firebase para setar na agenda
+                // e colocar o nome junto com o id para identificar o nó
                 String key = mDatabaseAgenda.push().getKey();
                 agenda.setIdAgenda(key);
-                agenda.setIdUser(key);
+                agenda.setIdUser(key);// substituir pelo id od usuário qdo o login estiver pronto
                 mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
             } else {
