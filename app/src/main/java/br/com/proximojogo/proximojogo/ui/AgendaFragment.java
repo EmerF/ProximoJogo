@@ -37,7 +37,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     //estava usando só no Dynamo
     private Handler handler;
     private Activity activity;
-    private String idAgenda;
+    private String idUser;
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -95,10 +95,10 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            idAgenda = bundle.getString("agenda");
-            if (idAgenda != null) {
+            idUser = bundle.getString("agenda");
+            if (idUser != null) {
                 try {
-                    helper.preencheFormulario(idAgenda);
+                    helper.preencheFormulario(idUser);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -130,8 +130,8 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             salvarAgenda(v);
             getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         } else if (i == R.id.bt_excluir_agenda) {
-            if (idAgenda != null) {
-                helper.excluir(v, idAgenda);
+            if (idUser != null) {
+                helper.excluir(v, idUser);
             } else {
                 Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
             }

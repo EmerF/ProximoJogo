@@ -36,6 +36,7 @@ import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.enuns.Times;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
+import br.com.proximojogo.proximojogo.utils.GetUser;
 
 /**
  * Created by ale on 08/08/2017.
@@ -90,11 +91,13 @@ public class FormularioHelper {
                 // e colocar o nome junto com o id para identificar o nó
                 String key = mDatabaseAgenda.push().getKey();
                 agenda.setIdAgenda(key);
-                agenda.setIdUser(key);// substituir pelo id od usuário qdo o login estiver pronto
-                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                agenda.setIdUser("Txr5w0STR5YX2r9QjGuqab0KOB13");// substituir pelo id do usuário qdo o login estiver pronto
+                //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                mDatabaseAgenda.child(agenda.getIdUser()+ "/" +  agenda.getIdAgenda()).setValue(agenda);
+
                 Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
             } else {
-                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                mDatabaseAgenda.child(agenda.getIdUser()+  "/" + agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
             limparCamposTela();
@@ -108,7 +111,7 @@ public class FormularioHelper {
 
     public void excluir(View activity, String idAgenda) {
         try {
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
             mDatabaseAgenda.removeValue();
             limparCamposTela();
             Toast.makeText(activity.getContext(), "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
@@ -135,7 +138,6 @@ public class FormularioHelper {
         agenda.setEvento(evento.toString());
         agenda.setData(inicio.getTime());
 
-        //String fim = (campoHora.getText().toString());
         Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
         agenda.setHora(hora.getTime());
         agenda.setDiaSemana(diaDaSemana(inicio));
@@ -153,7 +155,7 @@ public class FormularioHelper {
     }
 
     public void preencheFormulario(String idAgenda) throws ParseException {
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado()+ "/" +idAgenda);
         mDatabaseAgenda.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

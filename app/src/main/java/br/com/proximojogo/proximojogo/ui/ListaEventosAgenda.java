@@ -11,18 +11,24 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
+import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class ListaEventosAgenda extends Fragment {
     private DatabaseReference mDatabase;
     private ListView mListView;
+    AgendaDO agenda;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,10 +36,11 @@ public class ListaEventosAgenda extends Fragment {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
-                AgendaDO agenda = (AgendaDO) lista.getItemAtPosition(position);
+                 agenda = (AgendaDO) lista.getItemAtPosition(position);
                 /**
                  * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
                  * utilizar uma interface) mas não vi necessidade aqui.
@@ -55,13 +62,16 @@ public class ListaEventosAgenda extends Fragment {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas"+ "/" +GetUser.getUserLogado());
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH-1);
 
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),
                 AgendaDO.class,
                 R.layout.row_evento,
-                mDatabase.orderByChild("data") // ordena os dados pelo campo informado...
+                mDatabase.startAt(c.getTimeInMillis()).orderByChild("data") // ordena os dados pelo campo informado...
+
 
         ) {
             @Override
