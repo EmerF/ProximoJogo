@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -37,6 +38,7 @@ import br.com.proximojogo.proximojogo.enuns.Times;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
+import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 /**
  * Created by ale on 08/08/2017.
@@ -72,6 +74,8 @@ public class FormularioHelper {
     private Handler handler = null;
 
     private DatabaseReference mDatabaseAgenda;
+    private View viewAtiva;
+
 
     /*
     * Captura valores inseridos no formulário...
@@ -79,11 +83,15 @@ public class FormularioHelper {
     public FormularioHelper(View activity, Handler handler) {
         this.handler = handler;
         inicializaCamposTela(activity);
+        viewAtiva = activity;
+
+
     }
 
     //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
     public void salvar(View activity) {
         try {
+
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             AgendaDO agenda = pegaAgenda();
             if (agenda.getIdAgenda() == null) {
@@ -129,27 +137,28 @@ public class FormularioHelper {
 
     public AgendaDO pegaAgenda() throws ParseException {
 //        agenda.setIdAgenda("-KrYLr6m0kc9TH_TJhaZ");
-        if (campoDat.getText().toString().equals("")) {
+        /*if (campoDat.getText().toString().equals("")) {
             campoDat.setError("Informe a data!!");
-        }
-        Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
+        }*/
 
-        Eventos evento = (Eventos) campoEvento.getSelectedItem();
-        agenda.setEvento(evento.toString());
-        agenda.setData(inicio.getTime());
 
-        Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
-        agenda.setHora(hora.getTime());
-        agenda.setDiaSemana(diaDaSemana(inicio));
-        agenda.setAdversario(campoAdversario.getText().toString());
-        agenda.setValor(new Double(campoValor.getText().toString()));
-        NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
-        agenda.setArena(arena.toString());
-        Times time = (Times) campoTime.getSelectedItem();
-        agenda.setTimes(time.toString());
-        agenda.setObservacao(campoObservacao.getText().toString());
-        agenda.setStatus("Status");
+            Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
 
+            Eventos evento = (Eventos) campoEvento.getSelectedItem();
+            agenda.setEvento(evento.toString());
+            agenda.setData(inicio.getTime());
+
+            Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
+            agenda.setHora(hora.getTime());
+            agenda.setDiaSemana(diaDaSemana(inicio));
+            agenda.setAdversario(campoAdversario.getText().toString());
+            agenda.setValor(new Double(campoValor.getText().toString()));
+            NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
+            agenda.setArena(arena.toString());
+            Times time = (Times) campoTime.getSelectedItem();
+            agenda.setTimes(time.toString());
+            agenda.setObservacao(campoObservacao.getText().toString());
+            agenda.setStatus("Status");
         return agenda;
 
     }

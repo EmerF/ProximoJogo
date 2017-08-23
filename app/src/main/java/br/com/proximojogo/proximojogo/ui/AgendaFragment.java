@@ -24,6 +24,7 @@ import java.util.Collections;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.helper.FormularioHelper;
+import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class AgendaFragment extends Fragment implements View.OnClickListener {
 
@@ -38,6 +39,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private Handler handler;
     private Activity activity;
     private String idUser;
+    private boolean salvou;
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -117,7 +119,13 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     public void salvarAgenda(View v) {
         try {
-            helper.salvar(v);
+            LimparCamposFormulario camposFormulario = new LimparCamposFormulario();
+           salvou = camposFormulario.validaCamposForm((ViewGroup)this.getView());
+            if(!salvou){
+                Toast.makeText(activity,"Preencher todos os campos antes de salvar!!!",Toast.LENGTH_SHORT).show();
+            }else {
+                helper.salvar(v);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,7 +136,10 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         int i = v.getId();
         if (i == R.id.bt_salvar_agenda) {
             salvarAgenda(v);
-            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            if(salvou){
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            }
+
         } else if (i == R.id.bt_excluir_agenda) {
             if (idUser != null) {
                 helper.excluir(v, idUser);

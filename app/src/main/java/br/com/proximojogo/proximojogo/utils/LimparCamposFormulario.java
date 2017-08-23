@@ -1,5 +1,7 @@
 package br.com.proximojogo.proximojogo.utils;
 
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -9,6 +11,7 @@ import android.widget.EditText;
  */
 
 public final class LimparCamposFormulario {
+    private boolean validou = true;
 
     private void clearForm(ViewGroup group)
     {
@@ -24,19 +27,26 @@ public final class LimparCamposFormulario {
     }
 
 
-    private void validaCamposForm(ViewGroup group)
+    public boolean validaCamposForm(ViewGroup group)
     {
+
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
-            if (view instanceof EditText) {
-                ((EditText)view).setText("");
-                if(((EditText) view).getText().equals("")){
-                    ((EditText) view).setError("Campo Obrigatório!!");
+            if (view instanceof android.support.design.widget.TextInputEditText) {
+                String tx = ((android.support.design.widget.TextInputEditText) view).getText().toString();
+                System.out.println("Texto: "+ tx);
+                if(tx.equals("")){
+                    ((android.support.design.widget.TextInputEditText) view).setError("Campo Obrigatório!!");
+                    view.setFocusable(true);
+                    view.requestFocus();
+                    validou = false;
                 }
             }
 
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
-                clearForm((ViewGroup)view);
+                validaCamposForm((ViewGroup)view);
         }
+
+        return validou;
     }
 }
