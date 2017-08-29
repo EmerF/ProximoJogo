@@ -33,7 +33,12 @@ public class createTimePicker implements View.OnFocusChangeListener, View.OnClic
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.editText.setText( hourOfDay + ":" + minute);
+        String format=":";
+        if(minute < 10 ){
+            format = ":0";
+        }
+
+        this.editText.setText( hourOfDay + format + minute);
 
     }
 
@@ -57,6 +62,7 @@ public class createTimePicker implements View.OnFocusChangeListener, View.OnClic
 
     @Override
     public void onClick(View v) {
+
         timePickerDialog = new TimePickerDialog(ctx,3, this,
                 myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), true);
 

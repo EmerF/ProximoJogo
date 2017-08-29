@@ -8,21 +8,23 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
-import java.util.Collections;
 
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.helper.FormularioHelper;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
@@ -31,9 +33,9 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference mDatabase;
     private FormularioHelper helper;
 
-    private Button btSalvar;
-    private Button btExcluir;
-    private Button btListar;
+    private ImageButton btSalvar;
+    private ImageButton btExcluir;
+    private ImageButton btListar;
     private View agendaView;
     //estava usando só no Dynamo
     private Handler handler;
@@ -80,13 +82,13 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
         helper = new FormularioHelper(agendaView, handler);
 
-        btSalvar = (Button) agendaView.findViewById(R.id.bt_salvar_agenda);
+        btSalvar = (ImageButton) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
 
-        btExcluir = (Button) agendaView.findViewById(R.id.bt_excluir_agenda);
+        btExcluir = (ImageButton) agendaView.findViewById(R.id.bt_excluir_agenda);
         btExcluir.setOnClickListener(this);
 
-        btListar = (Button) agendaView.findViewById(R.id.bt_listar_agenda);
+        btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
         btListar.setOnClickListener(this);
 
         return agendaView;
@@ -120,9 +122,11 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     public void salvarAgenda(View v) {
         try {
             LimparCamposFormulario camposFormulario = new LimparCamposFormulario();
-           salvou = camposFormulario.validaCamposForm((ViewGroup)this.getView());
+           salvou = camposFormulario.validaEditTextVazio((ViewGroup)this.getView());
             if(!salvou){
-                Toast.makeText(activity,"Preencher todos os campos antes de salvar!!!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
+                ExibirToast.ExibirToastComIcone(activity,R.drawable.musicface,"Preencha os campos, meu Bem! »-(¯`v´¯)-»");
+
             }else {
                 helper.salvar(v);
             }
@@ -143,6 +147,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         } else if (i == R.id.bt_excluir_agenda) {
             if (idUser != null) {
                 helper.excluir(v, idUser);
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
             } else {
                 Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
             }

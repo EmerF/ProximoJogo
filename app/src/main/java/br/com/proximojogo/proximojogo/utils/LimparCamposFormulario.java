@@ -4,10 +4,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.EditText;
 
+import java.lang.reflect.Type;
+
 /**
- * Created by emer on 22/08/17.
+ * Classe que limpa ou valida todos os campos Edite Text do formulario
  */
 
 public final class LimparCamposFormulario {
@@ -27,24 +30,34 @@ public final class LimparCamposFormulario {
     }
 
 
-    public boolean validaCamposForm(ViewGroup group)
+    /*
+    * Percorre o formulario validando se os dados foram preenchidos corretamente
+    * Percorre os Contentores.
+    * Ex: Se o form tiver vários FrameLayout ele vai percorrer todos e validar os campos do tipo indicado.
+    *
+    *
+    *
+     */
+    public boolean validaEditTextVazio(ViewGroup group)
     {
 
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
             if (view instanceof android.support.design.widget.TextInputEditText) {
-                String tx = ((android.support.design.widget.TextInputEditText) view).getText().toString();
-                System.out.println("Texto: "+ tx);
-                if(tx.equals("")){
-                    ((android.support.design.widget.TextInputEditText) view).setError("Campo Obrigatório!!");
-                    view.setFocusable(true);
-                    view.requestFocus();
+                android.support.design.widget.TextInputEditText view2 = ((android.support.design.widget.TextInputEditText) view);
+                String tx = ( view2.getText().toString());
+                System.out.println("Tag: "+ view2.getTag());
+
+                if(tx.equals("") && view2.getTag() == null){
+                    view2.setError("Campo Obrigatório!!");
+                    view2.setFocusable(true);
+
                     validou = false;
                 }
             }
 
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
-                validaCamposForm((ViewGroup)view);
+                validaEditTextVazio((ViewGroup)view);
         }
 
         return validou;
