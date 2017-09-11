@@ -125,7 +125,8 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
            salvou = camposFormulario.validaEditTextVazio((ViewGroup)this.getView());
             if(!salvou){
                 //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
-                ExibirToast.ExibirToastComIcone(activity,R.drawable.musicface,"Preencha os campos, meu Bem! »-(¯`v´¯)-»");
+                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
+
 
             }else {
                 helper.salvar(v);
