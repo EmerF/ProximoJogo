@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -36,6 +37,8 @@ import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.enuns.Times;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
+import br.com.proximojogo.proximojogo.utils.GetUser;
+import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 /**
  * Created by ale on 08/08/2017.
@@ -71,6 +74,8 @@ public class FormularioHelper {
     private Handler handler = null;
 
     private DatabaseReference mDatabaseAgenda;
+    private View viewAtiva;
+
 
     /*
     * Captura valores inseridos no formulário...
@@ -78,21 +83,29 @@ public class FormularioHelper {
     public FormularioHelper(View activity, Handler handler) {
         this.handler = handler;
         inicializaCamposTela(activity);
+        viewAtiva = activity;
+
+
     }
 
     //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
     public void salvar(View activity) {
         try {
+
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             AgendaDO agenda = pegaAgenda();
             if (agenda.getIdAgenda() == null) {
+                //getUser id do Firebase para setar na agenda
+                // e colocar o nome junto com o id para identificar o nó
                 String key = mDatabaseAgenda.push().getKey();
                 agenda.setIdAgenda(key);
-                agenda.setIdUser(key);
-                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                agenda.setIdUser("Txr5w0STR5YX2r9QjGuqab0KOB13");// substituir pelo id do usuário qdo o login estiver pronto
+                //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                mDatabaseAgenda.child(agenda.getIdUser()+ "/" +  agenda.getIdAgenda()).setValue(agenda);
+
                 Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
             } else {
-                mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                mDatabaseAgenda.child(agenda.getIdUser()+  "/" + agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
             limparCamposTela();
@@ -106,7 +119,7 @@ public class FormularioHelper {
 
     public void excluir(View activity, String idAgenda) {
         try {
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
             mDatabaseAgenda.removeValue();
             limparCamposTela();
             Toast.makeText(activity.getContext(), "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
@@ -124,34 +137,34 @@ public class FormularioHelper {
 
     public AgendaDO pegaAgenda() throws ParseException {
 //        agenda.setIdAgenda("-KrYLr6m0kc9TH_TJhaZ");
-        if (campoDat.getText().toString().equals("")) {
+        /*if (campoDat.getText().toString().equals("")) {
             campoDat.setError("Informe a data!!");
-        }
-        Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
+        }*/
 
-        Eventos evento = (Eventos) campoEvento.getSelectedItem();
-        agenda.setEvento(evento.toString());
-        agenda.setData(inicio.getTime());
 
-        //String fim = (campoHora.getText().toString());
-        Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
-        agenda.setHora(hora.getTime());
-        agenda.setDiaSemana(diaDaSemana(inicio));
-        agenda.setAdversario(campoAdversario.getText().toString());
-        agenda.setValor(new Double(campoValor.getText().toString()));
-        NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
-        agenda.setArena(arena.toString());
-        Times time = (Times) campoTime.getSelectedItem();
-        agenda.setTimes(time.toString());
-        agenda.setObservacao(campoObservacao.getText().toString());
-        agenda.setStatus("Status");
+            Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
 
+            Eventos evento = (Eventos) campoEvento.getSelectedItem();
+            agenda.setEvento(evento.toString());
+            agenda.setData(inicio.getTime());
+
+            Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
+            agenda.setHora(hora.getTime());
+            agenda.setDiaSemana(diaDaSemana(inicio));
+            agenda.setAdversario(campoAdversario.getText().toString());
+            agenda.setValor(new Double(campoValor.getText().toString()));
+            NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
+            agenda.setArena(arena.toString());
+            Times time = (Times) campoTime.getSelectedItem();
+            agenda.setTimes(time.toString());
+            agenda.setObservacao(campoObservacao.getText().toString());
+            agenda.setStatus("Status");
         return agenda;
 
     }
 
     public void preencheFormulario(String idAgenda) throws ParseException {
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas").child(idAgenda);
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado()+ "/" +idAgenda);
         mDatabaseAgenda.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

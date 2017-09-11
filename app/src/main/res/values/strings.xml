@@ -6,13 +6,13 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Próximo Jogo</string>
 
     <!-- Agenda Fragment -->
     <string name="local">Local</string>
     <string name="evento">Evento</string>
     <string name="inicio">Inicio</string>
-    <string name="fim">Fim</string>
+    <string name="horario">Horario</string>
     <string name="valor">Valor</string>
     <string name="equipe">Equipe</string>
     <string name="versus">X</string>
