@@ -8,15 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -25,13 +20,13 @@ import java.lang.ref.WeakReference;
 import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.helper.FormularioHelper;
+import br.com.proximojogo.proximojogo.helper.FormularioHelperAgenda;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseReference mDatabase;
-    private FormularioHelper helper;
+    private FormularioHelperAgenda helper;
 
     private ImageButton btSalvar;
     private ImageButton btExcluir;
@@ -80,7 +75,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         handler = new AgendaHandler(this);
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
-        helper = new FormularioHelper(agendaView, handler);
+        helper = new FormularioHelperAgenda(agendaView, handler);
 
         btSalvar = (ImageButton) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
@@ -121,8 +116,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     public void salvarAgenda(View v) {
         try {
-            LimparCamposFormulario camposFormulario = new LimparCamposFormulario();
-           salvou = camposFormulario.validaEditTextVazio((ViewGroup)this.getView());
+           salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup)this.getView());
             if(!salvou){
                 //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
                 ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
