@@ -36,7 +36,7 @@ import br.com.proximojogo.proximojogo.utils.GetUser;
  * Created by ale on 08/08/2017.
  */
 
-public class FormularioHelperAgenda {
+public class HelperAgenda {
 
     private static final String TAG = "ASYNC_DAO_AGENDA";
     //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -72,7 +72,7 @@ public class FormularioHelperAgenda {
     /*
     * Captura valores inseridos no formulário...
     * */
-    public FormularioHelperAgenda(View activity, Handler handler) {
+    public HelperAgenda(View activity, Handler handler) {
         this.handler = handler;
         inicializaCamposTela(activity);
         viewAtiva = activity;

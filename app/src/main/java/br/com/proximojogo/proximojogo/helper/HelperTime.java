@@ -1,21 +1,14 @@
 package br.com.proximojogo.proximojogo.helper;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.ParseException;
-
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Time;
-import br.com.proximojogo.proximojogo.ui.CadastrarTime;
-import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 
 /**
@@ -24,6 +17,7 @@ import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class HelperTime {
 
+    private final View viewAtiva;
     private EditText campoNomeTime;
     private EditText campoResponsavelTime;
     private EditText campoTelefoneResponsavel;
@@ -32,10 +26,13 @@ public class HelperTime {
     private DatabaseReference mDatabaseAgenda;
 
 
-    public HelperTime(Handler handler){
+    public HelperTime(View activity,Handler handler){
         this.handler = handler;
+        viewAtiva = activity;
+
 
     }
+
 
     public Time pegaTime(){
 
