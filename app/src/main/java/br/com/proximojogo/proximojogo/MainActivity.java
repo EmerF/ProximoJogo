@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
+import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TesteFirebase;
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
         } else if (id == R.id.nav_slideshow) {
+            fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
 
         } else if (id == R.id.nav_manage) {
 
