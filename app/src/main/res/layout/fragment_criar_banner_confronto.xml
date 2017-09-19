@@ -5,35 +5,37 @@
     android:layout_height="match_parent"
     tools:context="br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/campo_um">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="167dp"
-                app:srcCompat="@drawable/cachorro" />
-
-
-            <Button
-                android:id="@+id/btn_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="47dp"
-                android:text="Upload" />
-
-        </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="174dp"
+            android:layout_height="125dp"
+            app:srcCompat="@drawable/cachorro"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="174dp"
+            android:layout_height="125dp"
+            app:srcCompat="@drawable/cachorro"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
 
 </FrameLayout>

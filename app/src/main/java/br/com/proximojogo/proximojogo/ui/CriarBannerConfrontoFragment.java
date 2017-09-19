@@ -34,10 +34,13 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private static final int IMAGE_REQUEST_CODE = 3;
     private static final int STORAGE_PERMISSION_CODE = 123;
     private ImageView imageView;
+    private ImageView imageView2;
     private Button btnUpload;
     private Bitmap bitmap;
     private Uri filePath;
     private Activity activity;
+    private boolean imagemUm;
+    private boolean imagemDois;
 
 
     @Override
@@ -46,12 +49,14 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         View view = inflater.inflate(R.layout.fragment_criar_banner_confronto, container, false);
 
         imageView = (ImageView) view.findViewById(R.id.imageView);
-        btnUpload = (Button) view.findViewById(R.id.btn_upload);
+        imageView2 = (ImageView) view.findViewById(R.id.imageView2);
+//        btnUpload = (Button) view.findViewById(R.id.btn_upload);
 
         requestStoragePermission();
 
         imageView.setOnClickListener(this);
-        btnUpload.setOnClickListener(this);
+        imageView2.setOnClickListener(this);
+//        btnUpload.setOnClickListener(this);
 
         return view;
     }
@@ -59,6 +64,16 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == imageView) {
+            imagemUm = true;
+            imagemDois = false;
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
+        }
+        if (v == imageView2) {
+            imagemUm = false;
+            imagemDois = true;
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -85,7 +100,12 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             filePath = data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+                if(imagemUm){
+                    imageView.setImageBitmap(bitmap);
+                }else{
+                    imageView2.setImageBitmap(bitmap);
+
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -94,20 +114,21 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     }
 
     private void requestStoragePermission() {
-        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
             return;
-        if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
             //aqui explica pq vc precisa da permissao
         }
-        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == STORAGE_PERMISSION_CODE){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(getActivity(),"Precisa de permissao para acessar a imagem",Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getActivity(),"Oops você não tem permissao",Toast.LENGTH_LONG).show();
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getActivity(), "Precisa de permissao para acessar a imagem", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), "Oops você não tem permissao", Toast.LENGTH_LONG).show();
 
             }
         }
