@@ -1,6 +1,7 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.theartofdev.edmodo.cropper.CropImage;
+
 import java.io.IOException;
 
 import br.com.proximojogo.proximojogo.R;
@@ -31,7 +34,7 @@ import br.com.proximojogo.proximojogo.R;
  */
 public class CriarBannerConfrontoFragment extends Fragment implements View.OnClickListener {
 
-    private static final int IMAGE_REQUEST_CODE = 3;
+    private static final int IMAGE_REQUEST_CODE = 203;
     private static final int STORAGE_PERMISSION_CODE = 123;
     private ImageView imageView;
     private ImageView imageView2;
@@ -41,6 +44,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private Activity activity;
     private boolean imagemUm;
     private boolean imagemDois;
+    private Uri mCropImageUri;
 
 
     @Override
@@ -61,15 +65,22 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         return view;
     }
 
+
     @Override
     public void onClick(View v) {
         if (v == imageView) {
-            imagemUm = true;
-            imagemDois = false;
-            Intent intent = new Intent();
-            intent.setType("image/*");
+//            CropImage.startPickImageActivity(activity);
+
+            Intent intent = CropImage.activity(mCropImageUri)
+                    .getIntent(getContext());
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
+            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+//            imagemUm = true;
+//            imagemDois = false;
+//            Intent intent = new Intent();
+//            intent.setType("image/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
         }
         if (v == imageView2) {
             imagemUm = false;
@@ -96,21 +107,52 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == IMAGE_REQUEST_CODE && resultCode == activity.RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
-                if(imagemUm){
-                    imageView.setImageBitmap(bitmap);
-                }else{
-                    imageView2.setImageBitmap(bitmap);
+        // handle result of pick image chooser
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(getContext(), data);
 
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(getContext(), imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+            } else {
+                // no permissions required or already grunted, can start crop image activity
+//                startCropImageActivity(imageUri);
+
+                if (data != null && data.getData() != null) {
+                    filePath = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
+                        if (imagemUm) {
+                            imageView.setImageBitmap(bitmap);
+                        } else {
+                            imageView2.setImageBitmap(bitmap);
+
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
+//        if (requestCode == IMAGE_REQUEST_CODE && resultCode == activity.RESULT_OK && data != null && data.getData() != null) {
+//            filePath = data.getData();
+//            try {
+//                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
+//                if(imagemUm){
+//                    imageView.setImageBitmap(bitmap);
+//                }else{
+//                    imageView2.setImageBitmap(bitmap);
+//
+//                }
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void requestStoragePermission() {
@@ -124,14 +166,43 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == STORAGE_PERMISSION_CODE) {
+        if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getActivity(), "Precisa de permissao para acessar a imagem", Toast.LENGTH_LONG).show();
+                CropImage.startPickImageActivity(activity);
             } else {
-                Toast.makeText(getActivity(), "Oops você não tem permissao", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
             }
         }
+        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+            if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // required permissions granted, start crop image activity
+                startCropImageActivity(mCropImageUri);
+            } else {
+                Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+            }
+        }
+//        if (requestCode == STORAGE_PERMISSION_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                Toast.makeText(getActivity(), "Precisa de permissao para acessar a imagem", Toast.LENGTH_LONG).show();
+//            } else {
+//                Toast.makeText(getActivity(), "Oops você não tem permissao", Toast.LENGTH_LONG).show();
+//
+//            }
+//        }
 
+    }
+
+    //inicio crop
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .start(getContext(), this);
+    }
+
+    public void onSelectImageClick(View view) {
+        if (CropImage.isExplicitCameraPermissionRequired(activity)) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
+        } else {
+            CropImage.startPickImageActivity(activity);
+        }
     }
 }
