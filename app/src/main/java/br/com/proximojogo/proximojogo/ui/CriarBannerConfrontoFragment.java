@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 
@@ -36,6 +38,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     private static final int IMAGE_REQUEST_CODE = 203;
     private static final int STORAGE_PERMISSION_CODE = 123;
+    private static final int RESULT_SELECT_IMG = 3;
     private ImageView imageView;
     private ImageView imageView2;
     private Button btnUpload;
@@ -69,14 +72,12 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == imageView) {
+            imagemUm = true;
+            imagemDois = false;
+            selectImageFromGallary();
 //            CropImage.startPickImageActivity(activity);
 
-            Intent intent = CropImage.activity(mCropImageUri)
-                    .getIntent(getContext());
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-//            imagemUm = true;
-//            imagemDois = false;
+
 //            Intent intent = new Intent();
 //            intent.setType("image/*");
 //            intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -85,10 +86,11 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         if (v == imageView2) {
             imagemUm = false;
             imagemDois = true;
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
+            selectImageFromGallary();
+//            Intent intent = new Intent();
+//            intent.setType("image/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
         } else if (v == btnUpload) {
             //enviar para servidor
         }
@@ -105,8 +107,74 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     }
 
+    //novo jeito de crop
+    private void selectImageFromGallary() {
+        Intent intent = CropImage.activity(mCropImageUri)
+                .getIntent(getContext());
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
+        // Create intent to Open Image
+//        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        startActivityForResult(galleryIntent, RESULT_SELECT_IMG);
+//
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_SELECT_IMG);
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d("APP_DEBUG", String.valueOf(requestCode));
+
+        try {
+            // When an Image is picked
+            if (requestCode == RESULT_SELECT_IMG && resultCode == Activity.RESULT_OK
+                    && null != data) {
+                Uri selectedImage = data.getData();
+
+                CropImage.activity(selectedImage)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setMinCropResultSize(80, 80)
+                        .setMaxCropResultSize(800, 800)
+                        .start(getContext(), this);
+            }
+            // when image is cropped
+            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                Log.d("APP_DEBUG", result.toString());
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    Log.d("APP_DEBUG", resultUri.toString());
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), resultUri);
+//                    profilePic.setImageBitmap(bitmap);
+                    if (imagemUm)
+                        imageView.setImageBitmap(bitmap);
+                    else
+                        imageView2.setImageBitmap(bitmap);
+
+
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                }
+            } else {
+                Toast.makeText(getActivity(), "You haven't picked Image",
+                        Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Something went wrong" + e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
+
+    }
+ /*  @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         // handle result of pick image chooser
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Uri imageUri = CropImage.getPickImageResultUri(getContext(), data);
@@ -153,7 +221,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 //                e.printStackTrace();
 //            }
 //        }
-    }
+    }*/
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
