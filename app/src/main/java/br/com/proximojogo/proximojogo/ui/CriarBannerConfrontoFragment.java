@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.shapes.OvalShape;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,6 +113,9 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     //novo jeito de crop
     private void selectImageFromGallary() {
         Intent intent = CropImage.activity(mCropImageUri)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                .setMinCropResultSize(500, 500)
+                .setMaxCropResultSize(1000, 1000)
                 .getIntent(getContext());
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -141,7 +147,8 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 CropImage.activity(selectedImage)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(80, 80)
-                        .setMaxCropResultSize(800, 800)
+                        .setMaxCropResultSize(80, 80)
+                        .setCropShape(CropImageView.CropShape.OVAL)
                         .start(getContext(), this);
             }
             // when image is cropped
