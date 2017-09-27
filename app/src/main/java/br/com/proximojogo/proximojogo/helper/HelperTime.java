@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.Time;
 
 
@@ -28,6 +29,7 @@ public class HelperTime {
 
     public HelperTime(View activity,Handler handler){
         this.handler = handler;
+        inicializaCamposTela(activity);
         viewAtiva = activity;
 
 
@@ -44,7 +46,16 @@ public class HelperTime {
 
     }
 
-    public void salvar(View activity) {
+    public void inicializaCamposTela(View activity) {
+        campoNomeTime = (EditText) activity.findViewById(R.id.nome_time);
+        campoResponsavelTime= (EditText) activity.findViewById(R.id.responsavel_time);
+        campoTelefoneResponsavel = (EditText) activity.findViewById(R.id.telefone_responsavel_time);
+
+        time = new Time();
+
+    }
+
+    public void salvarTime(View activity) {
 
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Times");
         Time time = pegaTime();
@@ -57,42 +68,12 @@ public class HelperTime {
             //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
             mDatabaseAgenda.setValue(time);
 
-            Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity.getContext(), "Time Cadastrado com Sucesso!", Toast.LENGTH_SHORT).show();
         } else {
             mDatabaseAgenda.child(time.getIdTime()).setValue(time);
-            Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity.getContext(), "Time Editado com Sucesso!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public EditText getCampoNomeTime() {
-        return campoNomeTime;
-    }
 
-    public void setCampoNomeTime(EditText campoNomeTime) {
-        this.campoNomeTime = campoNomeTime;
-    }
-
-    public EditText getCampoResponsavelTime() {
-        return campoResponsavelTime;
-    }
-
-    public void setCampoResponsavelTime(EditText campoResponsavelTime) {
-        this.campoResponsavelTime = campoResponsavelTime;
-    }
-
-    public EditText getCampoTelefoneResponsavel() {
-        return campoTelefoneResponsavel;
-    }
-
-    public void setCampoTelefoneResponsavel(EditText campoTelefoneResponsavel) {
-        this.campoTelefoneResponsavel = campoTelefoneResponsavel;
-    }
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
 }

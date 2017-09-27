@@ -22,7 +22,8 @@
             android:id="@+id/nome_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:text="Aguia"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -36,7 +37,8 @@
             android:id="@+id/responsavel_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:text="Milton"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -49,15 +51,23 @@
             android:id="@+id/telefone_responsavel_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:text="41 9898-7675"/>
         </android.support.design.widget.TextInputLayout>
 
 
-        <Button
+        <ImageButton
             android:id="@+id/bt_salvar_time"
-            android:layout_width="wrap_content"
+            android:layout_width="51dp"
             android:layout_height="wrap_content"
-            android:text="Salvar" />
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/savechild"
+            android:text="@string/salvar"
+            android:layout_centerHorizontal="true"
+
+            />
+
+
     </LinearLayout>
 
 </FrameLayout>

@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.drawer_cadastrar_time) {
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
 
         } else if (id == R.id.nav_manage) {
