@@ -1,37 +1,45 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.shapes.OvalShape;
-import android.location.Location;
+import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.FileUriExposedException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.text.Html;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
 
+import br.com.proximojogo.proximojogo.BuildConfig;
 import br.com.proximojogo.proximojogo.R;
 
 /**
@@ -51,12 +59,51 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private boolean imagemUm;
     private boolean imagemDois;
     private Uri mCropImageUri;
+    private Button btnShare;
+    private ShareActionProvider mShareActionProvider;
+    private View mCurrentUrlMask;
+    private File imageFile;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_criar_banner_confronto, container, false);
+
+        Button novaAgenda = (Button) view.findViewById(R.id.btn_share);
+        novaAgenda.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                Date now = new Date();
+                android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+                // image naming and path  to include sd card  appending name you choose for file
+                String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+
+                // create bitmap screen capture
+                View v1 = getActivity().getWindow().getDecorView().getRootView();
+                v1.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+                v1.setDrawingCacheEnabled(false);
+
+                File imageFile = new File(mPath);
+
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(imageFile);
+
+                int quality = 100;
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+                outputStream.flush();
+                outputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                openScreenshot(imageFile);
+
+            }
+        });
 
         imageView = (ImageView) view.findViewById(R.id.imageView);
         imageView2 = (ImageView) view.findViewById(R.id.imageView2);
@@ -71,6 +118,22 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void openScreenshot(File imageFile) {
+        try {
+            Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+//            intent.setAction(Intent.ACTION_SEND);
+//            Uri uri = Uri.fromFile(imageFile);
+            Uri uri = FileProvider.getUriForFile(getContext(),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    imageFile);
+            intent.setDataAndType(uri, "image/*");
+            startActivity(intent);
+        }catch (FileUriExposedException e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -94,7 +157,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 //            intent.setType("image/*");
 //            intent.setAction(Intent.ACTION_GET_CONTENT);
 //            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
-        } else if (v == btnUpload) {
+        } else if (v == btnShare) {
             //enviar para servidor
         }
     }
@@ -280,4 +343,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             CropImage.startPickImageActivity(activity);
         }
     }
+
+
+
 }
