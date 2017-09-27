@@ -1,6 +1,7 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.com.proximojogo.proximojogo.BuildConfig;
@@ -63,6 +65,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private ShareActionProvider mShareActionProvider;
     private View mCurrentUrlMask;
     private File imageFile;
+    String mCurrentPhotoPath;
 
 
     @Override
@@ -74,32 +77,37 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                Date now = new Date();
-                android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-                // image naming and path  to include sd card  appending name you choose for file
-                String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+//                Date now = new Date();
+//                android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+//                // image naming and path  to include sd card  appending name you choose for file
+//                String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
 
-                // create bitmap screen capture
-                View v1 = getActivity().getWindow().getDecorView().getRootView();
-                v1.setDrawingCacheEnabled(true);
-                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-                v1.setDrawingCacheEnabled(false);
-
-                File imageFile = new File(mPath);
-
-                FileOutputStream outputStream = null;
                 try {
-                    outputStream = new FileOutputStream(imageFile);
-
-                int quality = 100;
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-                outputStream.flush();
-                outputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    createImageFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                // create bitmap screen capture
+//                View v1 = getActivity().getWindow().getDecorView().getRootView();
+//                v1.setDrawingCacheEnabled(true);
+//                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+//                v1.setDrawingCacheEnabled(false);
+
+//                File imageFile = new File(mCurrentPhotoPath);
+
+//                FileOutputStream outputStream = null;
+//                try {
+//                    outputStream = new FileOutputStream(imageFile);
+//
+//                int quality = 100;
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+//                outputStream.flush();
+//                outputStream.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 openScreenshot(imageFile);
 
             }
@@ -118,6 +126,21 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         return view;
     }
 
+    private void createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        imageFile = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = imageFile.getAbsolutePath();
+    }
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void openScreenshot(File imageFile) {
         try {

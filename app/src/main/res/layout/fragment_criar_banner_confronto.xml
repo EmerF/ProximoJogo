@@ -76,8 +76,7 @@
             android:layout_marginRight="16dp"
             android:background="@drawable/ic_menu_share"
             android:elevation="6dp"
-            android:textSize="40sp"
-            android:actionProviderClass="android.widget.ShareActionProvider"/>
+            android:textSize="40sp" />
     </RelativeLayout>
 
 </FrameLayout>
