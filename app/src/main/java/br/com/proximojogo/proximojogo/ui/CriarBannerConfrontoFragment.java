@@ -3,6 +3,7 @@ package br.com.proximojogo.proximojogo.ui;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -69,7 +70,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_criar_banner_confronto, container, false);
 
         Button novaAgenda = (Button) view.findViewById(R.id.btn_share);
@@ -108,7 +109,8 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }
-                openScreenshot(imageFile);
+//                openScreenshot(imageFile);
+                shareImage(imageFile);
 
             }
         });
@@ -129,32 +131,75 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private void createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + ".jpg";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "Camera");
-        imageFile = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+
+        View v1 = getActivity().getWindow().getDecorView().getRootView();
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+
+        File imageFile = new File(storageDir, imageFileName);
+
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(imageFile);
+
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        imageFile = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = imageFile.getAbsolutePath();
+        this.imageFile = imageFile;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void openScreenshot(File imageFile) {
         try {
             Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-//            intent.setAction(Intent.ACTION_SEND);
+//            intent.setAction(Intent.ACTION_VIEW);
+            intent.setAction(Intent.ACTION_SEND);
 //            Uri uri = Uri.fromFile(imageFile);
             Uri uri = FileProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
-                    imageFile);
+                    this.imageFile);
             intent.setDataAndType(uri, "image/*");
             startActivity(intent);
-        }catch (FileUriExposedException e){
+        } catch (FileUriExposedException e) {
             e.printStackTrace();
+        }
+    }
+    private void shareImage(File file){
+//        Uri uri = Uri.fromFile(file);
+        Uri uri = FileProvider.getUriForFile(getContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                this.imageFile);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "No App Available", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -366,7 +411,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             CropImage.startPickImageActivity(activity);
         }
     }
-
 
 
 }
