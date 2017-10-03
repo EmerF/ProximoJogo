@@ -15,21 +15,20 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivAvatar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:src="@android:drawable/sym_def_app_icon"
         app:civ_border_color="@color/common_google_signin_btn_text_dark_default"
-        app:civ_border_width="3dp"
-        android:layout_weight="0.75" />
+        app:civ_border_width="2dp" />
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Cartola"
+        android:text="Dirigente"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView

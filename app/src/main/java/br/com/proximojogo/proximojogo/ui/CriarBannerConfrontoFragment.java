@@ -78,11 +78,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-//                Date now = new Date();
-//                android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-//                // image naming and path  to include sd card  appending name you choose for file
-//                String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
                 try {
                     createImageFile();
                 } catch (IOException e) {
