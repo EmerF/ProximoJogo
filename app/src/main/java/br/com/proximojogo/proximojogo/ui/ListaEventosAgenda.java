@@ -64,7 +64,9 @@ public class ListaEventosAgenda extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas"+ "/" +GetUser.getUserLogado());
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.DAY_OF_MONTH, Calendar.DAY_OF_MONTH-1);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        c.set(Calendar.DAY_OF_MONTH, day-1);
+
 
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),

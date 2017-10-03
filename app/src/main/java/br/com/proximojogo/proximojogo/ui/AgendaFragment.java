@@ -8,10 +8,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +36,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private ImageButton btExcluir;
     private ImageButton btListar;
     private View agendaView;
+    private EditText obs;
     //estava usando só no Dynamo
     private Handler handler;
     private Activity activity;
@@ -86,6 +91,15 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
         btListar.setOnClickListener(this);
 
+        /*obs.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+
+                return false;
+            }
+        });*/
+
         return agendaView;
     }
 
@@ -118,14 +132,15 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         try {
            salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup)this.getView());
             if(!salvou){
-                //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
-                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
+
+                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorPrimary,"Preencha os campos, meu Bem!");
 
 
             }else {
                 helper.salvar(v);
             }
         } catch (Exception e) {
+            ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Erro ao salvar a agenda ): ");
             e.printStackTrace();
         }
     }
