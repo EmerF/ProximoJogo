@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.os.FileUriExposedException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -67,7 +68,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private View mCurrentUrlMask;
     private File imageFile;
     String mCurrentPhotoPath;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
     tools:context="br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/campo_um">
+        android:background="@drawable/campo_dois">
 
     </ScrollView>
 
@@ -32,11 +33,11 @@
             android:id="@+id/imageView"
             android:layout_width="174dp"
             android:layout_height="125dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
             android:src="@drawable/time_casa"
             app:civ_border_color="@color/common_google_signin_btn_text_dark_default"
-            app:civ_border_width="3dp" />
+            app:civ_border_width="3dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView2"
@@ -63,11 +64,27 @@
             android:textSize="40sp" />
 
         <EditText
+            android:id="@+id/timeVisitante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Time Vistante"
+            android:inputType="textPersonName"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textColorLink="@android:color/background_light"
+            android:textStyle="bold"
+            android:layout_above="@+id/imageView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="42dp"
+            android:layout_alignStart="@+id/imageView2" />
+
+        <EditText
             android:id="@+id/timeDaCasa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/imageView"
-            android:layout_alignEnd="@+id/imageView"
+            android:layout_alignBaseline="@+id/timeVisitante"
+            android:layout_alignBottom="@+id/timeVisitante"
             android:layout_alignParentStart="true"
             android:ems="10"
             android:hint="Time da Casa"
@@ -75,23 +92,10 @@
             android:text="Audax FC"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@android:color/black"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textColorLink="@android:color/background_light"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/timeVisitante"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/imageView2"
-            android:layout_alignParentEnd="true"
-            android:ems="10"
-            android:hint="Time Vistante"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textColorLink="@android:color/background_light"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignEnd="@+id/imageView" />
 
 
     </RelativeLayout>

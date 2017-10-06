@@ -3,6 +3,7 @@ package br.com.proximojogo.proximojogo;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         //permissao acessar card app
-
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
