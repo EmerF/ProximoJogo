@@ -3,11 +3,14 @@ package br.com.proximojogo.proximojogo;
 import android.*;
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,7 +33,13 @@ import android.widget.Toast;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
@@ -41,9 +50,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int RESULT_SELECT_IMG = 3;
     private static final int STORAGE_PERMISSION_CODE = 123;
+    private static final String TAG = "LEITURA_IMAGEM";
     private ImageView ivAvatar;
     private Bitmap bitmap;
     private Uri mCropImageUri;
+    private String avatarProximoJogo = "avatarProximoJogo.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +86,8 @@ public class MainActivity extends AppCompatActivity
                 selectImageFromGallary();
             }
         });
+
+        leituraAvatar();
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -166,6 +179,23 @@ public class MainActivity extends AppCompatActivity
                     Log.d("APP_DEBUG", resultUri.toString());
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                     ivAvatar.setImageBitmap(bitmap);
+                    String content = "avatarPJ";
+
+                    File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_DCIM), "Camera");
+
+                    File imageFile = new File(storageDir, avatarProximoJogo);
+                    FileOutputStream outputStream = null;
+                    try {
+                        outputStream = new FileOutputStream(imageFile);
+
+                        int quality = 100;
+                        bitmap.compress(Bitmap.CompressFormat.PNG, quality, outputStream);
+                        outputStream.flush();
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Exception error = result.getError();
@@ -208,6 +238,17 @@ public class MainActivity extends AppCompatActivity
 //        intent.setType("image/*");
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_SELECT_IMG);
+
+    }
+
+    public void leituraAvatar() {
+        File imgFile = new  File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera/" + avatarProximoJogo);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ivAvatar.setImageBitmap(myBitmap);
+
+        }
 
     }
 
