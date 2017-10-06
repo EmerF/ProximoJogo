@@ -83,28 +83,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                // create bitmap screen capture
-//                View v1 = getActivity().getWindow().getDecorView().getRootView();
-//                v1.setDrawingCacheEnabled(true);
-//                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-//                v1.setDrawingCacheEnabled(false);
-
-//                File imageFile = new File(mCurrentPhotoPath);
-
-//                FileOutputStream outputStream = null;
-//                try {
-//                    outputStream = new FileOutputStream(imageFile);
-//
-//                int quality = 100;
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-//                outputStream.flush();
-//                outputStream.close();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                openScreenshot(imageFile);
                 shareImage(imageFile);
 
             }
@@ -150,14 +128,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        imageFile = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = imageFile.getAbsolutePath();
         this.imageFile = imageFile;
@@ -204,22 +174,11 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
             imagemUm = true;
             imagemDois = false;
             selectImageFromGallary();
-//            CropImage.startPickImageActivity(activity);
-
-
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
         }
         if (v == imageView2) {
             imagemUm = false;
             imagemDois = true;
             selectImageFromGallary();
-//            Intent intent = new Intent();
-//            intent.setType("image/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), IMAGE_REQUEST_CODE);
         } else if (v == btnShare) {
             //enviar para servidor
         }
@@ -245,17 +204,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 .getIntent(getContext());
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Complete a ação usando"), CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-        // Create intent to Open Image
-//        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-//                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//
-//        startActivityForResult(galleryIntent, RESULT_SELECT_IMG);
-//
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_SELECT_IMG);
-
     }
 
     @Override
@@ -273,7 +221,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 CropImage.activity(selectedImage)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(80, 80)
-                        .setMaxCropResultSize(80, 80)
+                        .setMaxCropResultSize(200, 200)
                         .setCropShape(CropImageView.CropShape.OVAL)
                         .start(getContext(), this);
             }
@@ -305,56 +253,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
         }
 
     }
- /*  @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // handle result of pick image chooser
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri imageUri = CropImage.getPickImageResultUri(getContext(), data);
-
-            // For API >= 23 we need to check specifically that we have permissions to read external storage.
-            if (CropImage.isReadExternalStoragePermissionsRequired(getContext(), imageUri)) {
-                // request permissions and handle the result in onRequestPermissionsResult()
-                mCropImageUri = imageUri;
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-            } else {
-                // no permissions required or already grunted, can start crop image activity
-//                startCropImageActivity(imageUri);
-
-                if (data != null && data.getData() != null) {
-                    filePath = data.getData();
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
-                        if (imagemUm) {
-                            imageView.setImageBitmap(bitmap);
-                        } else {
-                            imageView2.setImageBitmap(bitmap);
-
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        }
-//        if (requestCode == IMAGE_REQUEST_CODE && resultCode == activity.RESULT_OK && data != null && data.getData() != null) {
-//            filePath = data.getData();
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), filePath);
-//                if(imagemUm){
-//                    imageView.setImageBitmap(bitmap);
-//                }else{
-//                    imageView2.setImageBitmap(bitmap);
-//
-//                }
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-    }*/
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
@@ -382,14 +280,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
             }
         }
-//        if (requestCode == STORAGE_PERMISSION_CODE) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(getActivity(), "Precisa de permissao para acessar a imagem", Toast.LENGTH_LONG).show();
-//            } else {
-//                Toast.makeText(getActivity(), "Oops você não tem permissao", Toast.LENGTH_LONG).show();
-//
-//            }
-//        }
 
     }
 
