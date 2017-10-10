@@ -90,7 +90,8 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
 
     public void salvarTime(View v) {
         try {
-            salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup) this.getView());
+            LimparCamposFormulario lf = new LimparCamposFormulario();
+            salvou = lf.validaEditTextVazio((ViewGroup) this.getView());
             if(!salvou){
                 //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
                 ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");

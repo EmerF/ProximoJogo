@@ -81,7 +81,8 @@ public class HelperAgenda {
     }
 
     //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
-    public void salvar(View activity) {
+    public boolean salvar(View activity) {
+        boolean salvou = false;
         try {
 
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
@@ -101,12 +102,15 @@ public class HelperAgenda {
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
             limparCamposTela();
+            salvou = true;
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("ERRO_SALVAR_AGENDA", "Erro ao salvar Agenda." + e.getStackTrace());
+            salvou = false;
             Toast.makeText(activity.getContext(), "Erro ao Salvar Agenda." + e.getStackTrace(), Toast.LENGTH_SHORT).show();
 
         }
+        return salvou;
     }
 
     public void excluir(View activity, String idAgenda) {

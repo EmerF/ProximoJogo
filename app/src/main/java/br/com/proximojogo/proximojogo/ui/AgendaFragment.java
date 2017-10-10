@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
@@ -42,6 +43,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private Activity activity;
     private String idUser;
     private boolean salvou;
+    private boolean validarCampos;
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -90,15 +92,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
         btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
         btListar.setOnClickListener(this);
-
-        /*obs.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-
-                return false;
-            }
-        });*/
+        setRetainInstance(true);
 
         return agendaView;
     }
@@ -119,6 +113,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -130,14 +125,14 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     public void salvarAgenda(View v) {
         try {
-           salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup)this.getView());
-            if(!salvou){
+           LimparCamposFormulario lf = new LimparCamposFormulario();
+           validarCampos = lf.validaEditTextVazio((ViewGroup)this.getView());
+            if(!validarCampos){
 
-                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorPrimary,"Preencha os campos, meu Bem!");
-
+                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
 
             }else {
-                helper.salvar(v);
+                salvou = helper.salvar(v);
             }
         } catch (Exception e) {
             ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Erro ao salvar a agenda ): ");
@@ -149,7 +144,9 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.bt_salvar_agenda) {
+
             salvarAgenda(v);
+            
             if(salvou){
                 getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
             }
@@ -166,5 +163,9 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 }

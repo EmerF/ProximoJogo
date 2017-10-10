@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
  */
 
 public final class LimparCamposFormulario {
-    private static boolean validou = true;
+    private boolean validou = true ;
 
     public static void clearForm(ViewGroup group)
     {
@@ -38,15 +38,15 @@ public final class LimparCamposFormulario {
     *
     *
      */
-    public static boolean validaEditTextVazio(ViewGroup group)
+    public boolean validaEditTextVazio(ViewGroup group)
     {
+
 
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
             if (view instanceof android.support.design.widget.TextInputEditText) {
                 android.support.design.widget.TextInputEditText view2 = ((android.support.design.widget.TextInputEditText) view);
                 String tx = ( view2.getText().toString());
-                System.out.println("Tag: "+ view2.getTag());
 
                 if(tx.equals("") && view2.getTag() == null){
                     view2.setError("Campo Obrigatório!!");
