@@ -68,7 +68,17 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private View mCurrentUrlMask;
     private File imageFile;
     String mCurrentPhotoPath;
+    // data object we want to retain
+    private CriarBannerConfrontoFragment data;
 
+
+    // this method is only called once for this fragment
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // retain this fragment
+        setRetainInstance(true);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_criar_banner_confronto, container, false);
@@ -298,4 +308,11 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     }
 
 
+    public CriarBannerConfrontoFragment getData() {
+        return data;
+    }
+
+    public void setData(CriarBannerConfrontoFragment data) {
+        this.data = data;
+    }
 }
