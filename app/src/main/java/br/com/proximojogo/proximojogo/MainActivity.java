@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         //permissao acessar card app
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
         ivAvatar = (ImageView) hView.findViewById(R.id.ivAvatar);
