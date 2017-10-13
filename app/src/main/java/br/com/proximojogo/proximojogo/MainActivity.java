@@ -18,6 +18,7 @@ import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TesteFirebase;
+import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
@@ -85,10 +87,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_manage) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.drawer_cadastrar_time) {
+            fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
 
         } else if (id == R.id.nav_share) {
 
