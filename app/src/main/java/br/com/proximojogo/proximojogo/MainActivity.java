@@ -201,7 +201,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Something went wrong" + e.getMessage(), Toast.LENGTH_LONG)
                     .show();
         }
-
     }
 
     private void requestStoragePermission() {
