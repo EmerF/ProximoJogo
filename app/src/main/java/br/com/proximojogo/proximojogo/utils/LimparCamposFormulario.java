@@ -14,9 +14,9 @@ import java.lang.reflect.Type;
  */
 
 public final class LimparCamposFormulario {
-    private boolean validou = true;
+    private static boolean validou = true;
 
-    private void clearForm(ViewGroup group)
+    public static void clearForm(ViewGroup group)
     {
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
@@ -38,7 +38,7 @@ public final class LimparCamposFormulario {
     *
     *
      */
-    public boolean validaEditTextVazio(ViewGroup group)
+    public static boolean validaEditTextVazio(ViewGroup group)
     {
 
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {

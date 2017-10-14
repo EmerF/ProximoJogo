@@ -1,19 +1,15 @@
 package br.com.proximojogo.proximojogo.helper;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.LocalDate;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -35,16 +29,14 @@ import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.enuns.Times;
-import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
-import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 /**
  * Created by ale on 08/08/2017.
  */
 
-public class FormularioHelper {
+public class FormularioHelperAgenda {
 
     private static final String TAG = "ASYNC_DAO_AGENDA";
     //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -80,7 +72,7 @@ public class FormularioHelper {
     /*
     * Captura valores inseridos no formulário...
     * */
-    public FormularioHelper(View activity, Handler handler) {
+    public FormularioHelperAgenda(View activity, Handler handler) {
         this.handler = handler;
         inicializaCamposTela(activity);
         viewAtiva = activity;

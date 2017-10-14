@@ -44,6 +44,7 @@ import java.io.InputStreamReader;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
+import br.com.proximojogo.proximojogo.ui.CadastrarTime;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TesteFirebase;
 
@@ -135,9 +136,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if(id == R.id.nav_view){
+            fragmentManager.beginTransaction().replace(R.id.container, new CadastrarTime()).commit();
+        }
+        else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
-
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
