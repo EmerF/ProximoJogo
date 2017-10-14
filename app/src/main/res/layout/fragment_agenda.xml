@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.proximojogo.proximojogo.ui.AgendaFragment">
+    tools:context="br.com.proximojogo.proximojogo.ui.AgendaFragment"
+    android:tag="Agenda">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -74,7 +75,11 @@
                     android:id="@+id/formulario_Data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:inputType="textImeMultiLine"
+                    android:imeActionLabel="@string/pronto"
+                    android:imeOptions="actionNext" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -88,7 +93,11 @@
                     android:id="@+id/formulario_hora"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:inputType="textImeMultiLine"
+                    android:imeActionLabel="@string/pronto"
+                    android:imeOptions="actionNext" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +112,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:textColorLink="@color/colorPrimaryDark" />
+                    android:textColorLink="@color/colorPrimaryDark"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:imeActionLabel="@string/pronto"
+                    android:imeOptions="actionDone" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -172,14 +185,14 @@
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/text_input_layout_formulario_adversario"
-                        android:layout_width="83dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:hint="@string/adversario">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/formulario_adversario"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:inputType="textCapCharacters"
                             android:paddingTop="22dp" />
 
@@ -197,7 +210,13 @@
                     android:id="@+id/formulario_observacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:tag="naoObrigatorio" />
+                    android:tag="naoObrigatorio"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:inputType="textImeMultiLine"
+                    android:imeActionLabel="@string/pronto"
+                    android:imeOptions="actionDone"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 

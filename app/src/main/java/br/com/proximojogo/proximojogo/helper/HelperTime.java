@@ -56,17 +56,18 @@ public class HelperTime {
     }
 
     public void salvarTime(View activity) {
-
+        String id = "Txr5w0STR5YX2r9QjGuqab0KOB13";
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Times");
+
         Time time = pegaTime();
         if (time.getIdTime() == null) {
             //getUser id do Firebase para setar na agenda
             // e colocar o nome junto com o id para identificar o nó
             String key = mDatabaseAgenda.push().getKey();
             time.setIdTime(key);
-            time.setIdResponsavel("Txr5w0STR5YX2r9QjGuqab0KOB13");// substituir pelo id do usuário qdo o login estiver pronto
+            time.setIdResponsavel(id);// substituir pelo id do usuário qdo o login estiver pronto
             //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
-            mDatabaseAgenda.setValue(time);
+            mDatabaseAgenda.child(time.getIdResponsavel()+ "/" +  time.getIdTime()).setValue(time);
 
             Toast.makeText(activity.getContext(), "Time Cadastrado com Sucesso!", Toast.LENGTH_SHORT).show();
         } else {
