@@ -67,17 +67,17 @@
             android:id="@+id/timeVisitante"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/imageView2"
+            android:layout_marginBottom="42dp"
             android:ems="10"
             android:hint="Time Vistante"
             android:inputType="textPersonName"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
             android:textColorLink="@android:color/background_light"
-            android:textStyle="bold"
-            android:layout_above="@+id/imageView"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="42dp"
-            android:layout_alignStart="@+id/imageView2" />
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/timeDaCasa"
