@@ -1,14 +1,12 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.os.Environment;
 import android.os.FileUriExposedException;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -27,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
@@ -39,7 +35,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -55,8 +50,8 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     private static final int IMAGE_REQUEST_CODE = 203;
     private static final int STORAGE_PERMISSION_CODE = 123;
     private static final int RESULT_SELECT_IMG = 3;
-    private ImageView imageView;
     private ImageView imageView2;
+    private ImageView imageView;
     private Button btnUpload;
     private Bitmap bitmap;
     private Uri filePath;
@@ -108,8 +103,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
         imageView.setOnClickListener(this);
         imageView2.setOnClickListener(this);
-//        btnUpload.setOnClickListener(this);
-
         return view;
     }
 
@@ -266,35 +259,6 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     }
 
-    private void requestStoragePermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-            return;
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            //aqui explica pq vc precisa da permissao
-        }
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                CropImage.startPickImageActivity(activity);
-            } else {
-                Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
-            }
-        }
-        if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
-            if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // required permissions granted, start crop image activity
-                startCropImageActivity(mCropImageUri);
-            } else {
-                Toast.makeText(activity, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
-            }
-        }
-
-    }
-
     //inicio crop
     private void startCropImageActivity(Uri imageUri) {
         CropImage.activity(imageUri)
@@ -316,5 +280,26 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
 
     public void setData(CriarBannerConfrontoFragment data) {
         this.data = data;
+    }
+
+    private void requestStoragePermission() {
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return;
+        if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)){
+            //aqui explica pq vc precisa da permissao
+        }
+        ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},STORAGE_PERMISSION_CODE);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == STORAGE_PERMISSION_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(getActivity(),"Precisa de permissao para acessar a imagem",Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getActivity(),"Oops você não tem permissao",Toast.LENGTH_LONG).show();
+
+            }
+        }
+
     }
 }
