@@ -21,13 +21,13 @@ import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.helper.FormularioHelperAgenda;
+import br.com.proximojogo.proximojogo.helper.HelperAgenda;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseReference mDatabase;
-    private FormularioHelperAgenda helper;
+    private HelperAgenda helper;
 
     private ImageButton btSalvar;
     private ImageButton btExcluir;
@@ -76,7 +76,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         handler = new AgendaHandler(this);
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
-        helper = new FormularioHelperAgenda(agendaView, handler);
+        helper = new HelperAgenda(agendaView, handler);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Criar Evento do Time");
         btSalvar = (ImageButton) agendaView.findViewById(R.id.bt_salvar_agenda);
@@ -152,4 +152,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
     }
+
+
 }

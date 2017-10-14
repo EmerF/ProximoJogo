@@ -1,10 +1,7 @@
 package br.com.proximojogo.proximojogo;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,40 +10,34 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
-import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.CadastrarTime;
+import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
-import br.com.proximojogo.proximojogo.ui.TesteFirebase;
+import br.com.proximojogo.proximojogo.ui.TimeFragment;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -135,9 +126,10 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-
         } else if(id == R.id.nav_view){
             fragmentManager.beginTransaction().replace(R.id.container, new CadastrarTime()).commit();
+        } else if (id == R.id.nav_slideshow) {
+            fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         }
         else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
