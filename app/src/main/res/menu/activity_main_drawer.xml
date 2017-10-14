@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_list_48"
             android:title="Listar Eventos" />
         <item
+            android:id="@+id/drawer_cadastrar_time"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Cadastrar Time" />
+        <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_banner_versus_48"
             android:title="Banner" />

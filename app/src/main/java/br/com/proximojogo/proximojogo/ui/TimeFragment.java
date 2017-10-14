@@ -1,6 +1,7 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,38 +11,34 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.helper.HelperAgenda;
 import br.com.proximojogo.proximojogo.helper.HelperTime;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 
 public class TimeFragment extends Fragment  implements View.OnClickListener {
 
-    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference testeReferencia = databaseReference.child("Times");
+    private DatabaseReference databaseReference;
+
 
     private EditText nomeTime;
     private EditText responsavel;
     private EditText telefone;
     private Activity activity;
-
-
-
-
     private ImageButton btSalvar;
-    private TimeFragment helper;
+    private HelperTime helper;
     private Handler handler;
     private View timeView;
+    private boolean salvou;
+    private String idUser;
 
 
     static class TimeHandler extends Handler {
@@ -84,19 +81,8 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         timeView = inflater.inflate(R.layout.fragment_cadastrar_time, container, false);
         helper = new HelperTime(timeView, handler);
 
-//        handler = new AgendaFragment.AgendaHandler(this);
-//        agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
-//        helper = new HelperAgenda(agendaView, handler);
-
-
-        btSalvar = (ImageButton) timeView.findViewById(R.id.bt_salvar_);
+        btSalvar = (ImageButton) timeView.findViewById(R.id.bt_salvar_time);
         btSalvar.setOnClickListener(this);
-
-        btExcluir = (ImageButton) agendaView.findViewById(R.id.bt_excluir_agenda);
-        btExcluir.setOnClickListener(this);
-
-        btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
-        btListar.setOnClickListener(this);
 
         return timeView;
     }
@@ -104,7 +90,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
 
     public void salvarTime(View v) {
         try {
-            boolean salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup) this.getView());
+            salvou = LimparCamposFormulario.validaEditTextVazio((ViewGroup) this.getView());
             if(!salvou){
                 //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
                 ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
@@ -120,6 +106,39 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        int i = v.getId();
+        if(i == R.id.bt_salvar_time){
+            salvarTime(v);
+            if(salvou){
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+
+            }
+        }
+
+    }
+
+   /* @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            idUser = bundle.getString("agenda");
+            if (idUser != null) {
+                try {
+                    helper.preencheFormulario(idUser);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            activity = (Activity) context;
+        }
 
     }
 
@@ -131,13 +150,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         this.databaseReference = databaseReference;
     }
 
-    public DatabaseReference getTesteReferencia() {
-        return testeReferencia;
-    }
-
-    public void setTesteReferencia(DatabaseReference testeReferencia) {
-        this.testeReferencia = testeReferencia;
-    }
 
     public EditText getNomeTime() {
         return nomeTime;
@@ -163,28 +175,32 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         this.telefone = telefone;
     }
 
-    @Override
-    public Activity getActivity() {
-        return activity;
-    }
 
     public void setActivity(Activity activity) {
         this.activity = activity;
     }
 
-    public Button getBtSalvar() {
+    public ImageButton getBtSalvar() {
         return btSalvar;
     }
 
-    public void setBtSalvar(Button btSalvar) {
+    public void setBtSalvar(ImageButton btSalvar) {
         this.btSalvar = btSalvar;
     }
 
-    public TimeFragment getHelper() {
-        return helper;
+    public Handler getHandler() {
+        return handler;
     }
 
-    public void setHelper(TimeFragment helper) {
-        this.helper = helper;
+    public void setHandler(Handler handler) {
+        this.handler = handler;
+    }
+
+    public View getTimeView() {
+        return timeView;
+    }
+
+    public void setTimeView(View timeView) {
+        this.timeView = timeView;
     }
 }

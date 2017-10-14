@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
-import br.com.proximojogo.proximojogo.ui.CadastrarTime;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
@@ -126,9 +125,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-        } else if(id == R.id.nav_view){
-            fragmentManager.beginTransaction().replace(R.id.container, new CadastrarTime()).commit();
-        } else if (id == R.id.nav_slideshow) {
+        }else if (id == R.id.drawer_cadastrar_time) {
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         }
         else if (id == R.id.nav_slideshow) {
