@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
                         .start(this);
             }
             // when image is cropped
-            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 Log.d("APP_DEBUG", result.toString());
                 if (resultCode == Activity.RESULT_OK) {
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity
                     Exception error = result.getError();
                 }
             } else {
-                Toast.makeText(this, "You haven't picked Image",
+                Toast.makeText(this, "Nenhuma imagem selecionada!",
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
@@ -235,9 +235,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void leituraAvatar() {
-        File imgFile = new  File(Environment.getExternalStoragePublicDirectory(
+        File imgFile = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "Camera/" + avatarProximoJogo);
-        if(imgFile.exists()){
+        if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             ivAvatar.setImageBitmap(myBitmap);
 

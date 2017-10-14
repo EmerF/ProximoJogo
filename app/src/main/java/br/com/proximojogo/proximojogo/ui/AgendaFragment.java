@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 
+import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.helper.FormularioHelper;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
@@ -82,6 +83,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         agendaView = inflater.inflate(R.layout.fragment_agenda, container, false);
         helper = new FormularioHelper(agendaView, handler);
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Criar Evento do Time");
         btSalvar = (ImageButton) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
 

@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import br.com.proximojogo.proximojogo.BuildConfig;
+import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 
 /**
@@ -83,6 +84,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_criar_banner_confronto, container, false);
 
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Criar Banner de Confronto");
         Button novaAgenda = (Button) view.findViewById(R.id.btn_share);
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -231,12 +233,12 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                 CropImage.activity(selectedImage)
                         .setGuidelines(CropImageView.Guidelines.ON)
                         .setMinCropResultSize(80, 80)
-                        .setMaxCropResultSize(200, 200)
+                        .setMaxCropResultSize(400, 400)
                         .setCropShape(CropImageView.CropShape.OVAL)
                         .start(getContext(), this);
             }
             // when image is cropped
-            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
                 CropImage.ActivityResult result = CropImage.getActivityResult(data);
                 Log.d("APP_DEBUG", result.toString());
                 if (resultCode == Activity.RESULT_OK) {
@@ -254,7 +256,7 @@ public class CriarBannerConfrontoFragment extends Fragment implements View.OnCli
                     Exception error = result.getError();
                 }
             } else {
-                Toast.makeText(getActivity(), "You haven't picked Image",
+                Toast.makeText(getActivity(), "Nenhuma imagem selecionada!",
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
