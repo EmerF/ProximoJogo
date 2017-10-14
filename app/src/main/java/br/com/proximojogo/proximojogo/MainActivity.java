@@ -43,6 +43,7 @@ import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
 import br.com.proximojogo.proximojogo.ui.TesteFirebase;
+import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -133,10 +134,9 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-        }else if (id == R.id.drawer_cadastrar_time) {
+        } else if (id == R.id.drawer_cadastrar_time) {
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
-        }
-        else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity
 //        intent.setType("image/*");
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_SELECT_IMG);
-
     }
 
     public void leituraAvatar() {
