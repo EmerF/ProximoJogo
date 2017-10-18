@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -68,10 +69,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        //permissao acessar card app
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
+        if(fragmentById == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
