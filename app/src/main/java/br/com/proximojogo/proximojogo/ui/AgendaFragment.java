@@ -3,6 +3,7 @@ package br.com.proximojogo.proximojogo.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -45,6 +47,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private String idUser;
     private boolean salvou;
     private boolean validarCampos;
+    private InputMethodManager imm;
 
     static class AgendaHandler extends Handler {
         WeakReference<AgendaFragment> weakAgendaFragment;
@@ -100,6 +103,13 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
@@ -135,6 +145,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
             }else {
                 salvou = helper.salvar(v);
+
             }
         } catch (Exception e) {
             ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Erro ao salvar a agenda ): ");
@@ -151,6 +162,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             
             if(salvou){
                 getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+
             }
 
         } else if (i == R.id.bt_excluir_agenda) {
@@ -170,4 +182,10 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 }

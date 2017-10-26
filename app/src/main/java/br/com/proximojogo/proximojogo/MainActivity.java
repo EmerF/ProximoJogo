@@ -2,6 +2,8 @@ package br.com.proximojogo.proximojogo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -30,6 +32,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         leituraAvatar();
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -232,6 +238,7 @@ public class MainActivity extends AppCompatActivity
 //        intent.setAction(Intent.ACTION_GET_CONTENT);
 //        startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_SELECT_IMG);
     }
+
 
     public void leituraAvatar() {
         File imgFile = new File(Environment.getExternalStoragePublicDirectory(
