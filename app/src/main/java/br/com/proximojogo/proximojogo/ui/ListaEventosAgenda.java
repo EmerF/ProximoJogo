@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 import java.util.Date;
 
+import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
@@ -34,6 +35,7 @@ public class ListaEventosAgenda extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
 
