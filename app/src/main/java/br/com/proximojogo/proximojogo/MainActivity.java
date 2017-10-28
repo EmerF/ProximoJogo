@@ -74,10 +74,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if(fragmentById == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
@@ -141,15 +143,18 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+
         } else if (id == R.id.drawer_cadastrar_time) {
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         } else if (id == R.id.nav_slideshow) {
+
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -209,6 +214,7 @@ public class MainActivity extends AppCompatActivity
                     .show();
         }
     }
+
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)

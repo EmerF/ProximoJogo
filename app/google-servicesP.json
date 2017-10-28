@@ -1,0 +1,138 @@
+{
+  "project_info": {
+    "project_number": "301914957722",
+    "firebase_url": "https://proximojogo-434b7.firebaseio.com",
+    "project_id": "proximojogo-434b7",
+    "storage_bucket": "proximojogo-434b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301914957722:android:523997f0edbaae50",
+        "android_client_info": {
+          "package_name": "com.proximojogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0P0LyMSKeENL1PSQ2EgkljRRzieqs6iM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301914957722:android:3f4d99fe106e066d",
+        "android_client_info": {
+          "package_name": "br.com.proximojogo.proximojogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301914957722-l9m29m6glb0uv9du130vbi4u2snfqt9d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.proximojogo.proximojogo",
+            "certificate_hash": "11e0568282b7864ab7413ce0e3d2a97cc9ac6c1d"
+          }
+        },
+        {
+          "client_id": "301914957722-3j311bghc21r689gsc4073h365tct1pj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.proximojogo.proximojogo",
+            "certificate_hash": "90f5612778034fcb0968e3a83a7f7b00a18a9383"
+          }
+        },
+        {
+          "client_id": "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0P0LyMSKeENL1PSQ2EgkljRRzieqs6iM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301914957722:android:4d8ec1443b56021b",
+        "android_client_info": {
+          "package_name": "br.com.easygame.easygame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301914957722-ooo80kcu0okmqbf5vm46hk1iapntun07.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.easygame.easygame",
+            "certificate_hash": "90f5612778034fcb0968e3a83a7f7b00a18a9383"
+          }
+        },
+        {
+          "client_id": "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0P0LyMSKeENL1PSQ2EgkljRRzieqs6iM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
