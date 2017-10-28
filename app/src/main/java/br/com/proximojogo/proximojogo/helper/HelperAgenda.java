@@ -153,8 +153,8 @@
             agenda.setValor(new Double(campoValor.getText().toString()));
             NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
             agenda.setArena(arena.toString());
-            Times time = (Times) campoTime.getSelectedItem();
-            agenda.setTimes(time.toString());
+            String time =  campoTime.getSelectedItem().toString();
+            agenda.setTimes(campoTime.getSelectedItem().toString());
             agenda.setObservacao(campoObservacao.getText().toString());
             agenda.setStatus("Status");
         return agenda;
@@ -245,7 +245,8 @@
 
     public void inicializaCamposTela(View activity) {
         //spinner Arenas
-        ArrayAdapter<NomeArena> adapter = new ArrayAdapter<NomeArena>(activity.getContext(), R.layout.support_simple_spinner_dropdown_item,
+        ArrayAdapter<NomeArena> adapter = new ArrayAdapter<NomeArena>(activity.getContext(),
+                R.layout.support_simple_spinner_dropdown_item,
                 NomeArena.values());
         adapter.setDropDownViewResource(android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item);
         sp = (Spinner) activity.findViewById(R.id.formulario_local);
@@ -254,7 +255,7 @@
         //Times/Times
         ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>
                 (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, getTimesUsuario());
-        adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        adapterTimes.setDropDownViewResource(android.R.layout.simple_spinner_item);
 
         spTimes = (Spinner) activity.findViewById(R.id.formulario_time);
         spTimes.setAdapter(adapterTimes);
@@ -262,7 +263,8 @@
         //Tipo do evento
 
         ArrayAdapter<Eventos> adapterEvento = new ArrayAdapter<Eventos>
-                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Eventos.values());
+                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item,
+                        br.com.proximojogo.proximojogo.enuns.Eventos.values());
         adapterEvento.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
         spEvento.setAdapter(adapterEvento);
