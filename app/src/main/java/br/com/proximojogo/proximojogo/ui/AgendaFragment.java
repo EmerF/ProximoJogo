@@ -188,4 +188,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         super.onConfigurationChanged(newConfig);
     }
 
+
+
 }
