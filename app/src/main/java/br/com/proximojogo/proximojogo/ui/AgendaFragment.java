@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -98,7 +99,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
         btListar.setOnClickListener(this);
         setRetainInstance(true);
-
         return agendaView;
     }
 

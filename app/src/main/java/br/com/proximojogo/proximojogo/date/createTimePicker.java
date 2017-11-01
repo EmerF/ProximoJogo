@@ -55,6 +55,8 @@ public class createTimePicker  implements View.OnFocusChangeListener, View.OnCli
             minute = myCalendar.get(Calendar.MINUTE);
             timePickerDialog =  new TimePickerDialog(ctx, 3,this, hour, minute,true);
             //timePickerDialog.setTitle(this.title);
+//            timePicker.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
             timePickerDialog.show();
         }
     }

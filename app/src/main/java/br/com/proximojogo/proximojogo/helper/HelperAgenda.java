@@ -3,8 +3,10 @@ package br.com.proximojogo.proximojogo.helper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,6 +25,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.date.PickersActivity;
 import br.com.proximojogo.proximojogo.date.createDatePicker;
 import br.com.proximojogo.proximojogo.date.createTimePicker;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
@@ -265,11 +268,18 @@ public class HelperAgenda {
         spEvento.setAdapter(adapterEvento);
 
         data = (EditText) activity.findViewById(R.id.formulario_Data);
+
         //sempre pego o dia atual
         data.setText(new LocalDate().toString("dd/MM/yyyy"));
+        //boqueia o teclado
+        data.setInputType(InputType.TYPE_NULL);
+
         hora = (EditText) activity.findViewById(R.id.formulario_hora);
-        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
-        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
+        hora.setInputType(InputType.TYPE_NULL);
+//        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
+//        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
+        new PickersActivity(data,activity.getContext(),0);
+        new PickersActivity(hora,activity.getContext(),1);
 
 
         campoEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
