@@ -276,8 +276,6 @@ public class HelperAgenda {
 
         hora = (EditText) activity.findViewById(R.id.formulario_hora);
         hora.setInputType(InputType.TYPE_NULL);
-//        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
-//        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
         new PickersActivity(data,activity.getContext(),0);
         new PickersActivity(hora,activity.getContext(),1);
 

@@ -13,6 +13,10 @@ import java.util.Calendar;
  * Created by emerson on 03/12/16.
  */
 
+/**
+ * Pia deprecatei ela agora usar {@link PickersActivity}
+ */
+@Deprecated
 public class createDatePicker implements View.OnFocusChangeListener, View.OnClickListener, DatePickerDialog.OnDateSetListener {
     /* Cria um datepicker a partir do click em um edit text e preenche com data após clicar em ok
 
