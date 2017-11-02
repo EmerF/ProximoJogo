@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -21,6 +22,7 @@ import java.lang.ref.WeakReference;
 import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.entity.Time;
 import br.com.proximojogo.proximojogo.helper.HelperTime;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
@@ -34,12 +36,14 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
     private EditText responsavel;
     private EditText telefone;
     private Activity activity;
-    private ImageButton btSalvar;
     private HelperTime helper;
     private Handler handler;
     private View timeView;
     private boolean salvou;
-    private String idUser;
+    private String idTime;
+    private ImageButton btSalvar;
+    private ImageButton btExcluir;
+    private ImageButton btListar;
 
 
     static class TimeHandler extends Handler {
@@ -85,6 +89,12 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         btSalvar = (ImageButton) timeView.findViewById(R.id.bt_salvar_time);
         btSalvar.setOnClickListener(this);
 
+        btExcluir = (ImageButton) timeView.findViewById(R.id.bt_excluir_time);
+        btExcluir.setOnClickListener(this);
+
+        btListar = (ImageButton) timeView.findViewById(R.id.bt_listar_times);
+        btListar.setOnClickListener(this);
+
         return timeView;
     }
 
@@ -114,28 +124,45 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         if(i == R.id.bt_salvar_time){
             salvarTime(v);
             if(salvou){
-                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaTimesUsuario()).commit();
 
+            }
+        }
+        if(i == R.id.bt_listar_times){
+            getFragmentManager().beginTransaction().replace(R.id.container, new ListaTimesUsuario()).commit();
+        }
+        if (i == R.id.bt_excluir_time) {
+            if (idTime != null) {
+                helper.excluir(v, idTime);
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaTimesUsuario()).commit();
+            } else {
+                Toast.makeText(activity, "Time não pode ser excluído!", Toast.LENGTH_SHORT).show();
             }
         }
 
     }
 
-   /* @Override
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            idUser = bundle.getString("agenda");
-            if (idUser != null) {
+            idTime = bundle.getString("idTime");
+            Time time = new Time();
+            time.setIdTime(idTime);
+            time.setNomeTime(bundle.getString("nome"));
+            time.setResponsavelTime(bundle.getString("responsavel"));
+            time.setTelefoneResponsavel(bundle.getString("telefone"));
+
+            if (idTime != null) {
                 try {
-                    helper.preencheFormulario(idUser);
+                    helper.preencheFormulario(time);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
         }
-    }*/
+    }
 
     @Override
     public void onAttach(Context context) {

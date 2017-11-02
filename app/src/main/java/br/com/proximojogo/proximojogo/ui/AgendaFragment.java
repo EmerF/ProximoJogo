@@ -28,6 +28,7 @@ import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.helper.HelperAgenda;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
@@ -44,7 +45,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     //estava usando só no Dynamo
     private Handler handler;
     private Activity activity;
-    private String idUser;
+    private String idAgenda;
     private boolean salvou;
     private boolean validarCampos;
     private InputMethodManager imm;
@@ -97,7 +98,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
         btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
         btListar.setOnClickListener(this);
-        setRetainInstance(true);
 
         return agendaView;
     }
@@ -112,12 +112,25 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
-            idUser = bundle.getString("agenda");
-            if (idUser != null) {
+            //idUser = bundle.getString("agenda");
+            idAgenda = bundle.getString("idAgenda");
+            AgendaDO agenda = new AgendaDO();
+            agenda.setIdAgenda(idAgenda);
+            agenda.setEvento(bundle.getString("evento"));
+            agenda.setArena(bundle.getString("local"));
+            agenda.setTimes(bundle.getString("time"));
+            agenda.setData(Long.parseLong(bundle.getString("data")));
+            agenda.setHora(Long.parseLong(bundle.getString("hora")));
+            agenda.setAdversario(bundle.getString("adversario"));
+            agenda.setValor(Double.parseDouble(bundle.getString("valor")));
+            agenda.setObservacao(bundle.getString("observacao"));
+
+            if (agenda != null) {
                 try {
-                    helper.preencheFormulario(idUser);
+                    helper.preencheFormulario(agenda);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -165,9 +178,10 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
             }
 
-        } else if (i == R.id.bt_excluir_agenda) {
-            if (idUser != null) {
-                helper.excluir(v, idUser);
+        }
+        if (i == R.id.bt_excluir_agenda) {
+            if (idAgenda != null) {
+                helper.excluir(v, idAgenda);
                 getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
             } else {
                 Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();

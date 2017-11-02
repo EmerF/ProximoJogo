@@ -23,7 +23,6 @@
             android:id="@+id/nome_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aguia"
             android:maxLines="1"
             android:lines="1"
             android:inputType="textImeMultiLine"
@@ -42,7 +41,6 @@
             android:id="@+id/responsavel_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Milton"
             android:maxLines="1"
             android:lines="1"
             android:inputType="textImeMultiLine"
@@ -60,7 +58,6 @@
             android:id="@+id/telefone_responsavel_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="41 9898-7675"
             android:maxLines="1"
             android:lines="1"
             android:inputType="textImeMultiLine"
@@ -69,16 +66,50 @@
         </android.support.design.widget.TextInputLayout>
 
 
-        <ImageButton
-            android:id="@+id/bt_salvar_time"
-            android:layout_width="51dp"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:src="@drawable/savechild"
-            android:text="@string/salvar"
-            android:layout_centerHorizontal="true"
 
-            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:id="@+id/linear_botoes_agenda">
+
+            <ImageButton
+                android:id="@+id/bt_salvar_time"
+                android:layout_width="51dp"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/savechild"
+                android:text="@string/salvar"
+                android:layout_centerHorizontal="true"
+
+                />
+
+            <ImageButton
+                android:id="@+id/bt_listar_times"
+                android:layout_width="59dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/list"
+                android:text="@string/listar"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="45dp"
+
+                />
+
+            <ImageButton
+                android:id="@+id/bt_excluir_time"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="false"
+                android:background="?android:attr/selectableItemBackground"
+                android:src="@drawable/delete"
+                android:text="@string/excluir"
+
+
+                />
+
+        </LinearLayout>
 
 
     </LinearLayout>

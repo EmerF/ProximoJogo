@@ -49,7 +49,15 @@ public class ListaEventosAgenda extends Fragment {
                  */
                 Bundle bundle = new Bundle();
                 AgendaFragment agendaFragment = new AgendaFragment();
-                bundle.putString("agenda", agenda.getIdAgenda());
+                bundle.putString("idAgenda", agenda.getIdAgenda());
+                bundle.putString("evento", agenda.getEvento());
+                bundle.putString("local", agenda.getArena());
+                bundle.putString("time", agenda.getTimes());
+                bundle.putString("data", agenda.getData().toString());
+                bundle.putString("hora", agenda.getHora().toString());
+                bundle.putString("adversario", agenda.getAdversario());
+                bundle.putString("valor", agenda.getValor().toString());
+                bundle.putString("observacao", agenda.getObservacao());
                 agendaFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
 

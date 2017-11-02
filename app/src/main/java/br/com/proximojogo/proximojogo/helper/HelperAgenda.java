@@ -69,6 +69,7 @@
 
         private DatabaseReference mDatabaseAgenda;
         private View viewAtiva;
+        private ArrayAdapter<String> adapterTimes;
 
 
         /*
@@ -94,7 +95,7 @@
                     // e colocar o nome junto com o id para identificar o nó
                     String key = mDatabaseAgenda.push().getKey();
                     agenda.setIdAgenda(key);
-                    agenda.setIdUser("Txr5w0STR5YX2r9QjGuqab0KOB13");// substituir pelo id do usuário qdo o login estiver pronto
+                    // substituir pelo id do usuário qdo o login estiver pronto
                     //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
                     mDatabaseAgenda.child(agenda.getIdUser()+ "/" +  agenda.getIdAgenda()).setValue(agenda);
 
@@ -117,7 +118,7 @@
 
         public void excluir(View activity, String idAgenda) {
             try {
-                mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
             mDatabaseAgenda.removeValue();
             limparCamposTela();
             Toast.makeText(activity.getContext(), "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
@@ -134,11 +135,6 @@
     }
 
     public AgendaDO pegaAgenda() throws ParseException {
-//        agenda.setIdAgenda("-KrYLr6m0kc9TH_TJhaZ");
-        /*if (campoDat.getText().toString().equals("")) {
-            campoDat.setError("Informe a data!!");
-        }*/
-
 
             Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
 
@@ -153,42 +149,38 @@
             agenda.setValor(new Double(campoValor.getText().toString()));
             NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
             agenda.setArena(arena.toString());
-            Times time = (Times) campoTime.getSelectedItem();
-            agenda.setTimes(time.toString());
+            agenda.setTimes(campoTime.getSelectedItem().toString());
             agenda.setObservacao(campoObservacao.getText().toString());
             agenda.setStatus("Status");
+            agenda.setIdUser(GetUser.getUserLogado());
         return agenda;
 
     }
-
-    public void preencheFormulario(String idAgenda) throws ParseException {
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado()+ "/" +idAgenda);
-        mDatabaseAgenda.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                agenda = dataSnapshot.getValue(AgendaDO.class);
+/*  Preenche o formulário com os dados do objeto recebido como parametro
+*   Seta o objeto recebido no objeto local para fins de edição
+*
+*
+ */
+    public void preencheFormulario(AgendaDO agenda) throws ParseException {
                 if (agenda != null) {
                     int item;
                     //Eventos.values();
                     //item = setValorSpinner(agenda.getEvento(),Eventos.values());
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
                     campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
-                    campoTime.setSelection(Times.valueOf(agenda.getTimes()).ordinal());
+//                    int pos = adapterTimes.getPosition(agenda.getTimes());
+//                    campoTime.setAdapter(adapterTimes);
+//                    campoTime.setSelection(pos);
+                    campoTime.setSelection(1);
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
                     campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
                     campoAdversario.setText(String.valueOf(agenda.getAdversario()));
                     campoValor.setText(String.valueOf(agenda.getValor()));
                     campoObservacao.setText(agenda.getObservacao());
-//                this.agenda = agenda;
+                    this.agenda = agenda;
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-            }
-        });
     }
 
 
@@ -252,12 +244,8 @@
         sp.setAdapter(adapter);
 
         //Times/Times
-        ArrayAdapter<String> adapterTimes = new ArrayAdapter<String>
-                (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, getTimesUsuario());
-        adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-        spTimes = (Spinner) activity.findViewById(R.id.formulario_time);
-        spTimes.setAdapter(adapterTimes);
+        getTimesUsuario(activity);
 
         //Tipo do evento
 
@@ -290,7 +278,7 @@
         agenda = new AgendaDO();
     }
 
-    private List<String> getTimesUsuario(){
+    private void getTimesUsuario(final View activity){
         final List<String> times = new ArrayList<String>();
         mDatabaseAgenda =FirebaseDatabase.getInstance().getReference().child("Times"+ "/" +GetUser.getUserLogado());
         mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
@@ -305,6 +293,13 @@
                     String areaName = areaSnapshot.child("nomeTime").getValue(String.class);
                     times.add(areaName);
                 }
+                //Times/Times
+                adapterTimes = new ArrayAdapter<String>
+                        (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
+                adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
+                campoTime.setAdapter(adapterTimes);
 
             }
 
@@ -312,8 +307,8 @@
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
         });
 
-        return  times;
     }
 }
