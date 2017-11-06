@@ -93,7 +93,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         btExcluir.setOnClickListener(this);
 
         btListar = (ImageButton) timeView.findViewById(R.id.bt_listar_times);
-        btListar.setOnClickListener(this);
+        btListar.setOnClickListener(this);//teste ale
 
         return timeView;
     }
