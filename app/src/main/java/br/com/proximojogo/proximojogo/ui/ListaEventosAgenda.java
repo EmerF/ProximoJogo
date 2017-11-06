@@ -73,7 +73,7 @@ public class ListaEventosAgenda extends Fragment {
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),
                 AgendaDO.class,
-                R.layout.row_evento,
+                R.layout.row_evento_excluir,
                 mDatabase.startAt(c.getTimeInMillis()).orderByChild("data") // ordena os dados pelo campo informado...
 
 
