@@ -162,16 +162,15 @@
 *
  */
     public void preencheFormulario(AgendaDO agenda) throws ParseException {
+        
                 if (agenda != null) {
-                    int item;
-                    //Eventos.values();
-                    //item = setValorSpinner(agenda.getEvento(),Eventos.values());
+
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
                     campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
-//                    int pos = adapterTimes.getPosition(agenda.getTimes());
-//                    campoTime.setAdapter(adapterTimes);
-//                    campoTime.setSelection(pos);
-                    campoTime.setSelection(1);
+                    //campoTime.getAdapter().getPo
+                    int pos = adapterTimes.getPosition(agenda.getTimes());
+                    //campoTime.setAdapter(pos);
+                    campoTime.setSelection(pos);
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
                     campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
@@ -182,15 +181,6 @@
                 }
 
     }
-
-
-    public void imprimeValores(AgendaDO agenda) {
-       /* Log.d("Evento", agenda.getEvento().name());
-        Log.d("Time", agenda.getTimeEnum().toString());
-        Log.d("Inicio", FormatarData.geagenda.getInicio());*/
-
-    }
-
 
     public void carregaImagem(String caminhoFoto) {
         if (caminhoFoto != null) {
