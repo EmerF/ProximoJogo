@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView ivAvatar;
     private Bitmap bitmap;
     private Uri mCropImageUri;
-    private String avatarProximoJogo = "avatarProximoJogo.png";
+    private String avatarProximoJogo = "avatar_proximo_jogo.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
