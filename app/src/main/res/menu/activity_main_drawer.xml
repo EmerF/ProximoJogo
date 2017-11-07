@@ -18,6 +18,10 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_banner_versus_48"
             android:title="Banner" />
+        <item
+            android:id="@+id/drawer_cadastrar_arena"
+            android:icon="@drawable/ic_preferencias"
+            android:title="Cadastrar Arena" />
     </group>
 
 

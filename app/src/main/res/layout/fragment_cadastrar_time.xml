@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:lines="1"
-            android:inputType="textImeMultiLine"
+            android:inputType="numberDecimal"
             android:imeActionLabel="@string/pronto"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>

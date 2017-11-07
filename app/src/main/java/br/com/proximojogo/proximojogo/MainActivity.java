@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
+import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
@@ -149,7 +150,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
+        }else if(id == R.id.drawer_cadastrar_arena){
+
+            fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

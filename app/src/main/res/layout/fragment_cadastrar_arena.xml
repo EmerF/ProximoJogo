@@ -1,0 +1,146 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.proximojogo.proximojogo.ui.TesteFirebase">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        >
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_nome_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nome">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/nome_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:lines="1"
+            android:inputType="textImeMultiLine"
+            android:imeActionLabel="@string/pronto"
+            android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_endereco_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/endereco">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/endereco_arena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="textImeMultiLine"
+                android:imeActionLabel="@string/pronto"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_telefone_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/telefone">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/telefone_arena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="numberDecimal"
+                android:imeActionLabel="@string/pronto"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_responsavel_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/responsavel">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/responsavel_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:lines="1"
+            android:inputType="textImeMultiLine"
+            android:imeActionLabel="@string/pronto"
+            android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_horario_ini_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/horario">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/horario_ini_arena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="textImeMultiLine"
+                android:imeActionLabel="@string/pronto"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lb_horario_fim_arena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/horario_fim">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/horario_fim_arena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:lines="1"
+                android:inputType="textImeMultiLine"
+                android:imeActionLabel="@string/pronto"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="left"
+            android:id="@+id/linear_botoes_arena">
+
+            <Button
+                android:id="@+id/bt_salvar_arena"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salvar"
+                android:textColor="@android:color/background_light"
+                android:textSize="@dimen/texto_btn"
+                android:theme="@style/btnSalvar" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

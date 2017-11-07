@@ -2,12 +2,10 @@
 
 package br.com.proximojogo.proximojogo.helper;
 
-import android.text.InputType;
-import android.widget.ArrayAdapter;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,12 +29,9 @@ import java.util.List;
 
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.date.PickersActivity;
-import br.com.proximojogo.proximojogo.date.createDatePicker;
-import br.com.proximojogo.proximojogo.date.createTimePicker;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.enuns.NomeArena;
-import br.com.proximojogo.proximojogo.enuns.Times;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
