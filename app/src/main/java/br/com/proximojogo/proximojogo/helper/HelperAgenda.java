@@ -70,6 +70,7 @@
         private DatabaseReference mDatabaseAgenda;
         private View viewAtiva;
         private ArrayAdapter<String> adapterTimes;
+        private List <String> times2 = new ArrayList<String>();
 
 
         /*
@@ -168,8 +169,9 @@
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
                     campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
                     //campoTime.getAdapter().getPo
+                    adapterTimes = (ArrayAdapter<String>) campoTime.getAdapter();
                     int pos = adapterTimes.getPosition(agenda.getTimes());
-                    //campoTime.setAdapter(pos);
+
                     campoTime.setSelection(pos);
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
@@ -268,9 +270,11 @@
         agenda = new AgendaDO();
     }
 
+
+
     private void getTimesUsuario(final View activity){
         final List<String> times = new ArrayList<String>();
-        mDatabaseAgenda =FirebaseDatabase.getInstance().getReference().child("Times"+ "/" +GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times"+ "/" +GetUser.getUserLogado());
         mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -283,6 +287,7 @@
                     String areaName = areaSnapshot.child("nomeTime").getValue(String.class);
                     times.add(areaName);
                 }
+                times2.addAll(times);
                 //Times/Times
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
