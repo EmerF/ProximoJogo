@@ -39,6 +39,7 @@
             android:background="@drawable/fundo"
             android:elevation="6dp"
             android:stateListAnimator="@null"
+            android:visibility="gone"
             />
     </RelativeLayout>
 

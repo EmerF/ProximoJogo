@@ -12,7 +12,10 @@ import java.util.Calendar;
 /**
  * Created by emerson on 03/12/16.
  */
-
+/**
+ * Pia deprecatei ela agora usar {@link PickersActivity}
+ */
+@Deprecated
 public class createTimePicker  implements View.OnFocusChangeListener, View.OnClickListener, TimePickerDialog.OnTimeSetListener {
     /* Cria um timepicker a partir do click em um edit text e preenche com data após clicar em ok
 
@@ -50,11 +53,12 @@ public class createTimePicker  implements View.OnFocusChangeListener, View.OnCli
     public void onFocusChange(View v, boolean hasFocus) {
         // TODO Auto-generated method stub
         if(hasFocus){
-
             hour = myCalendar.get(Calendar.HOUR_OF_DAY);
             minute = myCalendar.get(Calendar.MINUTE);
             timePickerDialog =  new TimePickerDialog(ctx, 3,this, hour, minute,true);
             //timePickerDialog.setTitle(this.title);
+//            timePicker.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
             timePickerDialog.show();
         }
     }

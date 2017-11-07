@@ -10,16 +10,13 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 
@@ -37,7 +34,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private DatabaseReference mDatabase;
     private HelperAgenda helper;
 
-    private ImageButton btSalvar;
+    private Button btSalvar;
     private ImageButton btExcluir;
     private ImageButton btListar;
     private View agendaView;
@@ -90,15 +87,15 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         helper = new HelperAgenda(agendaView, handler);
 
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Criar Evento do Time");
-        btSalvar = (ImageButton) agendaView.findViewById(R.id.bt_salvar_agenda);
+        btSalvar = (Button) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
 
-        btExcluir = (ImageButton) agendaView.findViewById(R.id.bt_excluir_agenda);
-        btExcluir.setOnClickListener(this);
-
-        btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
-        btListar.setOnClickListener(this);
-
+//        btExcluir = (ImageButton) agendaView.findViewById(R.id.bt_excluir_agenda);
+//        btExcluir.setOnClickListener(this);
+//
+//        btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
+//        btListar.setOnClickListener(this);
+        setRetainInstance(true);
         return agendaView;
     }
 
@@ -172,36 +169,35 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         if (i == R.id.bt_salvar_agenda) {
 
             salvarAgenda(v);
-            
-            if(salvou){
+
+            if (salvou) {
                 getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
             }
 
+//        else if (i == R.id.bt_excluir_agenda) {
+//            if (idUser != null) {
+//                helper.excluir(v, idUser);
+//                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+//            } else {
+//                Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
+//            }
+//        } else if (i == R.id.bt_listar_agenda) {
+//            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+//        }
         }
-        if (i == R.id.bt_excluir_agenda) {
-            if (idAgenda != null) {
-                helper.excluir(v, idAgenda);
-                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-            } else {
-                Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
-            }
-        } else if (i == R.id.bt_listar_agenda) {
-            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+    }
+        @Override
+        public void onCreate (@Nullable Bundle savedInstanceState){
+            super.onCreate(savedInstanceState);
+            setRetainInstance(true);
         }
+
+        @Override
+        public void onConfigurationChanged (Configuration newConfig){
+            super.onConfigurationChanged(newConfig);
+        }
+
+
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-
-
-}

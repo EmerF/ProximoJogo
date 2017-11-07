@@ -15,4 +15,6 @@
     <dimen name="activity_padding_16dp">16dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
+    <!-- Customizado equipe ProximoJogo-->
+    <dimen name="texto_btn">13dp</dimen>
 </resources>

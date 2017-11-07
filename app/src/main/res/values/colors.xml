@@ -6,4 +6,9 @@
     <color name="colorRed">#FF0000</color>
     <color name="colorGreen">#52D017</color>
 
+    <!-- Cutomizar botão salvar-->
+    <color name="colorNormal">#3f51b5</color>
+    <color name="colorPressionado">#303f9f</color>
+    <color name="colorDesabilitado">#95174ed0</color>
+
 </resources>

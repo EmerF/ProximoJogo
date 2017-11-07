@@ -1,124 +1,125 @@
-    package br.com.proximojogo.proximojogo.helper;
-
-    import android.graphics.Bitmap;
-    import android.graphics.BitmapFactory;
-    import android.os.Handler;
-    import android.util.Log;
-    import android.view.View;
-    import android.widget.ArrayAdapter;
-    import android.widget.EditText;
-    import android.widget.Spinner;
-    import android.widget.Toast;
-
-    import com.google.firebase.database.DataSnapshot;
-    import com.google.firebase.database.DatabaseError;
-    import com.google.firebase.database.DatabaseReference;
-    import com.google.firebase.database.FirebaseDatabase;
-    import com.google.firebase.database.ValueEventListener;
-
-    import org.joda.time.LocalDate;
-
-    import java.text.ParseException;
-    import java.util.ArrayList;
-    import java.util.Date;
-    import java.util.GregorianCalendar;
-    import java.util.List;
-
-    import br.com.proximojogo.proximojogo.R;
-    import br.com.proximojogo.proximojogo.date.createDatePicker;
-    import br.com.proximojogo.proximojogo.date.createTimePicker;
-    import br.com.proximojogo.proximojogo.entity.AgendaDO;
-    import br.com.proximojogo.proximojogo.enuns.Eventos;
-    import br.com.proximojogo.proximojogo.enuns.NomeArena;
-    import br.com.proximojogo.proximojogo.enuns.Times;
-    import br.com.proximojogo.proximojogo.utils.FormatarData;
-    import br.com.proximojogo.proximojogo.utils.GetUser;
-
-    /**
-     * Created by ale on 08/08/2017.
-     */
-
-    public class HelperAgenda {
-
-        private static final String TAG = "ASYNC_DAO_AGENDA";
-        //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-
-        //private final EditText campoEvento;
-        private Spinner campoEvento;
-        //private final EditText campoStatus;
-        private EditText campoDat;
-        private EditText campoDiaSemana;
-        private EditText campoHora;
-        //private final EditText campoDiaSemana;
-        private EditText campoAdversario;
-        private EditText campoValor;
-        private Spinner campoLocal;
-        private Spinner campoTime;
-
-        private EditText campoObservacao;
-
-        private Spinner sp;
-        private Spinner spTimes;
-        private Spinner spEvento;
-        private EditText data;
-        private EditText hora;
-
-        //private final ImageView campoFoto;
-        private AgendaDO agenda;
-        private Handler handler = null;
-
-        private DatabaseReference mDatabaseAgenda;
-        private View viewAtiva;
-        private ArrayAdapter<String> adapterTimes;
-        private List <String> times2 = new ArrayList<String>();
 
 
-        /*
-        * Captura valores inseridos no formulário...
-        * */
-        public HelperAgenda(View activity, Handler handler) {
-            this.handler = handler;
-            inicializaCamposTela(activity);
-            viewAtiva = activity;
+package br.com.proximojogo.proximojogo.helper;
+
+import android.text.InputType;
+import android.widget.ArrayAdapter;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.joda.time.LocalDate;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.date.PickersActivity;
+import br.com.proximojogo.proximojogo.date.createDatePicker;
+import br.com.proximojogo.proximojogo.date.createTimePicker;
+import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.enuns.Eventos;
+import br.com.proximojogo.proximojogo.enuns.NomeArena;
+import br.com.proximojogo.proximojogo.enuns.Times;
+import br.com.proximojogo.proximojogo.utils.FormatarData;
+import br.com.proximojogo.proximojogo.utils.GetUser;
+
+/**
+ * Created by ale on 08/08/2017.
+ */
 
 
-        }
+public class HelperAgenda {
 
-        //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
-        public boolean salvar(View activity) {
-            boolean salvou = false;
-            try {
+    private static final String TAG = "ASYNC_DAO_AGENDA";
+    private final View viewAtiva;
+    //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-                mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
-                AgendaDO agenda = pegaAgenda();
-                if (agenda.getIdAgenda() == null) {
-                    //getUser id do Firebase para setar na agenda
-                    // e colocar o nome junto com o id para identificar o nó
-                    String key = mDatabaseAgenda.push().getKey();
-                    agenda.setIdAgenda(key);
-                    // substituir pelo id do usuário qdo o login estiver pronto
-                    //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
-                    mDatabaseAgenda.child(agenda.getIdUser()+ "/" +  agenda.getIdAgenda()).setValue(agenda);
+    //private final EditText campoEvento;
+    private Spinner campoEvento;
+    //private final EditText campoStatus;
+    private EditText campoDat;
+    private EditText campoDiaSemana;
+    private EditText campoHora;
+    //private final EditText campoDiaSemana;
+    private EditText campoAdversario;
+    private EditText campoValor;
+    private Spinner campoLocal;
+    private Spinner campoTime;
 
-                    Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
-                } else {
-                    mDatabaseAgenda.child(agenda.getIdUser()+  "/" + agenda.getIdAgenda()).setValue(agenda);
-                    Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
-                }
-                limparCamposTela();
-                salvou = true;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                Log.e("ERRO_SALVAR_AGENDA", "Erro ao salvar Agenda." + e.getStackTrace());
-                salvou = false;
-                Toast.makeText(activity.getContext(), "Erro ao Salvar Agenda." + e.getStackTrace(), Toast.LENGTH_SHORT).show();
+    private EditText campoObservacao;
 
+    private Spinner sp;
+    private Spinner spTimes;
+    private Spinner spEvento;
+    private EditText data;
+    private EditText hora;
+
+    //private final ImageView campoFoto;
+    private AgendaDO agenda;
+    private Handler handler = null;
+    private DatabaseReference mDatabaseAgenda;
+    private ArrayAdapter<String> adapterTimes;
+
+    public HelperAgenda(View activity, Handler handler) {
+        this.handler = handler;
+        inicializaCamposTela(activity);
+        viewAtiva = activity;
+    }
+
+
+    //https://www.simplifiedcoding.net/firebase-realtime-database-crud/
+
+    public boolean salvar(View activity) {
+        boolean salvou = false;
+        try {
+
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
+            AgendaDO agenda = pegaAgenda();
+            if (agenda.getIdAgenda() == null) {
+                //getUser id do Firebase para setar na agenda
+                // e colocar o nome junto com o id para identificar o nó
+                String key = mDatabaseAgenda.push().getKey();
+                agenda.setIdAgenda(key);
+                // substituir pelo id do usuário qdo o login estiver pronto
+                //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
+                mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
+
+                Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
+            } else {
+                mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
+                Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }
-            return salvou;
-        }
+            limparCamposTela();
+            salvou = true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("ERRO_SALVAR_AGENDA", "Erro ao salvar Agenda." + e.getStackTrace());
+            salvou = false;
+            Toast.makeText(activity.getContext(), "Erro ao Salvar Agenda." + e.getStackTrace(), Toast.LENGTH_SHORT).show();
 
-        public void excluir(View activity, String idAgenda) {
-            try {
+        }
+        return salvou;
+    }
+
+    public void excluir(View activity, String idAgenda) {
+        try {
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
             mDatabaseAgenda.removeValue();
             limparCamposTela();
@@ -137,50 +138,51 @@
 
     public AgendaDO pegaAgenda() throws ParseException {
 
-            Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
+        Date inicio = FormatarData.getFormato().parse(campoDat.getText().toString());
 
-            Eventos evento = (Eventos) campoEvento.getSelectedItem();
-            agenda.setEvento(evento.toString());
-            agenda.setData(inicio.getTime());
+        Eventos evento = (Eventos) campoEvento.getSelectedItem();
+        agenda.setEvento(evento.toString());
+        agenda.setData(inicio.getTime());
 
-            Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
-            agenda.setHora(hora.getTime());
-            agenda.setDiaSemana(diaDaSemana(inicio));
-            agenda.setAdversario(campoAdversario.getText().toString());
-            agenda.setValor(new Double(campoValor.getText().toString()));
-            NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
-            agenda.setArena(arena.toString());
-            agenda.setTimes(campoTime.getSelectedItem().toString());
-            agenda.setObservacao(campoObservacao.getText().toString());
-            agenda.setStatus("Status");
-            agenda.setIdUser(GetUser.getUserLogado());
+        Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
+        agenda.setHora(hora.getTime());
+        agenda.setDiaSemana(diaDaSemana(inicio));
+        agenda.setAdversario(campoAdversario.getText().toString());
+        agenda.setValor(new Double(campoValor.getText().toString()));
+        NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
+        agenda.setArena(arena.toString());
+        agenda.setTimes(campoTime.getSelectedItem().toString());
+        agenda.setObservacao(campoObservacao.getText().toString());
+        agenda.setStatus("Status");
+        agenda.setIdUser(GetUser.getUserLogado());
         return agenda;
 
     }
-/*  Preenche o formulário com os dados do objeto recebido como parametro
-*   Seta o objeto recebido no objeto local para fins de edição
-*
-*
- */
+
+    /*  Preenche o formulário com os dados do objeto recebido como parametro
+    *   Seta o objeto recebido no objeto local para fins de edição
+    *
+    *
+     */
     public void preencheFormulario(AgendaDO agenda) throws ParseException {
-        
-                if (agenda != null) {
 
-                    campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
-                    campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
-                    //campoTime.getAdapter().getPo
-                    adapterTimes = (ArrayAdapter<String>) campoTime.getAdapter();
-                    int pos = adapterTimes.getPosition(agenda.getTimes());
+        if (agenda != null) {
 
-                    campoTime.setSelection(pos);
-                    campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
-                    campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
-                    campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
-                    campoAdversario.setText(String.valueOf(agenda.getAdversario()));
-                    campoValor.setText(String.valueOf(agenda.getValor()));
-                    campoObservacao.setText(agenda.getObservacao());
-                    this.agenda = agenda;
-                }
+            campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
+            campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
+            //campoTime.getAdapter().getPo
+            adapterTimes = (ArrayAdapter<String>) campoTime.getAdapter();
+            int pos = adapterTimes.getPosition(agenda.getTimes());
+
+            campoTime.setSelection(pos);
+            campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
+            campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
+            campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
+            campoAdversario.setText(String.valueOf(agenda.getAdversario()));
+            campoValor.setText(String.valueOf(agenda.getValor()));
+            campoObservacao.setText(agenda.getObservacao());
+            this.agenda = agenda;
+        }
 
     }
 
@@ -248,11 +250,16 @@
         spEvento.setAdapter(adapterEvento);
 
         data = (EditText) activity.findViewById(R.id.formulario_Data);
+
         //sempre pego o dia atual
         data.setText(new LocalDate().toString("dd/MM/yyyy"));
+        //boqueia o teclado
+        data.setInputType(InputType.TYPE_NULL);
+
         hora = (EditText) activity.findViewById(R.id.formulario_hora);
-        createDatePicker dtIni = new createDatePicker(data, activity.getContext(), "Data", new Date().getTime());
-        createTimePicker dtFim = new createTimePicker(hora, activity.getContext(), "Hora");
+        hora.setInputType(InputType.TYPE_NULL);
+        new PickersActivity(data, activity.getContext(), 0);
+        new PickersActivity(hora, activity.getContext(), 1);
 
 
         campoEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
@@ -271,10 +278,9 @@
     }
 
 
-
-    private void getTimesUsuario(final View activity){
+    private void getTimesUsuario(final View activity) {
         final List<String> times = new ArrayList<String>();
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times"+ "/" +GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
         mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -283,11 +289,10 @@
                 // initialize the array
 
 
-                for (DataSnapshot areaSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot areaSnapshot : dataSnapshot.getChildren()) {
                     String areaName = areaSnapshot.child("nomeTime").getValue(String.class);
                     times.add(areaName);
                 }
-                times2.addAll(times);
                 //Times/Times
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
@@ -307,3 +312,4 @@
 
     }
 }
+
