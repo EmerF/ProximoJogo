@@ -174,7 +174,7 @@ public class HelperAgenda {
                     String areaName = areaSnapshot.child("nomeTime").getValue(String.class);
                     times.add(areaName);
                 }
-//              Aqui chamo de novo os times da base, pode não ser uma melhor saida, mas para desenroscar da boa rsrsrs
+                //Aqui chamo de novo os times da base, pode não ser uma melhor saida, mas para desenroscar da boa rsrsrs
                 adapterTimes = new ArrayAdapter<String>
                         (viewAtiva.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
