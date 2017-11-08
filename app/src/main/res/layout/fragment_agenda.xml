@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.proximojogo.proximojogo.ui.AgendaFragment"
-    android:tag="Agenda">
+    android:tag="Agenda"
+    tools:context="br.com.proximojogo.proximojogo.ui.AgendaFragment">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -17,6 +17,11 @@
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true"
             android:orientation="vertical">
+            <EditText
+                android:id="@+id/idAgenda"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,11 +80,11 @@
                     android:id="@+id/formulario_Data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:inputType="textImeMultiLine"
                     android:imeActionLabel="@string/pronto"
-                    android:imeOptions="actionNext" />
+                    android:imeOptions="actionNext"
+                    android:inputType="textImeMultiLine"
+                    android:lines="1"
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -93,11 +98,11 @@
                     android:id="@+id/formulario_hora"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:inputType="textImeMultiLine"
                     android:imeActionLabel="@string/pronto"
-                    android:imeOptions="actionNext" />
+                    android:imeOptions="actionNext"
+                    android:inputType="textImeMultiLine"
+                    android:lines="1"
+                    android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -111,12 +116,12 @@
                     android:id="@+id/formulario_valor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:textColorLink="@color/colorPrimaryDark"
-                    android:maxLines="1"
-                    android:lines="1"
                     android:imeActionLabel="@string/pronto"
-                    android:imeOptions="actionDone" />
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColorLink="@color/colorPrimaryDark" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -210,13 +215,12 @@
                     android:id="@+id/formulario_observacao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:tag="naoObrigatorio"
-                    android:maxLines="1"
-                    android:lines="1"
-                    android:inputType="textImeMultiLine"
                     android:imeActionLabel="@string/pronto"
                     android:imeOptions="actionDone"
-                    />
+                    android:inputType="textImeMultiLine"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:tag="naoObrigatorio" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -228,35 +232,33 @@
                 android:visibility="invisible" />
 
             <LinearLayout
+                android:id="@+id/linear_botoes_agenda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:id="@+id/linear_botoes_agenda">
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/bt_salvar_agenda"
                     android:layout_width="51dp"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/savechild"
                     android:text="@string/salvar"
-                    android:layout_centerHorizontal="true"
 
                     />
-
-
 
 
                 <ImageButton
                     android:id="@+id/bt_listar_agenda"
                     android:layout_width="59dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/list"
-                    android:text="@string/listar"
-                    android:background="?android:attr/selectableItemBackground"
                     android:layout_marginLeft="45dp"
                     android:layout_marginRight="45dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/list"
+                    android:text="@string/listar"
 
                     />
 

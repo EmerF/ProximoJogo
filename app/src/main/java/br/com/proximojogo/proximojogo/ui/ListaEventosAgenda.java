@@ -39,6 +39,7 @@ public class ListaEventosAgenda extends Fragment {
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
 
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
