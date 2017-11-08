@@ -65,9 +65,9 @@ public class HelperAgenda {
     private EditText data;
     private EditText hora;
 
-    //private final ImageView campoFoto;
     private AgendaDO agenda;
     private Handler handler = null;
+    private List<String> times2 = new ArrayList<String>();
 
     private DatabaseReference mDatabaseAgenda;
     private View viewAtiva;
@@ -100,7 +100,6 @@ public class HelperAgenda {
                 // substituir pelo id do usuário qdo o login estiver pronto
                 //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
                 mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
-
                 Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
             } else {
                 mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
@@ -184,7 +183,6 @@ public class HelperAgenda {
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
                     campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
                     int pos = adapterTimes.getPosition(agenda.getTimes());
-                    //campoTime.setAdapter(pos);
                     campoTime.setSelection(pos);
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
@@ -294,7 +292,7 @@ public class HelperAgenda {
     }
 
 
-    public void getTimesUsuario(final View activity) {
+    private void getTimesUsuario(final View activity) {
         final List<String> times = new ArrayList<String>();
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
         mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
@@ -304,7 +302,6 @@ public class HelperAgenda {
                     String areaName = areaSnapshot.child("nomeTime").getValue(String.class);
                     times.add(areaName);
                 }
-//                //Times/Times
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
