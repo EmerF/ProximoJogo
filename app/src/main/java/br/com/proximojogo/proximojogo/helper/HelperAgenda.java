@@ -158,7 +158,7 @@ public class HelperAgenda {
     *
     *
      */
-            public void preencheFormulario ( final AgendaDO agenda) throws ParseException {
+            public void preencheFormulario (final AgendaDO agenda) throws ParseException {
                 final List<String> times = new ArrayList<String>();
                 mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
                 mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
@@ -185,7 +185,7 @@ public class HelperAgenda {
                             campoIdAgenda.setText(String.valueOf(agenda.getIdAgenda()));
                             campoValor.setText(String.valueOf(agenda.getValor()));
                             campoObservacao.setText(agenda.getObservacao());
-//                    this.agenda = agenda;
+
                         }
                     }
 
@@ -195,7 +195,7 @@ public class HelperAgenda {
                     }
 
                 });
-
+                this.agenda = agenda;
             }
 
             public void carregaImagem (String caminhoFoto){
@@ -223,24 +223,6 @@ public class HelperAgenda {
                 return diaDaSemana;
             }
 
-            private int getProximoDiaJogo ( int dia){
-                Date d = new Date();
-
-                int diaAtual = diaDaSemana(d);
-
-                if (dia < diaAtual) {
-                    dia = dia + (diaAtual - dia);
-                }
-                return dia;
-            }
-
-            public void limparCamposTela () throws ParseException {
-                data.setText(new LocalDate().toString("dd/MM/yyyy"));
-                campoValor.setText("");
-                campoAdversario.setText("");
-                campoIdAgenda.setText(null);
-                campoObservacao.setText("");
-            }
 
             public void inicializaCamposTela (View activity){
                 //spinner Arenas
@@ -251,7 +233,7 @@ public class HelperAgenda {
                 sp.setAdapter(adapter);
 
                 //Times/Times
-                getTimesUsuario(activity);
+                CarregarTimesUsuario(activity);
 
                 //Tipo do evento
 
@@ -291,7 +273,7 @@ public class HelperAgenda {
             }
 
 
-            private void getTimesUsuario ( final View activity){
+            private void CarregarTimesUsuario ( final View activity){
                 final List<String> times = new ArrayList<String>();
                 mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
                 mDatabaseAgenda.addValueEventListener(new ValueEventListener() {

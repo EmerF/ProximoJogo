@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.proximojogo.proximojogo.ui.TesteFirebase">
+    tools:context=".MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +27,7 @@
             android:lines="1"
             android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
+            android:text="Cerejeira"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -44,6 +45,7 @@
                 android:maxLines="1"
                 android:lines="1"
                 android:inputType="textCapWords"
+                android:text="Pedro Ossoski, 220"
                 android:imeActionLabel="@string/pronto"
                 android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -61,14 +63,10 @@
                 android:maxLines="1"
                 android:lines="1"
                 android:inputType="numberDecimal"
+                android:text="3666-3408"
                 android:imeActionLabel="@string/pronto"
                 android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
-
-
-
-
-
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/lb_responsavel_arena"
@@ -84,6 +82,7 @@
             android:lines="1"
             android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
+            android:text="Thiago"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -120,8 +119,6 @@
                 android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
-
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,6 +131,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/salvar"
+                android:textColor="@android:color/background_light"
+                android:textSize="@dimen/texto_btn"
+                android:theme="@style/btnSalvar" />
+            <Button
+                android:id="@+id/bt_excluir_arena"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/excluir"
                 android:textColor="@android:color/background_light"
                 android:textSize="@dimen/texto_btn"
                 android:theme="@style/btnSalvar" />

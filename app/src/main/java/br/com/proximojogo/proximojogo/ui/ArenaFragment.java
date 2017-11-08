@@ -34,7 +34,7 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
 
     private HelperArena helper;
 
-    private Button btSalvar;
+
     private View arenaView;
     private EditText obs;
     //estava usando só no Dynamo
@@ -43,6 +43,9 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
     private boolean salvou;
     private boolean validarCampos;
     private InputMethodManager imm;
+    private Button btExcluir;
+    private Button btSalvar;
+    private String idArena;
 
     static class ArenaHandler extends Handler {
         WeakReference<ArenaFragment> weakArenaFragment;
@@ -87,6 +90,9 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
         btSalvar = (Button) arenaView.findViewById(R.id.bt_salvar_arena);
         btSalvar.setOnClickListener(this);
 
+        btExcluir = (Button) arenaView.findViewById(R.id.bt_excluir_arena);
+        btExcluir.setOnClickListener(this);
+
         setRetainInstance(true);
         return arenaView;
     }
@@ -104,14 +110,14 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            //idUser = bundle.getString("agenda");
+            idArena = bundle.getString("idArena");
             Arena arena = new Arena();
-            arena.setIdArena(bundle.getString("idArena"));
+            arena.setIdArena(idArena);
             arena.setNomeArena(bundle.getString("nomeArena"));
             arena.setEndereco(bundle.getString("enderecoArena"));
             arena.setTelefone(bundle.getString("telefoneArena"));
-            arena.setHorarioIniAtendimento(Long.parseLong(bundle.getString("horaIni")));
-            arena.setHorarioFimAtendimento(Long.parseLong(bundle.getString("horaFim")));
+            arena.setHorarioIniAtendimento(bundle.getString("horaIni"));
+            arena.setHorarioFimAtendimento(bundle.getString("horaFim"));
 
             if (arena != null) {
                 try {
@@ -143,6 +149,7 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
 
             }else {
                 salvou = helper.salvar(v);
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaArenas()).commit();
 
             }
         } catch (Exception e) {
@@ -163,6 +170,9 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
 
             }
 
+        }else if(i == R.id.bt_excluir_arena){
+                helper.excluir(v,idArena);
+                getFragmentManager().beginTransaction().replace(R.id.container, new ListaArenas()).commit();
         }
     }
         @Override

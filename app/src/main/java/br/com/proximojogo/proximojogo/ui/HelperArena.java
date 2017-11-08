@@ -29,11 +29,13 @@ import br.com.proximojogo.proximojogo.utils.GetUser;
  */
 
 public class HelperArena {
+    private static final String TAG = "Helper Arena" ;
     private final Handler handler;
     private final View viewAtiva;
     private EditText campoNomeArena;
     private EditText campoTelefoneArena;
     private EditText campoEnderecoArena;
+    private EditText campoResponsavelArena;
     private EditText campoHorarioIniArena;
     private EditText campoHorarioFimArena;
     private DatabaseReference mDatabaseArena;
@@ -82,12 +84,18 @@ public class HelperArena {
 
     private Arena pegaArena() {
 
+        try {
+            arena.setNomeArena(campoNomeArena.getText().toString());
+            arena.setEndereco(campoEnderecoArena.getText().toString());
+            arena.setTelefone(campoTelefoneArena.getText().toString());
+            arena.setResponsavel(campoResponsavelArena.getText().toString());
+            arena.setHorarioIniAtendimento(campoHorarioIniArena.getText().toString());
+            arena.setHorarioFimAtendimento(campoHorarioFimArena.getText().toString());
 
-        arena.setNomeArena(campoNomeArena.getText().toString());
-        arena.setEndereco(campoEnderecoArena.getText().toString());
-        arena.setTelefone(campoTelefoneArena.getText().toString());
-        arena.setHorarioIniAtendimento(Long.parseLong(campoHorarioIniArena.getText().toString()));
-        arena.setHorarioFimAtendimento(Long.parseLong(campoHorarioFimArena.getText().toString()));
+        }catch (Exception e){
+            Log.d(TAG, "erro pegaArena: ");
+            e.printStackTrace();
+        }
         return arena;
     }
 
@@ -115,6 +123,7 @@ public class HelperArena {
         campoNomeArena = (EditText) activity.findViewById(R.id.nome_arena);
         campoTelefoneArena = (EditText) activity.findViewById(R.id.telefone_arena);
         campoEnderecoArena = (EditText) activity.findViewById(R.id.endereco_arena);
+        campoResponsavelArena=(EditText) activity.findViewById(R.id.responsavel_arena);
         // horario de inicio do atendimento
         campoHorarioIniArena = (EditText) activity.findViewById(R.id.horario_ini_arena);
         campoHorarioIniArena.setInputType(InputType.TYPE_NULL);

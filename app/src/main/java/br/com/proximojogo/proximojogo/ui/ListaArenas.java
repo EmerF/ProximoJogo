@@ -30,7 +30,7 @@ public class ListaArenas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosArenaView = inflater.inflate(R.layout.fragment_lista_arenas, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
+        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Arenas");
         mListView = (ListView) eventosArenaView.findViewById(R.id.list_view_arenas);
 
 
@@ -39,7 +39,7 @@ public class ListaArenas extends Fragment {
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
                  arena = (Arena) lista.getItemAtPosition(position);
                 /**
-                 * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                 * esse bundle que envia o valor para outro fragment (evitar acoplamento seria interessante
                  * utilizar uma interface) mas não vi necessidade aqui.
                  */
                 Bundle bundle = new Bundle();
@@ -64,7 +64,7 @@ public class ListaArenas extends Fragment {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Arenas"+ "/" +GetUser.getUserLogado());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Arenas");
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day-1);
@@ -72,8 +72,8 @@ public class ListaArenas extends Fragment {
         FirebaseListAdapter<Arena> firebaseListAdapter = new FirebaseListAdapter<Arena>(
                 getActivity(),
                 Arena.class,
-                R.layout.row_evento_excluir,
-                mDatabase.orderByChild("NomeArena") // ordena os dados pelo campo informado...
+                R.layout.row_arena_excluir,
+                mDatabase.orderByChild("nomeArena") // ordena os dados pelo campo informado...
 
 
         ) {
