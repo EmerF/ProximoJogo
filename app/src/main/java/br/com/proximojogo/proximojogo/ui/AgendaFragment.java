@@ -147,18 +147,18 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
     public void salvarAgenda(View v) {
         try {
-           LimparCamposFormulario lf = new LimparCamposFormulario();
-           validarCampos = lf.validaEditTextVazio((ViewGroup)this.getView());
-            if(!validarCampos){
+            LimparCamposFormulario lf = new LimparCamposFormulario();
+            validarCampos = lf.validaEditTextVazio((ViewGroup) this.getView());
+            if (!validarCampos) {
 
-                ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
+                ExibirToast.ExibirToastComIcone(activity, R.drawable.alerta, R.color.colorRed, "Preencha os campos, meu Bem!");
 
-            }else {
+            } else {
                 salvou = helper.salvar(v);
 
             }
         } catch (Exception e) {
-            ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Erro ao salvar a agenda ): ");
+            ExibirToast.ExibirToastComIcone(activity, R.drawable.alerta, R.color.colorRed, "Erro ao salvar a agenda ): ");
             e.printStackTrace();
         }
     }
@@ -200,4 +200,5 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
 
     }
+
 
