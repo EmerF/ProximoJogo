@@ -112,7 +112,7 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
         if (bundle != null) {
             idArena = bundle.getString("idArena");
             Arena arena = new Arena();
-            arena.setIdArena(idArena);
+            arena.setIdArena(idArena    );
             arena.setNomeArena(bundle.getString("nomeArena"));
             arena.setEndereco(bundle.getString("enderecoArena"));
             arena.setTelefone(bundle.getString("telefoneArena"));

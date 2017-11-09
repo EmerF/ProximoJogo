@@ -109,12 +109,12 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        AgendaDO agenda = new AgendaDO();
         Bundle bundle = getArguments();
         if (bundle != null) {
             //idUser = bundle.getString("agenda");
             idAgenda = bundle.getString("idAgenda");
-            AgendaDO agenda = new AgendaDO();
+
             agenda.setIdAgenda(idAgenda);
             agenda.setEvento(bundle.getString("evento"));
             agenda.setArena(bundle.getString("local"));
@@ -127,11 +127,14 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
 
             if (agenda != null) {
                 try {
+                    helper.inicializaCamposTela(agendaView, agenda);
                     helper.preencheFormulario(agenda);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
+        }else{
+            helper.inicializaCamposTela(agendaView, agenda);
         }
     }
 
