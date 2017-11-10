@@ -88,6 +88,7 @@ public class ListaEventosAgenda extends Fragment {
         ) {
             @Override
             protected void populateView(View v, AgendaDO agenda, int position) {
+                final int pos = position;
                 TextView time = (TextView) v.findViewById(R.id.time_evento);
                 time.setText(agenda.getTimes());
                 TextView tipo = (TextView) v.findViewById(R.id.adversario_evento);
@@ -98,16 +99,7 @@ public class ListaEventosAgenda extends Fragment {
                 data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
                 TextView hora = (TextView) v.findViewById(R.id.hora_evento);
                 hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
-
-            }
-
-            @Override
-            public View getView(int posicao, View view, ViewGroup viewGroup) {
-                final int pos =posicao;
-                if (view == null) {
-                    view = getActivity().getLayoutInflater().inflate(mLayout, viewGroup, false);
-                }
-                ImageButton btnExcluir = view.findViewById(R.id.main_line_more);
+                ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -115,12 +107,29 @@ public class ListaEventosAgenda extends Fragment {
                         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + item.getIdAgenda());
                         mDatabaseAgenda.removeValue();
                         //Acao do primeiro botao
-                        Toast.makeText(v.getContext(), "Vou excluir vc filho daputa posição: " + pos, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Vou excluir vc filho da puta posição: " + pos, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                ImageButton btnEditar = v.findViewById(R.id.row_edit);
+                btnEditar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AgendaDO item = getItem(pos);
+                        /**
+                         * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                         * utilizar uma interface) mas não vi necessidade aqui.
+                         */
+                        Bundle bundle = new Bundle();
+                        AgendaFragment agendaFragment = new AgendaFragment();
+                        bundle.putString("agenda", item.getIdAgenda());
+                        agendaFragment.setArguments(bundle);
+                        getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
+                        Toast.makeText(v.getContext(), "Vou editar vc filho da puta posição: " + pos, Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                return view;
             }
+
         };
         mListView.setAdapter(firebaseListAdapter);
 

@@ -11,7 +11,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="280dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -77,9 +77,14 @@
         android:orientation="horizontal">
 
         <ImageButton
+            android:id="@+id/row_edit"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icons8_edit" />
+        <ImageButton
             android:id="@+id/main_line_more"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:onClick="btn_exclui_evento"
             android:src="@drawable/ic_delete_black_24dp" />
     </LinearLayout>
