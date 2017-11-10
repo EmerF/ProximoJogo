@@ -69,6 +69,8 @@ public class ListaArenas extends Fragment {
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day-1);
 
+
+
         FirebaseListAdapter<Arena> firebaseListAdapter = new FirebaseListAdapter<Arena>(
                 getActivity(),
                 Arena.class,

@@ -1,6 +1,7 @@
 
 package br.com.proximojogo.proximojogo.helper;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +32,6 @@ import java.util.List;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.date.PickersActivity;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
-import br.com.proximojogo.proximojogo.entity.Time;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
@@ -70,22 +71,15 @@ public class HelperAgenda {
     private Handler handler = null;
     private DatabaseReference mDatabaseAgenda;
     private View viewAtiva;
-    private ArrayAdapter<String> adapterTimes;
 
-    public ArrayAdapter<String> getAdapterTimes() {
-        return adapterTimes;
-    }
 
-    public void setAdapterTimes(ArrayAdapter<String> adapterTimes) {
-        this.adapterTimes = adapterTimes;
-    }
 
     /*
         * Captura valores inseridos no formulário...
         * */
-    public HelperAgenda(View activity, Handler handler) {
+    public HelperAgenda(View view, Handler handler) {
         this.handler = handler;
-        viewAtiva = activity;
+        viewAtiva = view;
         //inicializaCamposTela(viewAtiva);
 
     }
@@ -152,8 +146,7 @@ public class HelperAgenda {
         agenda.setAdversario(campoAdversario.getText().toString());
         agenda.setIdAgenda(campoIdAgenda.getText().toString());
         agenda.setValor(new Double(campoValor.getText().toString()));
-        NomeArena arena = (NomeArena) campoLocal.getSelectedItem();
-        agenda.setArena(arena.toString());
+        agenda.setArena(campoLocal.getSelectedItem().toString());
         agenda.setTimes(campoTime.getSelectedItem().toString());
         agenda.setObservacao(campoObservacao.getText().toString());
         agenda.setStatus("Status");
@@ -172,7 +165,7 @@ public class HelperAgenda {
 
                 if (agenda != null) {
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
-                    campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
+                    //campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
                     campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
@@ -214,17 +207,27 @@ public class HelperAgenda {
 
 
     public void inicializaCamposTela(View activity, AgendaDO agenda) {
-        //spinner Arenas
-        ArrayAdapter<NomeArena> adapter = new ArrayAdapter<NomeArena>(activity.getContext(), R.layout.support_simple_spinner_dropdown_item,
-                NomeArena.values());
-        adapter.setDropDownViewResource(android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        sp = (Spinner) activity.findViewById(R.id.formulario_local);
-        sp.setAdapter(adapter);
+        String valorCampo = agenda.getArena();
+        String no = "Arenas";
+        String nomeCampo = "nomeArena";
 
-        //Times/Times
-        String time = agenda.getTimes();
-        CarregarTimesUsuario(activity, time );
+        // -------- Spinner de Arenas-----------------//
+        CarregarSpinner(activity, valorCampo, no,
+                nomeCampo,R.id.formulario_local);
+        // -----------------------------------------//
 
+        valorCampo = "";
+        nomeCampo = "";
+        no = "";
+
+        // -------- Spinner de Times-----------------//
+        valorCampo = agenda.getTimes();
+        nomeCampo = "nomeTime";
+        no = "Times" + "/" + GetUser.getUserLogado();
+
+        CarregarSpinner(activity, valorCampo, no,
+                nomeCampo,R.id.formulario_time);
+        // -----------------------------------------//
         //Tipo do evento
 
         ArrayAdapter<Eventos> adapterEvento = new ArrayAdapter<Eventos>
@@ -262,11 +265,10 @@ public class HelperAgenda {
         this.agenda = new AgendaDO();
     }
 
-    public final List<String> times = new ArrayList<>();
+    public void CarregarSpinner(final View activity, final String atributoClasse, String no,
+                                final String campoTabela, final int idSpinner) {
 
-    public void CarregarTimesUsuario(final View activity, final String time) {
-
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(no);
         mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -274,19 +276,21 @@ public class HelperAgenda {
                 // of the iterator returned by dataSnapshot.getChildren() to
                 // initialize the array
 
-
+                final List<String> times = new ArrayList<>();
                 for (DataSnapshot timeSnapshot : dataSnapshot.getChildren()) {
-                    String areaName = timeSnapshot.child("nomeTime").getValue(String.class);
+                    String areaName = timeSnapshot.child(campoTabela).getValue(String.class);
                     times.add(areaName);
                 }
-                //Times/Times
+                ArrayAdapter<String> adapterTimes;
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-                campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
+
+                campoTime = (Spinner) activity.findViewById(idSpinner);
+
                 int pos = 0;
-                if(time != null){
-                   pos = adapterTimes.getPosition(time);
+                if(atributoClasse != null){
+                    pos = adapterTimes.getPosition(atributoClasse);
                 }
 
                 campoTime.setAdapter(adapterTimes);

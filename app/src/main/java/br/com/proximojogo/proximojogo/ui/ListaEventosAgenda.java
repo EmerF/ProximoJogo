@@ -70,7 +70,7 @@ public class ListaEventosAgenda extends Fragment {
         });
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas"+ "/" +GetUser.getUserLogado());
-        Calendar c = Calendar.getInstance();
+            Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day-1);
 
