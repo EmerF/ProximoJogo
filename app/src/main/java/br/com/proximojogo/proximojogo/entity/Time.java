@@ -12,7 +12,15 @@ public class Time implements Serializable {
     private String nomeTime;
     private String responsavelTime;
     private String telefoneResponsavel;
+    private Boolean avulso = false;
 
+    public Boolean getAvulso() {
+        return avulso;
+    }
+
+    public void setAvulso(Boolean avulso) {
+        this.avulso = avulso;
+    }
 
     public String getIdTime() {
         return idTime;

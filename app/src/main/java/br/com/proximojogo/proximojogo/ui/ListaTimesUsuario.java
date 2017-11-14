@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -51,6 +52,7 @@ public class ListaTimesUsuario extends Fragment {
                 bundle.putString("nome", time.getNomeTime());
                 bundle.putString("responsavel", time.getResponsavelTime());
                 bundle.putString("telefone", time.getTelefoneResponsavel());
+                bundle.putString("avulso", time.getAvulso().toString());
                 timeFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, timeFragment).commit();
 
@@ -78,13 +80,13 @@ public class ListaTimesUsuario extends Fragment {
             @Override
             protected void populateView(View v, Time time, int position) {
                 TextView nome = (TextView) v.findViewById(R.id.nome_time_lista);
-                nome.setText("Nome do time: " + time.getNomeTime());
+                nome.setText("TIME: " + time.getNomeTime());
 
                 TextView resp = (TextView) v.findViewById(R.id.responsavel_time_lista);
                 resp.setText("Responsável: " +time.getResponsavelTime());
 
                 TextView tel = (TextView) v.findViewById(R.id.telefone_responsavel_time_lista);
-                tel.setText("Telefone do Responsável: " +time.getTelefoneResponsavel());
+                tel.setText("Telefone: " +time.getTelefoneResponsavel());
 
             }
 

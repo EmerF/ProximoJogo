@@ -12,8 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -41,9 +42,10 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
     private View timeView;
     private boolean salvou;
     private String idTime;
-    private ImageButton btSalvar;
-    private ImageButton btExcluir;
-    private ImageButton btListar;
+    private Button btSalvar;
+    private Button btExcluir;
+    private Button btListar;
+    private CheckBox chAvulso;
 
 
     static class TimeHandler extends Handler {
@@ -86,14 +88,17 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         timeView = inflater.inflate(R.layout.fragment_cadastrar_time, container, false);
         helper = new HelperTime(timeView, handler);
 
-        btSalvar = (ImageButton) timeView.findViewById(R.id.bt_salvar_time);
+        btSalvar =  timeView.findViewById(R.id.bt_salvar_time);
         btSalvar.setOnClickListener(this);
 
-        btExcluir = (ImageButton) timeView.findViewById(R.id.bt_excluir_time);
+        btExcluir =  timeView.findViewById(R.id.bt_excluir_time);
         btExcluir.setOnClickListener(this);
 
-        btListar = (ImageButton) timeView.findViewById(R.id.bt_listar_times);
+        btListar =  timeView.findViewById(R.id.bt_listar_times);
         btListar.setOnClickListener(this);
+
+        chAvulso =  timeView.findViewById(R.id.ch_avulso);
+        chAvulso.setOnClickListener(this);
 
         return timeView;
     }
@@ -104,7 +109,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
             LimparCamposFormulario lf = new LimparCamposFormulario();
             salvou = lf.validaEditTextVazio((ViewGroup) this.getView());
             if(!salvou){
-                //Toast.makeText(activity,"Preencher os campos obrigaórios, por favor !",Toast.LENGTH_SHORT).show();
                 ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
 
 
@@ -153,6 +157,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
             time.setNomeTime(bundle.getString("nome"));
             time.setResponsavelTime(bundle.getString("responsavel"));
             time.setTelefoneResponsavel(bundle.getString("telefone"));
+            time.setAvulso(Boolean.valueOf(bundle.getString("avulso")));
 
             if (idTime != null) {
                 try {
@@ -211,13 +216,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         this.activity = activity;
     }
 
-    public ImageButton getBtSalvar() {
-        return btSalvar;
-    }
-
-    public void setBtSalvar(ImageButton btSalvar) {
-        this.btSalvar = btSalvar;
-    }
 
     public Handler getHandler() {
         return handler;

@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:lines="1"
-            android:inputType="textImeMultiLine"
+            android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:lines="1"
-            android:inputType="textImeMultiLine"
+            android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -65,8 +65,12 @@
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
-
-
+       <android.support.v7.widget.AppCompatCheckBox
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:id="@+id/ch_avulso"
+           android:text="Avulso"
+           android:tooltipText="Para times ainda não cadastrados no App..."/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,40 +78,32 @@
             android:layout_gravity="center"
             android:id="@+id/linear_botoes_agenda">
 
-            <ImageButton
+            <Button
                 android:id="@+id/bt_salvar_time"
-                android:layout_width="51dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/savechild"
                 android:text="@string/salvar"
-                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/background_light"
+                android:textSize="@dimen/texto_btn"
+                android:theme="@style/btnSalvar" />
 
-                />
-
-            <ImageButton
+            <Button
                 android:id="@+id/bt_listar_times"
-                android:layout_width="59dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/listar"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
+                android:textColor="@android:color/background_light"
+                android:textSize="@dimen/texto_btn"
+                android:theme="@style/btnSalvar" />
 
-                />
-
-            <ImageButton
+            <Button
                 android:id="@+id/bt_excluir_time"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="false"
-                android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/delete"
+                android:layout_height="wrap_content"
                 android:text="@string/excluir"
-
-
-                />
+                android:textColor="@android:color/background_light"
+                android:textSize="@dimen/texto_btn"
+                android:theme="@style/btnSalvar" />
 
         </LinearLayout>
 

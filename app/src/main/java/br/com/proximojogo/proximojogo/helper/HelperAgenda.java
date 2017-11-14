@@ -1,7 +1,6 @@
 
 package br.com.proximojogo.proximojogo.helper;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -13,12 +12,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.LocalDate;
@@ -33,7 +30,6 @@ import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.date.PickersActivity;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
-import br.com.proximojogo.proximojogo.enuns.NomeArena;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
@@ -46,9 +42,7 @@ public class HelperAgenda {
     private static final String TAG = "ASYNC_DAO_AGENDA";
     //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
-    //private final EditText campoEvento;
     private Spinner campoEvento;
-    //private final EditText campoStatus;
     private EditText campoDat;
     private EditText campoDiaSemana;
     private EditText campoHora;
@@ -61,8 +55,6 @@ public class HelperAgenda {
 
     private EditText campoObservacao;
 
-    private Spinner sp;
-    private Spinner spTimes;
     private Spinner spEvento;
     private EditText data;
     private EditText hora;
@@ -124,12 +116,6 @@ public class HelperAgenda {
             e.printStackTrace();
             Toast.makeText(activity.getContext(), "Erro ao Apagadar Agenda!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    public boolean validarCampos() {
-
-        return false;
     }
 
     public AgendaDO pegaAgenda() throws ParseException {
@@ -278,10 +264,57 @@ public class HelperAgenda {
 
                 final List<String> times = new ArrayList<>();
                 for (DataSnapshot timeSnapshot : dataSnapshot.getChildren()) {
+
                     String areaName = timeSnapshot.child(campoTabela).getValue(String.class);
                     times.add(areaName);
                 }
                 ArrayAdapter<String> adapterTimes;
+                adapterTimes = new ArrayAdapter<String>
+                        (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
+                adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+                campoTime = (Spinner) activity.findViewById(idSpinner);
+
+
+                int pos = 0;
+                if (atributoClasse != null) {
+                    pos = adapterTimes.getPosition(atributoClasse);
+                }
+
+                campoTime.setAdapter(adapterTimes);
+                campoTime.setSelection(pos);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
+    public void CarregarSpinnerTimes(final View activity, final String atributoClasse, String no,
+                                     final String campoTabela, final int idSpinner) {
+
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(no);
+        mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Is better to use a List, because you don't know the size
+                // of the iterator returned by dataSnapshot.getChildren() to
+                // initialize the array
+
+                final List<String> times = new ArrayList<>();
+                for (DataSnapshot timeSnapshot : dataSnapshot.getChildren()) {
+                    String spName = activity.getResources().getResourceEntryName(idSpinner);
+
+                    Boolean avulso = timeSnapshot.child("avulso").getValue(Boolean.class);
+                    String areaName  = timeSnapshot.child(campoTabela).getValue(String.class);
+                    times.add(areaName);
+                }
+                ArrayAdapter<String> adapterTimes;
+
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

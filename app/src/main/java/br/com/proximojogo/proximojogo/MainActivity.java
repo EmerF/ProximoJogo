@@ -2,25 +2,17 @@ package br.com.proximojogo.proximojogo;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -32,8 +24,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,8 +37,6 @@ import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
-import br.com.proximojogo.proximojogo.ui.TimeFragment;
-import br.com.proximojogo.proximojogo.ui.TesteFirebase;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -103,7 +91,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
