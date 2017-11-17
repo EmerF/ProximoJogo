@@ -1,6 +1,7 @@
 
 package br.com.proximojogo.proximojogo.helper;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -22,6 +23,9 @@ import org.joda.time.LocalDate;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -48,7 +52,7 @@ public class HelperAgenda {
     private EditText campoHora;
     //private final EditText campoDiaSemana;
     private EditText campoIdAgenda;
-    private EditText campoAdversario;
+    private Spinner campoAdversario;
     private EditText campoValor;
     private Spinner campoLocal;
     private Spinner campoTime;
@@ -129,7 +133,7 @@ public class HelperAgenda {
         Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
         agenda.setHora(hora.getTime());
         agenda.setDiaSemana(diaDaSemana(inicio));
-        agenda.setAdversario(campoAdversario.getText().toString());
+        agenda.setAdversario(campoAdversario.getSelectedItem().toString());
         agenda.setIdAgenda(campoIdAgenda.getText().toString());
         agenda.setValor(new Double(campoValor.getText().toString()));
         agenda.setArena(campoLocal.getSelectedItem().toString());
@@ -143,7 +147,7 @@ public class HelperAgenda {
 
     /*  Preenche o formulário com os dados do objeto recebido como parametro
     *   Seta o objeto recebido no objeto local para fins de edição
-    *
+    *   Os spinners são preenchidos na inicialização da tela
     *
      */
     public void preencheFormulario(final AgendaDO agenda) throws ParseException {
@@ -151,11 +155,9 @@ public class HelperAgenda {
 
                 if (agenda != null) {
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
-                    //campoLocal.setSelection(NomeArena.valueOf(agenda.getArena()).ordinal());
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
                     campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
-                    campoAdversario.setText(String.valueOf(agenda.getAdversario()));
                     campoIdAgenda.setText(String.valueOf(agenda.getIdAgenda()));
                     campoValor.setText(String.valueOf(agenda.getValor()));
                     campoObservacao.setText(agenda.getObservacao());
@@ -208,11 +210,21 @@ public class HelperAgenda {
 
         // -------- Spinner de Times-----------------//
         valorCampo = agenda.getTimes();
+        no = "Times" + "/" + GetUser.getUserLogado();
+        nomeCampo = "nomeTime";
+
+
+        CarregarSpinner(activity, valorCampo, no,
+                nomeCampo, R.id.formulario_time);
+        // -----------------------------------------//
+
+        // -------- Spinner de Adversario-----------------//
+        valorCampo = agenda.getAdversario() ;
         nomeCampo = "nomeTime";
         no = "Times" + "/" + GetUser.getUserLogado();
 
         CarregarSpinner(activity, valorCampo, no,
-                nomeCampo,R.id.formulario_time);
+                nomeCampo,R.id.formulario_adversario);
         // -----------------------------------------//
         //Tipo do evento
 
@@ -240,7 +252,7 @@ public class HelperAgenda {
         campoDat = (EditText) activity.findViewById(R.id.formulario_Data);
         campoHora = (EditText) activity.findViewById(R.id.formulario_hora);
         campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
-        campoAdversario = (EditText) activity.findViewById(R.id.formulario_adversario);
+        campoAdversario = (Spinner) activity.findViewById(R.id.formulario_adversario);
         campoIdAgenda = (EditText) activity.findViewById(R.id.idAgenda);
         //campoFoto = (ImageView)activity.findViewById(R.id.formulario_foto);
 
@@ -248,6 +260,7 @@ public class HelperAgenda {
         campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
         campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
         campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
+
         this.agenda = new AgendaDO();
     }
 
@@ -264,25 +277,26 @@ public class HelperAgenda {
 
                 final List<String> times = new ArrayList<>();
                 for (DataSnapshot timeSnapshot : dataSnapshot.getChildren()) {
-
                     String areaName = timeSnapshot.child(campoTabela).getValue(String.class);
                     times.add(areaName);
                 }
+                Collections.sort(times);
                 ArrayAdapter<String> adapterTimes;
                 adapterTimes = new ArrayAdapter<String>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
-                campoTime = (Spinner) activity.findViewById(idSpinner);
-
 
                 int pos = 0;
-                if (atributoClasse != null) {
-                    pos = adapterTimes.getPosition(atributoClasse);
-                }
+                    Spinner campoLocal = (Spinner) activity.findViewById(idSpinner);
 
-                campoTime.setAdapter(adapterTimes);
-                campoTime.setSelection(pos);
+                    if (atributoClasse != null) {
+                        pos = adapterTimes.getPosition(atributoClasse);
+                    }
+
+                    campoLocal.setAdapter(adapterTimes);
+                    campoLocal.setSelection(pos);
+
 
             }
 
@@ -294,54 +308,11 @@ public class HelperAgenda {
 
         });
     }
-    public void CarregarSpinnerTimes(final View activity, final String atributoClasse, String no,
-                                     final String campoTabela, final int idSpinner) {
 
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(no);
-        mDatabaseAgenda.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Is better to use a List, because you don't know the size
-                // of the iterator returned by dataSnapshot.getChildren() to
-                // initialize the array
-
-                final List<String> times = new ArrayList<>();
-                for (DataSnapshot timeSnapshot : dataSnapshot.getChildren()) {
-                    String spName = activity.getResources().getResourceEntryName(idSpinner);
-
-                    Boolean avulso = timeSnapshot.child("avulso").getValue(Boolean.class);
-                    String areaName  = timeSnapshot.child(campoTabela).getValue(String.class);
-                    times.add(areaName);
-                }
-                ArrayAdapter<String> adapterTimes;
-
-                adapterTimes = new ArrayAdapter<String>
-                        (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
-                adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-
-                campoTime = (Spinner) activity.findViewById(idSpinner);
-
-                int pos = 0;
-                if(atributoClasse != null){
-                    pos = adapterTimes.getPosition(atributoClasse);
-                }
-
-                campoTime.setAdapter(adapterTimes);
-                campoTime.setSelection(pos);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-
-        });
 
 
     }
 
 
-}
+
 

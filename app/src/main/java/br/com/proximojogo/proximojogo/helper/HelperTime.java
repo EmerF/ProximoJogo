@@ -30,7 +30,6 @@ public class HelperTime {
     private EditText campoNomeTime;
     private EditText campoResponsavelTime;
     private EditText campoTelefoneResponsavel;
-    private CheckBox campoAvulso;
     private Handler handler = null;
     private Time time;
     private DatabaseReference mDatabaseAgenda;
@@ -46,14 +45,10 @@ public class HelperTime {
 
 
     public Time pegaTime(){
-        time.setAvulso(false);
         time.setNomeTime(campoNomeTime.getText().toString());
         time.setResponsavelTime(campoResponsavelTime.getText().toString());
         time.setTelefoneResponsavel(campoTelefoneResponsavel.getText().toString());
         time.setIdResponsavel(GetUser.getUserLogado());
-        if(campoAvulso.isChecked()){
-            time.setAvulso(true);
-        }
 
         return time;
 
@@ -63,7 +58,6 @@ public class HelperTime {
         campoNomeTime = (EditText) activity.findViewById(R.id.nome_time);
         campoResponsavelTime= (EditText) activity.findViewById(R.id.responsavel_time);
         campoTelefoneResponsavel = (EditText) activity.findViewById(R.id.telefone_responsavel_time);
-        campoAvulso = (CheckBox) activity.findViewById(R.id.ch_avulso);
 
         time = new Time();
 
@@ -74,7 +68,6 @@ public class HelperTime {
             campoNomeTime.setText(time.getNomeTime());
             campoResponsavelTime.setText(time.getResponsavelTime());
             campoTelefoneResponsavel.setText(time.getTelefoneResponsavel());
-            campoAvulso.setChecked(time.getAvulso());
             this.time = time;
         }
 

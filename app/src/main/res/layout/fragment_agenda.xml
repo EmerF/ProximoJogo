@@ -74,7 +74,7 @@
                 android:id="@+id/text_input_layout_formulario_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/inicio">
+                android:hint="@string/horario">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/formulario_Data"
@@ -174,33 +174,25 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:descendantFocusability="beforeDescendants"
-                    android:focusableInTouchMode="true"
-                    android:orientation="horizontal">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/lbAdversario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/adversario"
                         android:textSize="16sp" />
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/text_input_layout_formulario_adversario"
+                    <Spinner
+                        android:id="@+id/formulario_adversario"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:hint="@string/adversario">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/formulario_adversario"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:inputType="textCapCharacters"
-                            android:paddingTop="22dp" />
-
-                    </android.support.design.widget.TextInputLayout>
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:spinnerMode="dropdown" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout

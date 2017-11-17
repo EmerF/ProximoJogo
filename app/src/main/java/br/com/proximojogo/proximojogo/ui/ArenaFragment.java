@@ -16,18 +16,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-
-import com.google.firebase.database.DatabaseReference;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Arena;
-import br.com.proximojogo.proximojogo.helper.HelperAgenda;
+import br.com.proximojogo.proximojogo.helper.HelperArena;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class ArenaFragment extends Fragment implements View.OnClickListener {

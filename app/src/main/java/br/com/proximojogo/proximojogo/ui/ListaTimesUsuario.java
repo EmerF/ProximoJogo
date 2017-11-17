@@ -52,7 +52,6 @@ public class ListaTimesUsuario extends Fragment {
                 bundle.putString("nome", time.getNomeTime());
                 bundle.putString("responsavel", time.getResponsavelTime());
                 bundle.putString("telefone", time.getTelefoneResponsavel());
-                bundle.putString("avulso", time.getAvulso().toString());
                 timeFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, timeFragment).commit();
 

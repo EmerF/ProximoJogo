@@ -45,7 +45,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
     private Button btSalvar;
     private Button btExcluir;
     private Button btListar;
-    private CheckBox chAvulso;
 
 
     static class TimeHandler extends Handler {
@@ -97,8 +96,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         btListar =  timeView.findViewById(R.id.bt_listar_times);
         btListar.setOnClickListener(this);
 
-        chAvulso =  timeView.findViewById(R.id.ch_avulso);
-        chAvulso.setOnClickListener(this);
 
         return timeView;
     }
@@ -157,7 +154,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
             time.setNomeTime(bundle.getString("nome"));
             time.setResponsavelTime(bundle.getString("responsavel"));
             time.setTelefoneResponsavel(bundle.getString("telefone"));
-            time.setAvulso(Boolean.valueOf(bundle.getString("avulso")));
 
             if (idTime != null) {
                 try {

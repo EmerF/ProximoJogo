@@ -1,4 +1,4 @@
-package br.com.proximojogo.proximojogo.ui;
+package br.com.proximojogo.proximojogo.helper;
 
 import android.os.Handler;
 import android.text.InputType;
