@@ -204,7 +204,7 @@
                 android:id="@+id/text_input_layout_formulario_observacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/observacao">
+                android:hint="@string/resultado">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/formulario_observacao"

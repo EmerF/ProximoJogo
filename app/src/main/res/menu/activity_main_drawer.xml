@@ -19,6 +19,14 @@
             android:icon="@drawable/ic_banner_versus_48"
             android:title="Banner" />
     </group>
+    <item android:title="Estatisticas">
+        <menu>
+            <item
+                android:id="@+id/jogos_passados"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Jogos Passados"/>
+        </menu>
+    </item>
 
 
 </menu>
