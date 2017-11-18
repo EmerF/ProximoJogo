@@ -27,7 +27,6 @@
             android:lines="1"
             android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
-            android:text="Cerejeira"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -45,7 +44,6 @@
                 android:maxLines="1"
                 android:lines="1"
                 android:inputType="textCapWords"
-                android:text="Pedro Ossoski, 220"
                 android:imeActionLabel="@string/pronto"
                 android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -63,7 +61,6 @@
                 android:maxLines="1"
                 android:lines="1"
                 android:inputType="numberDecimal"
-                android:text="3666-3408"
                 android:imeActionLabel="@string/pronto"
                 android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -82,7 +79,6 @@
             android:lines="1"
             android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
-            android:text="Thiago"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 

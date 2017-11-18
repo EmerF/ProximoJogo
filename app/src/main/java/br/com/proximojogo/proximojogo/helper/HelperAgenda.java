@@ -264,7 +264,17 @@ public class HelperAgenda {
         this.agenda = new AgendaDO();
     }
 
-    public void CarregarSpinner(final View activity, final String atributoClasse, String no,
+    /*
+        Preenche o spinner com os dados que serão buscado no firebase
+        @param:
+        View: onde está o spinner
+        valorParaFiltrarPosicao: valor que será setado no spinner em caso de estar editando o registro
+        no: local do firebase onde os dados serão buscados
+        campoTabela: campo que será usado para preencher os valores do spinner. Ex: nomeTime
+        idSpinner: R.id do spinner
+     */
+
+    public void CarregarSpinner(final View activity, final String valorParaFiltrarPosicao, String no,
                                 final String campoTabela, final int idSpinner) {
 
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(no);
@@ -290,8 +300,8 @@ public class HelperAgenda {
                 int pos = 0;
                     Spinner campoLocal = (Spinner) activity.findViewById(idSpinner);
 
-                    if (atributoClasse != null) {
-                        pos = adapterTimes.getPosition(atributoClasse);
+                    if (valorParaFiltrarPosicao != null) {
+                        pos = adapterTimes.getPosition(valorParaFiltrarPosicao);
                     }
 
                     campoLocal.setAdapter(adapterTimes);
