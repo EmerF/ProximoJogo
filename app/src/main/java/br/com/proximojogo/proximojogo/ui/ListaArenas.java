@@ -48,8 +48,6 @@ public class ListaArenas extends Fragment {
                 bundle.putString("nomeArena", arena.getNomeArena());
                 bundle.putString("enderecoArena", arena.getEndereco());
                 bundle.putString("telefoneArena", arena.getTelefone());
-                bundle.putString("horaIni", arena.getHorarioIniAtendimento().toString());
-                bundle.putString("horaFim", arena.getHorarioFimAtendimento().toString());
                 arenaFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, arenaFragment).commit();
 
@@ -90,8 +88,6 @@ public class ListaArenas extends Fragment {
                 TextView telefone = (TextView) v.findViewById(R.id.telefone_arena_lista);
                 telefone.setText("Telefone: " + arena.getTelefone());
 
-                TextView horario = (TextView) v.findViewById(R.id.horario_funcionamento_arena_lista);
-                horario.setText("Horário de Funcionamento:  " + arena.getHorarioIniAtendimento() + "-" + arena.getHorarioFimAtendimento());
 
             }
 

@@ -10,8 +10,6 @@ public class Arena {
     private String NomeArena;
     private String Endereco;
     private String Telefone;
-    private String HorarioIniAtendimento;
-    private String HorarioFimAtendimento;
 
     public String getIdArena() {
         return idArena;
@@ -53,19 +51,5 @@ public class Arena {
         Telefone = telefone;
     }
 
-    public String getHorarioIniAtendimento() {
-        return HorarioIniAtendimento;
-    }
 
-    public void setHorarioIniAtendimento(String horarioIniAtendimento) {
-        HorarioIniAtendimento = horarioIniAtendimento;
-    }
-
-    public String getHorarioFimAtendimento() {
-        return HorarioFimAtendimento;
-    }
-
-    public void setHorarioFimAtendimento(String horarioFimAtendimento) {
-        HorarioFimAtendimento = horarioFimAtendimento;
-    }
 }

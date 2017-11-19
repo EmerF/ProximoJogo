@@ -112,8 +112,6 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
             arena.setNomeArena(bundle.getString("nomeArena"));
             arena.setEndereco(bundle.getString("enderecoArena"));
             arena.setTelefone(bundle.getString("telefoneArena"));
-            arena.setHorarioIniAtendimento(bundle.getString("horaIni"));
-            arena.setHorarioFimAtendimento(bundle.getString("horaFim"));
 
             if (arena != null) {
                 try {

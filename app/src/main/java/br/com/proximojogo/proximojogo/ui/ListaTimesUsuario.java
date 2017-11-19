@@ -79,7 +79,7 @@ public class ListaTimesUsuario extends Fragment {
             @Override
             protected void populateView(View v, Time time, int position) {
                 TextView nome = (TextView) v.findViewById(R.id.nome_time_lista);
-                nome.setText("TIME: " + time.getNomeTime());
+                nome.setText(time.getNomeTime());
 
                 TextView resp = (TextView) v.findViewById(R.id.responsavel_time_lista);
                 resp.setText("Responsável: " +time.getResponsavelTime());

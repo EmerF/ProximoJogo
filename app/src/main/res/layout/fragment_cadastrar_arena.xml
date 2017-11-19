@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:lines="1"
-            android:inputType="textCapWords"
+            android:inputType="textCapCharacters"
             android:imeActionLabel="@string/pronto"
             android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
@@ -79,41 +79,10 @@
             android:lines="1"
             android:inputType="textCapWords"
             android:imeActionLabel="@string/pronto"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:tag="naoObrigatorio"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/lb_horario_ini_arena"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/horario">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/horario_ini_arena"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:lines="1"
-                android:inputType="textImeMultiLine"
-                android:imeActionLabel="@string/pronto"
-                android:imeOptions="actionGo"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/lb_horario_fim_arena"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/horario_fim">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/horario_fim_arena"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:lines="1"
-                android:inputType="textImeMultiLine"
-                android:imeActionLabel="@string/pronto"
-                android:imeOptions="actionSend"/>
-        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

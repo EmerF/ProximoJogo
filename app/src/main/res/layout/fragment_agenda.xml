@@ -74,7 +74,7 @@
                 android:id="@+id/text_input_layout_formulario_data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/horario">
+                android:hint="@string/data">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/formulario_Data"

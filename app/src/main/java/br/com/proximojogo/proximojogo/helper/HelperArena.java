@@ -36,8 +36,6 @@ public class HelperArena {
     private EditText campoTelefoneArena;
     private EditText campoEnderecoArena;
     private EditText campoResponsavelArena;
-    private EditText campoHorarioIniArena;
-    private EditText campoHorarioFimArena;
     private DatabaseReference mDatabaseArena;
     private Arena arena;
 
@@ -89,8 +87,6 @@ public class HelperArena {
             arena.setEndereco(campoEnderecoArena.getText().toString());
             arena.setTelefone(campoTelefoneArena.getText().toString());
             arena.setResponsavel(campoResponsavelArena.getText().toString());
-            arena.setHorarioIniAtendimento(campoHorarioIniArena.getText().toString());
-            arena.setHorarioFimAtendimento(campoHorarioFimArena.getText().toString());
 
         }catch (Exception e){
             Log.d(TAG, "erro pegaArena: ");
@@ -111,8 +107,6 @@ public class HelperArena {
             campoNomeArena.setText(arena.getNomeArena());
             campoEnderecoArena.setText(arena.getEndereco());
             campoTelefoneArena.setText(arena.getTelefone());
-            campoHorarioIniArena.setText(arena.getHorarioIniAtendimento().toString());
-            campoHorarioFimArena.setText(arena.getHorarioFimAtendimento().toString());
             this.arena = arena;
         }
 
@@ -124,14 +118,6 @@ public class HelperArena {
         campoTelefoneArena = (EditText) activity.findViewById(R.id.telefone_arena);
         campoEnderecoArena = (EditText) activity.findViewById(R.id.endereco_arena);
         campoResponsavelArena=(EditText) activity.findViewById(R.id.responsavel_arena);
-        // horario de inicio do atendimento
-        campoHorarioIniArena = (EditText) activity.findViewById(R.id.horario_ini_arena);
-        campoHorarioIniArena.setInputType(InputType.TYPE_NULL);
-        new PickersActivity(campoHorarioIniArena, activity.getContext(), 1);
-        // horario de fim do atendimento
-        campoHorarioFimArena = (EditText) activity.findViewById(R.id.horario_fim_arena);
-        campoHorarioFimArena.setInputType(InputType.TYPE_NULL);
-        new PickersActivity(campoHorarioFimArena, activity.getContext(), 1);
-        arena = new Arena();
+        this.arena = new Arena();
     }
 }

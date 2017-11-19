@@ -59,7 +59,7 @@ public class ListaEventosAgenda extends Fragment {
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
                 agenda = (AgendaDO) lista.getItemAtPosition(position);
                 /**
-                 * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                 * esse bundle envia o valor para outro fragment (evitar acoplamento seria interessante
                  * utilizar uma interface) mas não vi necessidade aqui.
                  */
                 Bundle bundle = new Bundle();
