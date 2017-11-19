@@ -99,7 +99,6 @@ public class ListaEventosAgenda extends Fragment {
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day - 1);
         Query queryRef = mDatabase.startAt(c.getTimeInMillis()).orderByChild("data"); // ordena os dados pelo campo informado...
-
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),
                 AgendaDO.class,
@@ -141,7 +140,15 @@ public class ListaEventosAgenda extends Fragment {
                          */
                         Bundle bundle = new Bundle();
                         AgendaFragment agendaFragment = new AgendaFragment();
-                        bundle.putString("agenda", item.getIdAgenda());
+                        bundle.putString("idAgenda", item.getIdAgenda());
+                        bundle.putString("evento", item.getEvento());
+                        bundle.putString("local", item.getArena());
+                        bundle.putString("time", item.getTimes());
+                        bundle.putString("data", item.getData().toString());
+                        bundle.putString("hora", item.getHora().toString());
+                        bundle.putString("adversario", item.getAdversario());
+                        bundle.putString("valor", item.getValor().toString());
+                        bundle.putString("observacao", item.getObservacao());
                         agendaFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
                         Toast.makeText(v.getContext(), "Evento editado.", Toast.LENGTH_SHORT).show();

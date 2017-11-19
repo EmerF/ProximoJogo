@@ -89,12 +89,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Criar Evento do Time");
         btSalvar = (Button) agendaView.findViewById(R.id.bt_salvar_agenda);
         btSalvar.setOnClickListener(this);
-
-//        btExcluir = (ImageButton) agendaView.findViewById(R.id.bt_excluir_agenda);
-//        btExcluir.setOnClickListener(this);
-//
-//        btListar = (ImageButton) agendaView.findViewById(R.id.bt_listar_agenda);
-//        btListar.setOnClickListener(this);
         setRetainInstance(true);
         return agendaView;
     }
@@ -112,9 +106,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         AgendaDO agenda = new AgendaDO();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            //idUser = bundle.getString("agenda");
             idAgenda = bundle.getString("idAgenda");
-
             agenda.setIdAgenda(idAgenda);
             agenda.setEvento(bundle.getString("evento"));
             agenda.setArena(bundle.getString("local"));
@@ -177,17 +169,6 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
                 getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
             }
-
-//        else if (i == R.id.bt_excluir_agenda) {
-//            if (idUser != null) {
-//                helper.excluir(v, idUser);
-//                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-//            } else {
-//                Toast.makeText(activity, "Agenda não pode ser excluída!", Toast.LENGTH_SHORT).show();
-//            }
-//        } else if (i == R.id.bt_listar_agenda) {
-//            getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-//        }
         }
     }
         @Override
