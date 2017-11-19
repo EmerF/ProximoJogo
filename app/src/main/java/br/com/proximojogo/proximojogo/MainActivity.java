@@ -37,6 +37,7 @@ import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
+import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView ivAvatar;
     private Bitmap bitmap;
     private Uri mCropImageUri;
-    private String avatarProximoJogo = "avatarProximoJogo.png";
+    private String avatarProximoJogo = "avatar_proximo_jogo.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +137,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.drawer_cadastrar_time) {
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         } else if (id == R.id.nav_slideshow) {
-
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
         }else if(id == R.id.drawer_cadastrar_arena){
 
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
+        } else if (id == R.id.jogos_passados) {
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

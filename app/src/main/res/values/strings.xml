@@ -32,5 +32,6 @@
     <string name="endereco">Endereço</string>
     <string name="telefone">Telefone</string>
     <string name="horario_fim">Horario_fim</string>
+    <string name="resultado">Resultado</string>
 
 </resources>
