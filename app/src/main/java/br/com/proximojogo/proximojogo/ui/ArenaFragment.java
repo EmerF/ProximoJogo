@@ -87,7 +87,7 @@ public class ArenaFragment extends Fragment implements View.OnClickListener {
         btSalvar.setOnClickListener(this);
 
         btExcluir = (Button) arenaView.findViewById(R.id.bt_excluir_arena);
-        btExcluir.setOnClickListener(this);
+         btExcluir.setOnClickListener(this);
 
         setRetainInstance(true);
         return arenaView;
