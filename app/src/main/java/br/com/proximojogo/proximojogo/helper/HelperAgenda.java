@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -57,7 +58,7 @@ public class HelperAgenda {
     private Spinner campoLocal;
     private Spinner campoTime;
 
-    private EditText campoObservacao;
+    private TextView campoObservacao;
 
     private Spinner spEvento;
     private EditText data;
@@ -251,7 +252,7 @@ public class HelperAgenda {
         //campoStatus = (EditText)activity.findViewById(R.id.formulario_status);
         campoDat = (EditText) activity.findViewById(R.id.formulario_Data);
         campoHora = (EditText) activity.findViewById(R.id.formulario_hora);
-        campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
+        //campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
         campoAdversario = (Spinner) activity.findViewById(R.id.formulario_adversario);
         campoIdAgenda = (EditText) activity.findViewById(R.id.idAgenda);
         //campoFoto = (ImageView)activity.findViewById(R.id.formulario_foto);
@@ -259,7 +260,11 @@ public class HelperAgenda {
         campoValor = (EditText) activity.findViewById(R.id.formulario_valor);
         campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
         campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
-        //campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
+        if(agenda.getIdAgenda() == null){
+            campoObservacao = (TextView) activity.findViewById(R.id.formulario_observacao);
+            campoObservacao.setEnabled(true);
+        }
+
 
         this.agenda = new AgendaDO();
     }
@@ -269,7 +274,7 @@ public class HelperAgenda {
         @param:
         View: onde está o spinner
         valorParaFiltrarPosicao: valor que será setado no spinner em caso de estar editando o registro
-        no: local do firebase onde os dados serão buscados
+        nó: local do firebase onde os dados serão buscados
         campoTabela: campo que será usado para preencher os valores do spinner. Ex: nomeTime
         idSpinner: R.id do spinner
      */
