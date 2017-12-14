@@ -130,25 +130,37 @@
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+
 
                     <TextView
                         android:id="@+id/lbTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/equipe"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        />
 
                     <Spinner
                         android:id="@+id/formulario_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="2dp"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
+                        android:spinnerMode="dropdown"
+                        android:layout_below="@id/lbTime"/>
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="@dimen/field_width_standard"
+                        android:layout_height="match_parent"
+                        android:id="@+id/gols1"
+                        android:text="2"
+                        android:textAlignment="center"
+                        android:layout_below="@id/formulario_time"
+                        />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -173,33 +185,53 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
+
 
                     <TextView
                         android:id="@+id/lbAdversario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/adversario"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        />
 
                     <Spinner
                         android:id="@+id/formulario_adversario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="2dp"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
+                        android:spinnerMode="dropdown"
+                        android:layout_below="@id/lbAdversario"/>
+
+                    <android.support.design.widget.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/gols2"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:layout_below="@id/formulario_adversario"/>
+
+                </RelativeLayout>
+
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resultado"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:id="@+id/formulario_observacao"/>
+            <!--<android.support.design.widget.TextInputLayout
                 android:id="@+id/text_input_layout_formulario_observacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/resultado">
+                android:hint="@string/resultado"
+                android:textAlignment="center">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/formulario_observacao"
@@ -210,9 +242,10 @@
                     android:inputType="textImeMultiLine"
                     android:lines="1"
                     android:maxLines="1"
-                    android:tag="naoObrigatorio" />
-
-            </android.support.design.widget.TextInputLayout>
+                    android:tag="naoObrigatorio"
+                    android:enabled="false"
+                    android:textAlignment="center"/>
+            </android.support.design.widget.TextInputLayout>-->
 
             <EditText
                 android:id="@+id/formulario_dia_da_semana"

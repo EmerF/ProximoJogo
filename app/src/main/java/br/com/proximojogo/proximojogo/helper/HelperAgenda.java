@@ -259,7 +259,7 @@ public class HelperAgenda {
         campoValor = (EditText) activity.findViewById(R.id.formulario_valor);
         campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
         campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
-        campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
+        //campoObservacao = (EditText) activity.findViewById(R.id.formulario_observacao);
 
         this.agenda = new AgendaDO();
     }
