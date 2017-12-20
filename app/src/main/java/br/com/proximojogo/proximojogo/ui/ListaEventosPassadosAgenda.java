@@ -83,9 +83,9 @@ public class ListaEventosPassadosAgenda extends Fragment {
             protected void populateView(View v, AgendaDO agenda, int position) {
                 final int pos = position;
                 TextView time = (TextView) v.findViewById(R.id.time_evento);
-                time.setText(agenda.getTimes());
+                time.setText(agenda.getIdResultado());
                 TextView tipo = (TextView) v.findViewById(R.id.adversario_evento);
-                tipo.setText(" " + agenda.getAdversario());
+                tipo.setText(" " + agenda.getIdResultado());
                 TextView local = (TextView) v.findViewById(R.id.local_evento);
                 local.setText("Resultado: " + agenda.getObservacao());
                 TextView data = (TextView) v.findViewById(R.id.data_evento);
@@ -117,10 +117,10 @@ public class ListaEventosPassadosAgenda extends Fragment {
                         bundle.putString("idAgenda", agenda.getIdAgenda());
                         bundle.putString("evento", agenda.getEvento());
                         bundle.putString("local", agenda.getArena());
-                        bundle.putString("time", agenda.getTimes());
+                        //bundle.putString("time", agenda.getTimes());
                         bundle.putString("data", agenda.getData().toString());
                         bundle.putString("hora", agenda.getHora().toString());
-                        bundle.putString("adversario", agenda.getAdversario());
+                        //bundle.putString("adversario", agenda.getAdversario());
                         bundle.putString("valor", agenda.getValor().toString());
                         bundle.putString("observacao", agenda.getObservacao());
                         agendaFragment.setArguments(bundle);

@@ -8,8 +8,8 @@ public class Resultado {
     private String idResultado;
     private String time1;
     private String time2;
-    private String gols1;
-    private String gols2;
+    private String gols1 = "0";
+    private String gols2 = "0";
 
     public String getIdResultado() {
         return idResultado;

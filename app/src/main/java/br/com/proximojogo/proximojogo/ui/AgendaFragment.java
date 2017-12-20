@@ -110,12 +110,13 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             agenda.setIdAgenda(idAgenda);
             agenda.setEvento(bundle.getString("evento"));
             agenda.setArena(bundle.getString("local"));
-            agenda.setTimes(bundle.getString("time"));
+            //agenda.setTimes(bundle.getString("time"));
             agenda.setData(Long.parseLong(bundle.getString("data")));
             agenda.setHora(Long.parseLong(bundle.getString("hora")));
-            agenda.setAdversario(bundle.getString("adversario"));
+           // agenda.setAdversario(bundle.getString("adversario"));
             agenda.setValor(Double.parseDouble(bundle.getString("valor")));
             agenda.setObservacao(bundle.getString("observacao"));
+           // agenda.set_idResultado(bundle.getString("idResultado"));
 
             if (agenda != null) {
                 try {

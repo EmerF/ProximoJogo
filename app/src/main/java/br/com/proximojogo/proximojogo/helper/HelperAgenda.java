@@ -1,7 +1,6 @@
 
 package br.com.proximojogo.proximojogo.helper;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -24,8 +23,6 @@ import org.joda.time.LocalDate;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -34,6 +31,7 @@ import java.util.List;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.date.PickersActivity;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.entity.Resultado;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
@@ -57,6 +55,8 @@ public class HelperAgenda {
     private EditText campoValor;
     private Spinner campoLocal;
     private Spinner campoTime;
+    private EditText gols1;
+    private EditText gols2;
 
     private TextView campoObservacao;
 
@@ -68,7 +68,7 @@ public class HelperAgenda {
     private Handler handler = null;
     private DatabaseReference mDatabaseAgenda;
     private View viewAtiva;
-
+    private Resultado resultado;
 
 
     /*
@@ -88,6 +88,10 @@ public class HelperAgenda {
 
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             AgendaDO agenda = pegaAgenda();
+            if(salvarResultado(activity)){
+                agenda.setIdResultado(this.resultado.getIdResultado());
+            }
+
             if (agenda.getIdAgenda().equals("")) {
                 //getUser id do Firebase para setar na agenda
                 // e colocar o nome junto com o id para identificar o nó
@@ -95,12 +99,14 @@ public class HelperAgenda {
                 agenda.setIdAgenda(key);
                 // substituir pelo id do usuário qdo o login estiver pronto
                 //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
-                mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
-                Toast.makeText(activity.getContext(), "Agenda Cadastrada com Sucesso!", Toast.LENGTH_SHORT).show();
-            } else {
+
+            } /*else {
                 mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
-            }
+            }*/
+
+            mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
+            Toast.makeText(activity.getContext(), "Agenda salva com sucesso!", Toast.LENGTH_SHORT).show();
             salvou = true;
         } catch (ParseException e) {
             e.printStackTrace();
@@ -110,6 +116,30 @@ public class HelperAgenda {
 
         }
         return salvou;
+    }
+    public boolean salvarResultado(View activity){
+
+        boolean salvou = false;
+        try {
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("resultados");
+            Resultado resultado= pegaResultadoTela();
+            if (resultado.getIdResultado().equals("")) {
+                //getUser id do Firebase para setar na agenda
+                // e colocar o nome junto com o id para identificar o nó
+                String key = mDatabaseAgenda.push().getKey();
+                resultado.setIdResultado(key);
+
+            }
+            mDatabaseAgenda.child(resultado.getIdResultado()).setValue(agenda);
+            salvou = true;
+        }catch (Exception e){
+            Toast.makeText(activity.getContext(),"Erro ao salvar resultado..",Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+        return salvou;
+
+
     }
 
     public void excluir(View activity, String idAgenda) {
@@ -134,16 +164,32 @@ public class HelperAgenda {
         Date hora = FormatarData.getFormatoHora().parse(campoHora.getText().toString());
         agenda.setHora(hora.getTime());
         agenda.setDiaSemana(diaDaSemana(inicio));
-        agenda.setAdversario(campoAdversario.getSelectedItem().toString());
         agenda.setIdAgenda(campoIdAgenda.getText().toString());
         agenda.setValor(new Double(campoValor.getText().toString()));
         agenda.setArena(campoLocal.getSelectedItem().toString());
-        agenda.setTimes(campoTime.getSelectedItem().toString());
+        //agenda.setAdversario(campoAdversario.getSelectedItem().toString());
+        //agenda.setTimes(campoTime.getSelectedItem().toString());
         agenda.setObservacao(campoObservacao.getText().toString());
         agenda.setStatus("Status");
         agenda.setIdUser(GetUser.getUserLogado());
         return agenda;
 
+    }
+
+
+    public Resultado pegaResultadoTela(){
+        resultado.setTime1(campoTime.getSelectedItem().toString());
+        resultado.setTime2(campoAdversario.getSelectedItem().toString());
+        resultado.setGols1(gols1.getText().toString());
+        resultado.setGols2(gols2.getText().toString());
+
+        return resultado;
+    }
+
+    private Resultado getResultado(String idResultado){
+
+
+        return null;
     }
 
     /*  Preenche o formulário com os dados do objeto recebido como parametro
@@ -158,7 +204,7 @@ public class HelperAgenda {
                     campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
                     campoDat.setText((String) FormatarData.getDf().format(agenda.getData()));
                     campoHora.setText((String) FormatarData.getDfHora().format(agenda.getHora()));
-                    campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
+                    //campoDiaSemana.setText(String.valueOf(agenda.getDiaSemana()));
                     campoIdAgenda.setText(String.valueOf(agenda.getIdAgenda()));
                     campoValor.setText(String.valueOf(agenda.getValor()));
                     campoObservacao.setText(agenda.getObservacao());
@@ -195,10 +241,14 @@ public class HelperAgenda {
     }
 
 
+
     public void inicializaCamposTela(View activity, AgendaDO agenda) {
         String valorCampo = agenda.getArena();
         String no = "Arenas";
         String nomeCampo = "nomeArena";
+        if(agenda != null){
+            getResultado(agenda.getIdResultado());
+        }
 
         // -------- Spinner de Arenas-----------------//
         CarregarSpinner(activity, valorCampo, no,
@@ -210,7 +260,11 @@ public class HelperAgenda {
         no = "";
 
         // -------- Spinner de Times-----------------//
-        valorCampo = agenda.getTimes();
+        if (resultado != null) {
+            valorCampo = this.resultado.getTime1();
+
+        }
+
         no = "Times" + "/" + GetUser.getUserLogado();
         nomeCampo = "nomeTime";
 
@@ -220,7 +274,11 @@ public class HelperAgenda {
         // -----------------------------------------//
 
         // -------- Spinner de Adversario-----------------//
-        valorCampo = agenda.getAdversario() ;
+        valorCampo = "";
+        if (resultado != null) {
+            valorCampo = this.resultado.getTime2();
+
+        }
         nomeCampo = "nomeTime";
         no = "Times" + "/" + GetUser.getUserLogado();
 
@@ -261,8 +319,11 @@ public class HelperAgenda {
         campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
         campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
         if(agenda.getIdAgenda() == null){
-            campoObservacao = (TextView) activity.findViewById(R.id.formulario_observacao);
-            campoObservacao.setEnabled(true);
+            gols1 = (EditText)activity.findViewById(R.id.gols1);
+            gols2 = (EditText)activity.findViewById(R.id.gols2);
+            gols1.setEnabled(true);
+            gols2.setEnabled(true);
+
         }
 
 

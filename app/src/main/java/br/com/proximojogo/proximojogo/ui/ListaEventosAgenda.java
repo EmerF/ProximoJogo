@@ -67,10 +67,10 @@ public class ListaEventosAgenda extends Fragment {
                 bundle.putString("idAgenda", agenda.getIdAgenda());
                 bundle.putString("evento", agenda.getEvento());
                 bundle.putString("local", agenda.getArena());
-                bundle.putString("time", agenda.getTimes());
+                //bundle.putString("time", agenda.getTimes());
                 bundle.putString("data", agenda.getData().toString());
                 bundle.putString("hora", agenda.getHora().toString());
-                bundle.putString("adversario", agenda.getAdversario());
+                //bundle.putString("adversario", agenda.getAdversario());
                 bundle.putString("valor", agenda.getValor().toString());
                 bundle.putString("observacao", agenda.getObservacao());
                 agendaFragment.setArguments(bundle);
@@ -103,9 +103,9 @@ public class ListaEventosAgenda extends Fragment {
             protected void populateView(View v, AgendaDO agenda, int position) {
                 final int pos = position;
                 TextView time = (TextView) v.findViewById(R.id.time_evento);
-                time.setText(agenda.getTimes());
+                //time.setText(agenda.getTimes());
                 TextView tipo = (TextView) v.findViewById(R.id.adversario_evento);
-                tipo.setText(" " + agenda.getAdversario());
+                //tipo.setText(" " + agenda.getAdversario());
                 TextView local = (TextView) v.findViewById(R.id.local_evento);
                 local.setText("Local: " + agenda.getArena());
                 TextView data = (TextView) v.findViewById(R.id.data_evento);
@@ -137,10 +137,10 @@ public class ListaEventosAgenda extends Fragment {
                         bundle.putString("idAgenda", item.getIdAgenda());
                         bundle.putString("evento", item.getEvento());
                         bundle.putString("local", item.getArena());
-                        bundle.putString("time", item.getTimes());
+                        //bundle.putString("time", item.getTimes());
                         bundle.putString("data", item.getData().toString());
                         bundle.putString("hora", item.getHora().toString());
-                        bundle.putString("adversario", item.getAdversario());
+                        //bundle.putString("adversario", item.getAdversario());
                         bundle.putString("valor", item.getValor().toString());
                         bundle.putString("observacao", item.getObservacao());
                         agendaFragment.setArguments(bundle);
