@@ -118,7 +118,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             agenda.setObservacao(bundle.getString("observacao"));
            // agenda.set_idResultado(bundle.getString("idResultado"));
 
-            if (agenda != null) {
+gi            if (agenda != null) {
                 try {
                     helper.inicializaCamposTela(agendaView, agenda);
                     helper.preencheFormulario(agenda);

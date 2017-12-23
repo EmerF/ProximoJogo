@@ -261,7 +261,8 @@
                 android:text="@string/resultado"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:tag="naoObrigatorio"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

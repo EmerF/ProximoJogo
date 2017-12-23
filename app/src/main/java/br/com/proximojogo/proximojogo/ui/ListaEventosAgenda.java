@@ -30,7 +30,6 @@ import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class ListaEventosAgenda extends Fragment {
-    private DatabaseReference mDatabase;//rever acho que estamos usando repetido isso, parece ser a mesma coisa do mDatabaseAgenda
     private ListView mListView;
     AgendaDO agenda;
     private DatabaseReference mDatabaseAgenda;
@@ -87,31 +86,57 @@ public class ListaEventosAgenda extends Fragment {
             }
         });
 //        mDatabaseAgenda.child(GetUser.getUserLogado());
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
-        mDatabase.keepSynced(true);
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
+        mDatabaseAgenda.keepSynced(true);
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day - 1);
-        Query queryRef = mDatabase.startAt(c.getTimeInMillis()).orderByChild("data"); // ordena os dados pelo campo informado...
+        FirebaseDatabase fdb = null;
+        String nome;
+
+
+        Query queryRef = mDatabaseAgenda.startAt(c.getTimeInMillis()).orderByChild("data"); // ordena os dados pelo campo informado...
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),
                 AgendaDO.class,
                 R.layout.row_evento_excluir,
                 queryRef
         ) {
+
             @Override
-            protected void populateView(View v, AgendaDO agenda, int position) {
+            protected void populateView(final View v, final AgendaDO agenda, int position) {
                 final int pos = position;
-                TextView time = (TextView) v.findViewById(R.id.time_evento);
-                //time.setText(agenda.getTimes());
-                TextView tipo = (TextView) v.findViewById(R.id.adversario_evento);
-                //tipo.setText(" " + agenda.getAdversario());
-                TextView local = (TextView) v.findViewById(R.id.local_evento);
-                local.setText("Local: " + agenda.getArena());
-                TextView data = (TextView) v.findViewById(R.id.data_evento);
-                data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
-                TextView hora = (TextView) v.findViewById(R.id.hora_evento);
-                hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
+                DatabaseReference mResultados;
+                mResultados = FirebaseDatabase.getInstance().getReference().child("resultados/" + agenda.getIdResultado());
+                mResultados.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(agenda.getIdResultado() != null){
+                            TextView time = (TextView) v.findViewById(R.id.time_evento);
+                            time.setText(dataSnapshot.child("time1").getValue(String.class));
+
+                            TextView adv = (TextView) v.findViewById(R.id.adversario_evento);
+                            adv.setText(" " + dataSnapshot.child("time2").getValue(String.class));
+
+                        }
+
+
+                        TextView local = (TextView) v.findViewById(R.id.local_evento);
+                        local.setText("Local: " + agenda.getArena());
+                        TextView data = (TextView) v.findViewById(R.id.data_evento);
+                        data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
+                        TextView hora = (TextView) v.findViewById(R.id.hora_evento);
+                        hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -129,7 +154,7 @@ public class ListaEventosAgenda extends Fragment {
                     public void onClick(View v) {
                         AgendaDO item = getItem(pos);
                         /**
-                         * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                         * esse bundle envia o valor para outro fragment (evitar acoplamento seria interessante
                          * utilizar uma interface) mas não vi necessidade aqui.
                          */
                         Bundle bundle = new Bundle();
@@ -157,9 +182,6 @@ public class ListaEventosAgenda extends Fragment {
         return eventosDaAgendaView;
     }
 
-    public void populaListView(){
-
-    }
 
     /**
      * Teste de ver quando tem internet

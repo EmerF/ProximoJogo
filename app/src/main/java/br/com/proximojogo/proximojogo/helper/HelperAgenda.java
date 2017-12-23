@@ -86,7 +86,7 @@ public class HelperAgenda {
         boolean salvou = false;
         try {
 
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
+
             AgendaDO agenda = pegaAgenda();
             if(salvarResultado(activity)){
                 agenda.setIdResultado(this.resultado.getIdResultado());
@@ -104,7 +104,7 @@ public class HelperAgenda {
                 mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }*/
-
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
             mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
             Toast.makeText(activity.getContext(), "Agenda salva com sucesso!", Toast.LENGTH_SHORT).show();
             salvou = true;
@@ -121,17 +121,19 @@ public class HelperAgenda {
 
         boolean salvou = false;
         try {
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("resultados");
+
             Resultado resultado= pegaResultadoTela();
-            if (resultado.getIdResultado().equals("")) {
+            if (resultado.getIdResultado() == null) {
                 //getUser id do Firebase para setar na agenda
                 // e colocar o nome junto com o id para identificar o nó
                 String key = mDatabaseAgenda.push().getKey();
                 resultado.setIdResultado(key);
 
             }
-            mDatabaseAgenda.child(resultado.getIdResultado()).setValue(agenda);
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("resultados");
+            mDatabaseAgenda.child(resultado.getIdResultado()).setValue(resultado);
             salvou = true;
+            mDatabaseAgenda = null;
         }catch (Exception e){
             Toast.makeText(activity.getContext(),"Erro ao salvar resultado..",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -169,7 +171,7 @@ public class HelperAgenda {
         agenda.setArena(campoLocal.getSelectedItem().toString());
         //agenda.setAdversario(campoAdversario.getSelectedItem().toString());
         //agenda.setTimes(campoTime.getSelectedItem().toString());
-        agenda.setObservacao(campoObservacao.getText().toString());
+        //agenda.setObservacao(campoObservacao.getText().toString());
         agenda.setStatus("Status");
         agenda.setIdUser(GetUser.getUserLogado());
         return agenda;
@@ -246,7 +248,7 @@ public class HelperAgenda {
         String valorCampo = agenda.getArena();
         String no = "Arenas";
         String nomeCampo = "nomeArena";
-        if(agenda != null){
+        if(agenda.getIdResultado() != null){
             getResultado(agenda.getIdResultado());
         }
 
@@ -328,6 +330,7 @@ public class HelperAgenda {
 
 
         this.agenda = new AgendaDO();
+        this.resultado = new Resultado();
     }
 
     /*
