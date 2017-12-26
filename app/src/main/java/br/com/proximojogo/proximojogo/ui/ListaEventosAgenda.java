@@ -114,7 +114,6 @@ public class ListaEventosAgenda extends Fragment {
                         if(agenda.getIdResultado() != null){
                             TextView time = (TextView) v.findViewById(R.id.time_evento);
                             time.setText(dataSnapshot.child("time1").getValue(String.class));
-
                             TextView adv = (TextView) v.findViewById(R.id.adversario_evento);
                             adv.setText(" " + dataSnapshot.child("time2").getValue(String.class));
 

@@ -23,6 +23,7 @@ import org.joda.time.LocalDate;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -57,6 +58,7 @@ public class HelperAgenda {
     private Spinner campoTime;
     private EditText gols1;
     private EditText gols2;
+    private TextView lblVersus2;
 
     private TextView campoObservacao;
 
@@ -104,7 +106,7 @@ public class HelperAgenda {
                 mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
                 Toast.makeText(activity.getContext(), "Agenda Editada com Sucesso!", Toast.LENGTH_SHORT).show();
             }*/
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Agendas");
             mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
             Toast.makeText(activity.getContext(), "Agenda salva com sucesso!", Toast.LENGTH_SHORT).show();
             salvou = true;
@@ -130,7 +132,7 @@ public class HelperAgenda {
                 resultado.setIdResultado(key);
 
             }
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("resultados");
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Resultados");
             mDatabaseAgenda.child(resultado.getIdResultado()).setValue(resultado);
             salvou = true;
             mDatabaseAgenda = null;
@@ -292,40 +294,50 @@ public class HelperAgenda {
         ArrayAdapter<Eventos> adapterEvento = new ArrayAdapter<Eventos>
                 (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, br.com.proximojogo.proximojogo.enuns.Eventos.values());
         adapterEvento.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
+        spEvento =  activity.findViewById(R.id.formulario_evento);
         spEvento.setAdapter(adapterEvento);
 
-        data = (EditText) activity.findViewById(R.id.formulario_Data);
+        data =  activity.findViewById(R.id.formulario_Data);
 
         //sempre pego o dia atual
         data.setText(new LocalDate().toString("dd/MM/yyyy"));
         //boqueia o teclado
         data.setInputType(InputType.TYPE_NULL);
 
-        hora = (EditText) activity.findViewById(R.id.formulario_hora);
+        hora =  activity.findViewById(R.id.formulario_hora);
         hora.setInputType(InputType.TYPE_NULL);
         new PickersActivity(data, activity.getContext(), 0);
         new PickersActivity(hora, activity.getContext(), 1);
 
 
-        campoEvento = (Spinner) activity.findViewById(R.id.formulario_evento);
+        campoEvento =  activity.findViewById(R.id.formulario_evento);
         //campoStatus = (EditText)activity.findViewById(R.id.formulario_status);
-        campoDat = (EditText) activity.findViewById(R.id.formulario_Data);
-        campoHora = (EditText) activity.findViewById(R.id.formulario_hora);
+        campoDat =  activity.findViewById(R.id.formulario_Data);
+        campoHora =  activity.findViewById(R.id.formulario_hora);
         //campoDiaSemana = (EditText) activity.findViewById(R.id.formulario_dia_da_semana);
-        campoAdversario = (Spinner) activity.findViewById(R.id.formulario_adversario);
-        campoIdAgenda = (EditText) activity.findViewById(R.id.idAgenda);
+        campoAdversario =  activity.findViewById(R.id.formulario_adversario);
+        campoIdAgenda =  activity.findViewById(R.id.idAgenda);
         //campoFoto = (ImageView)activity.findViewById(R.id.formulario_foto);
 
-        campoValor = (EditText) activity.findViewById(R.id.formulario_valor);
-        campoLocal = (Spinner) activity.findViewById(R.id.formulario_local);
-        campoTime = (Spinner) activity.findViewById(R.id.formulario_time);
-        if(agenda.getIdAgenda() == null){
-            gols1 = (EditText)activity.findViewById(R.id.gols1);
-            gols2 = (EditText)activity.findViewById(R.id.gols2);
-            gols1.setEnabled(true);
-            gols2.setEnabled(true);
+        campoValor =  activity.findViewById(R.id.formulario_valor);
+        campoLocal =  activity.findViewById(R.id.formulario_local);
+        campoTime = activity.findViewById(R.id.formulario_time);
+        Calendar c = Calendar.getInstance();
 
+        if (agenda.getIdResultado() != null) {
+        // está editando, mas pode ser um jogo futuro
+
+            if (agenda.getData() < c.getTimeInMillis()) {// Jogos passados
+                campoObservacao = activity.findViewById(R.id.formulario_observacao);
+                gols1 = activity.findViewById(R.id.gols1);
+                lblVersus2 = activity.findViewById(R.id.lbVersus2);
+                gols2 = activity.findViewById(R.id.gols2);
+                campoObservacao.setVisibility(View.VISIBLE);
+                gols1.setVisibility(View.VISIBLE);
+                lblVersus2.setVisibility(View.VISIBLE);
+                gols2.setVisibility(View.VISIBLE);
+
+            }
         }
 
 

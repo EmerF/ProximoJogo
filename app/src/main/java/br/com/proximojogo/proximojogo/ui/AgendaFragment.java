@@ -99,12 +99,15 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
-
+    /* Pode haver inicialização com dados do jogos passados
+        por esse motivo repete-se o código para inicilização
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AgendaDO agenda = new AgendaDO();
         Bundle bundle = getArguments();
+
         if (bundle != null) {
             idAgenda = bundle.getString("idAgenda");
             agenda.setIdAgenda(idAgenda);
@@ -113,18 +116,16 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             //agenda.setTimes(bundle.getString("time"));
             agenda.setData(Long.parseLong(bundle.getString("data")));
             agenda.setHora(Long.parseLong(bundle.getString("hora")));
-           // agenda.setAdversario(bundle.getString("adversario"));
+            // agenda.setAdversario(bundle.getString("adversario"));
             agenda.setValor(Double.parseDouble(bundle.getString("valor")));
             agenda.setObservacao(bundle.getString("observacao"));
-           // agenda.set_idResultado(bundle.getString("idResultado"));
+            // agenda.set_idResultado(bundle.getString("idResultado"));
 
-gi            if (agenda != null) {
-                try {
-                    helper.inicializaCamposTela(agendaView, agenda);
-                    helper.preencheFormulario(agenda);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+            try {
+                helper.inicializaCamposTela(agendaView, agenda);
+                helper.preencheFormulario(agenda);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }else{
             helper.inicializaCamposTela(agendaView, agenda);
@@ -172,18 +173,19 @@ gi            if (agenda != null) {
             }
         }
     }
-        @Override
-        public void onCreate (@Nullable Bundle savedInstanceState){
-            super.onCreate(savedInstanceState);
-            setRetainInstance(true);
-        }
 
-        @Override
-        public void onConfigurationChanged (Configuration newConfig){
-            super.onConfigurationChanged(newConfig);
-        }
-
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+
+}
 
 

@@ -13,8 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
@@ -25,11 +28,11 @@ import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class ListaEventosPassadosAgenda extends Fragment {
-    private DatabaseReference mDatabase;
     private ListView mListView;
     AgendaDO agenda;
     private DatabaseReference mDatabaseAgenda;
     ImageButton btnExcluir;
+    private DatabaseReference mResultados;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +68,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day - 1);
@@ -75,19 +78,43 @@ public class ListaEventosPassadosAgenda extends Fragment {
                 getActivity(),
                 AgendaDO.class,
                 R.layout.row_evento_excluir,
-                mDatabase.endAt(c.getTimeInMillis()).orderByChild("data") // ordena os dados pelo campo informado...
+                mDatabaseAgenda.endAt(c.getTimeInMillis()).orderByChild("data") // ordena os dados pelo campo informado...
 
 
         ) {
             @Override
-            protected void populateView(View v, AgendaDO agenda, int position) {
+            protected void populateView(final View v, final AgendaDO agenda, int position) {
                 final int pos = position;
-                TextView time = (TextView) v.findViewById(R.id.time_evento);
-                time.setText(agenda.getIdResultado());
-                TextView tipo = (TextView) v.findViewById(R.id.adversario_evento);
-                tipo.setText(" " + agenda.getIdResultado());
-                TextView local = (TextView) v.findViewById(R.id.local_evento);
-                local.setText("Resultado: " + agenda.getObservacao());
+                //############# Resultado ##################
+                mResultados = FirebaseDatabase.getInstance().getReference().child("Resultados/" + agenda.getIdResultado());
+                mResultados.addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                TextView time =  v.findViewById(R.id.time_evento);
+                                time.setText(dataSnapshot.child("time1").getValue(String.class));
+
+                                TextView gols1 = v.findViewById(R.id.gols1);
+                                gols1.setText(dataSnapshot.child("gols1").getValue(String.class));
+
+                                TextView adv =  v.findViewById(R.id.adversario_evento);
+                                adv.setText(" " + dataSnapshot.child("time2").getValue(String.class));
+
+                                TextView gols2 = v.findViewById(R.id.gols2);
+                                gols2.setText(dataSnapshot.child("gols2").getValue(String.class));
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                //############# Resultado ##################
+
                 TextView data = (TextView) v.findViewById(R.id.data_evento);
                 data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
                 TextView hora = (TextView) v.findViewById(R.id.hora_evento);
@@ -97,10 +124,13 @@ public class ListaEventosPassadosAgenda extends Fragment {
                     @Override
                     public void onClick(View v) {
                         AgendaDO item = getItem(pos);
-                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + item.getIdAgenda());
+                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" + GetUser.getUserLogado() + "/" + item.getIdAgenda());
+                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultado/" + agenda.getIdResultado());
+                                                
                         mDatabaseAgenda.removeValue();
+                        mResultados.removeValue();
                         //Acao do primeiro botao
-                        Toast.makeText(v.getContext(), "Vou excluir vc filho da puta posição: " + pos, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Excluido! ", Toast.LENGTH_SHORT).show();
                     }
                 });
                 ImageButton btnEditar = v.findViewById(R.id.row_edit);
@@ -125,7 +155,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
                         bundle.putString("observacao", agenda.getObservacao());
                         agendaFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
-                        Toast.makeText(v.getContext(), "Vou editar vc filho da puta posição: " + pos, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Alterado! " + pos, Toast.LENGTH_SHORT).show();
                     }
                 });
 
