@@ -11,6 +11,16 @@ public class Resultado {
     private String gols1 = "0";
     private String gols2 = "0";
 
+    public Resultado(String idResultado, String time1, String time2, String gols1, String gols2) {
+        this.idResultado = idResultado;
+        this.time1 = time1;
+        this.time2 = time2;
+        this.gols1 = gols1;
+        this.gols2 = gols2;
+    }
+    public Resultado(){
+
+    }
     public String getIdResultado() {
         return idResultado;
     }

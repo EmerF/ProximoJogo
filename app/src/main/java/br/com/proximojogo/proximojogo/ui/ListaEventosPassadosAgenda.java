@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,43 +23,26 @@ import java.util.Calendar;
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.entity.Resultado;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
+import br.com.proximojogo.proximojogo.utils.bundle.BundleAgenda;
+import br.com.proximojogo.proximojogo.utils.snapshot.ConverteSnapshotResultado;
 
 public class ListaEventosPassadosAgenda extends Fragment {
     private ListView mListView;
-    AgendaDO agenda;
     private DatabaseReference mDatabaseAgenda;
-    ImageButton btnExcluir;
     private DatabaseReference mResultados;
+    private Resultado resultado;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Histórico de Jogos");
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
-        mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
+        mListView =  eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
-                agenda = (AgendaDO) lista.getItemAtPosition(position);
-                /**
-                 * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
-                 * utilizar uma interface) mas não vi necessidade aqui.
-                 */
-                Bundle bundle = new Bundle();
-                AgendaFragment agendaFragment = new AgendaFragment();
-                bundle.putString("agenda", agenda.getIdAgenda());
-                agendaFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
-
-            }
-        });
-
-        Button novaAgenda = (Button) eventosDaAgendaView.findViewById(R.id.novo_agenda);
+        Button novaAgenda = eventosDaAgendaView.findViewById(R.id.novo_agenda);
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +50,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
             }
         });
 
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas" + "/" + GetUser.getUserLogado());
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day - 1);
@@ -91,18 +73,22 @@ public class ListaEventosPassadosAgenda extends Fragment {
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                TextView time =  v.findViewById(R.id.time_evento);
-                                time.setText(dataSnapshot.child("time1").getValue(String.class));
+                                setResultado(dataSnapshot);
+                                agenda.setResultado(ConverteSnapshotResultado.converteSnapShotParaResultado(dataSnapshot));
 
-                                TextView gols1 = v.findViewById(R.id.gols1);
-                                gols1.setText(dataSnapshot.child("gols1").getValue(String.class));
 
-                                TextView adv =  v.findViewById(R.id.adversario_evento);
-                                adv.setText(" " + dataSnapshot.child("time2").getValue(String.class));
+                                TextView time = v.findViewById(R.id.time_evento);
+                                time.setText(agenda.getResultado().getTime1());
 
-                                TextView gols2 = v.findViewById(R.id.gols2);
-                                gols2.setText(dataSnapshot.child("gols2").getValue(String.class));
+                                TextView adv = v.findViewById(R.id.adversario_evento);
+                                adv.setText(agenda.getResultado().getTime2());
 
+                                TextView resultado = v.findViewById(R.id.resultado_jogo);
+                                resultado.setText(
+                                        agenda.getResultado().getTime1() + " " +
+                                        agenda.getResultado().getGols1() + " X " +
+                                        agenda.getResultado().getGols2() + " " +
+                                        agenda.getResultado().getTime2());
 
                             }
 
@@ -112,21 +98,21 @@ public class ListaEventosPassadosAgenda extends Fragment {
                             }
                         });
 
-
                 //############# Resultado ##################
 
-                TextView data = (TextView) v.findViewById(R.id.data_evento);
+                TextView data =  v.findViewById(R.id.data_evento);
                 data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
-                TextView hora = (TextView) v.findViewById(R.id.hora_evento);
+                TextView hora =  v.findViewById(R.id.hora_evento);
                 hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
                 ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         AgendaDO item = getItem(pos);
-                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" + GetUser.getUserLogado() + "/" + item.getIdAgenda());
+                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" +
+                                GetUser.getUserLogado() + "/" + item.getIdAgenda());
                         mResultados = FirebaseDatabase.getInstance().getReference().child("Resultado/" + agenda.getIdResultado());
-                                                
+
                         mDatabaseAgenda.removeValue();
                         mResultados.removeValue();
                         //Acao do primeiro botao
@@ -138,24 +124,18 @@ public class ListaEventosPassadosAgenda extends Fragment {
                     @Override
                     public void onClick(View v) {
                         AgendaDO agenda = getItem(pos);
+                        agenda.setResultado(resultado);
+                        agenda.setDataFutura(false);
                         /**
-                         * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                         * esse bundle que envia o valor para outro fragment (evitar acoplamento seria interessante
                          * utilizar uma interface) mas não vi necessidade aqui.
                          */
-                        Bundle bundle = new Bundle();
                         AgendaFragment agendaFragment = new AgendaFragment();
-                        bundle.putString("idAgenda", agenda.getIdAgenda());
-                        bundle.putString("evento", agenda.getEvento());
-                        bundle.putString("local", agenda.getArena());
-                        //bundle.putString("time", agenda.getTimes());
-                        bundle.putString("data", agenda.getData().toString());
-                        bundle.putString("hora", agenda.getHora().toString());
-                        //bundle.putString("adversario", agenda.getAdversario());
-                        bundle.putString("valor", agenda.getValor().toString());
-                        bundle.putString("observacao", agenda.getObservacao());
+                        Bundle bundle = BundleAgenda.retornaBundle(agenda);
                         agendaFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
-                        Toast.makeText(v.getContext(), "Alterado! " + pos, Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(v.getContext(), "Alterando! " + pos, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -165,6 +145,10 @@ public class ListaEventosPassadosAgenda extends Fragment {
         mListView.setAdapter(firebaseListAdapter);
 
         return eventosDaAgendaView;
+    }
+
+    private void setResultado(DataSnapshot dataSnapshot){
+        this.resultado = ConverteSnapshotResultado.converteSnapShotParaResultado(dataSnapshot);
     }
 
 }

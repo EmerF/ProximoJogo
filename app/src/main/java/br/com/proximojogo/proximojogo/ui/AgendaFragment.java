@@ -16,9 +16,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-
-import com.google.firebase.database.DatabaseReference;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
@@ -26,17 +23,15 @@ import java.text.ParseException;
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.entity.Resultado;
 import br.com.proximojogo.proximojogo.helper.HelperAgenda;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 public class AgendaFragment extends Fragment implements View.OnClickListener {
 
-    private DatabaseReference mDatabase;
     private HelperAgenda helper;
 
     private Button btSalvar;
-    private ImageButton btExcluir;
-    private ImageButton btListar;
     private View agendaView;
     private EditText obs;
     //estava usando só no Dynamo
@@ -45,6 +40,8 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
     private String idAgenda;
     private boolean salvou;
     private boolean validarCampos;
+    private boolean dataFutura = true;
+
     private InputMethodManager imm;
 
     static class AgendaHandler extends Handler {
@@ -99,6 +96,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
+
     /* Pode haver inicialização com dados do jogos passados
         por esse motivo repete-se o código para inicilização
      */
@@ -109,6 +107,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
+
             idAgenda = bundle.getString("idAgenda");
             agenda.setIdAgenda(idAgenda);
             agenda.setEvento(bundle.getString("evento"));
@@ -117,17 +116,22 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             agenda.setData(Long.parseLong(bundle.getString("data")));
             agenda.setHora(Long.parseLong(bundle.getString("hora")));
             // agenda.setAdversario(bundle.getString("adversario"));
+            agenda.setDataFutura(Boolean.valueOf(bundle.getString("dataFutura")));
             agenda.setValor(Double.parseDouble(bundle.getString("valor")));
-            agenda.setObservacao(bundle.getString("observacao"));
-            // agenda.set_idResultado(bundle.getString("idResultado"));
-
+            agenda.setResultado(new Resultado(
+                    bundle.getString("idResultado"),
+                    bundle.getString("time1"),
+                    bundle.getString("time2"),
+                    bundle.getString("gols1"),
+                    bundle.getString("gols2")));
+            dataFutura = agenda.getDataFutura();
             try {
-                helper.inicializaCamposTela(agendaView, agenda);
+                    helper.inicializaCamposTela(agendaView, agenda);
                 helper.preencheFormulario(agenda);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             helper.inicializaCamposTela(agendaView, agenda);
         }
     }
@@ -168,7 +172,12 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             salvarAgenda(v);
 
             if (salvou) {
-                getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+                if(dataFutura){
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+                }else {
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()    ).commit();
+                }
+
 
             }
         }

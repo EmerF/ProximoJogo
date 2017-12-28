@@ -65,7 +65,13 @@
                 android:id="@+id/local_evento"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Cerejeira" />
+                android:hint="" />
+            <TextView
+                android:id="@+id/resultado_jogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="" />
+
         </LinearLayout>
 
     </LinearLayout>

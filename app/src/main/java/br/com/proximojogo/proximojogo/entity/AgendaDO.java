@@ -1,27 +1,35 @@
 package br.com.proximojogo.proximojogo.entity;
 
+import com.google.firebase.database.Exclude;
+
 public class AgendaDO {
-    private String _idAgenda;
+    private String idAgenda;
     private String idResultado;
-    private String _status;
-    private String _arena;
-    private Long _data;
-    private int _diaSemana;
-    private String _evento;
-    private Long _hora;
-    private String _idUser;
-    private String _observacao;
-    private Double _valor;
+    private String status;
+    private String arena;
+    private Long data;
+    private int diaSemana;
+    private String evento;
+    private Long hora;
+    private String idUser;
+    private String observacao;
+    private Double valor;
+
+    @Exclude
+    private Boolean dataFutura = true;
+
+    @Exclude
+    private Resultado resultado;
 
     public AgendaDO() {
     }
 
     public String getIdAgenda() {
-        return _idAgenda;
+        return idAgenda;
     }
 
-    public String get_idAgenda() {
-        return _idAgenda;
+    public void setIdAgenda(String idAgenda) {
+        this.idAgenda = idAgenda;
     }
 
     public String getIdResultado() {
@@ -32,161 +40,91 @@ public class AgendaDO {
         this.idResultado = idResultado;
     }
 
-    public void set_idAgenda(String _idAgenda) {
-        this._idAgenda = _idAgenda;
-    }
-
-
-    public String get_status() {
-        return _status;
-    }
-
-    public void set_status(String _status) {
-        this._status = _status;
-    }
-
-
-    public String get_arena() {
-        return _arena;
-    }
-
-    public void set_arena(String _arena) {
-        this._arena = _arena;
-    }
-
-    public Long get_data() {
-        return _data;
-    }
-
-    public void set_data(Long _data) {
-        this._data = _data;
-    }
-
-    public int get_diaSemana() {
-        return _diaSemana;
-    }
-
-    public void set_diaSemana(int _diaSemana) {
-        this._diaSemana = _diaSemana;
-    }
-
-    public String get_evento() {
-        return _evento;
-    }
-
-    public void set_evento(String _evento) {
-        this._evento = _evento;
-    }
-
-    public Long get_hora() {
-        return _hora;
-    }
-
-    public void set_hora(Long _hora) {
-        this._hora = _hora;
-    }
-
-    public String get_idUser() {
-        return _idUser;
-    }
-
-    public void set_idUser(String _idUser) {
-        this._idUser = _idUser;
-    }
-
-    public String get_observacao() {
-        return _observacao;
-    }
-
-    public void set_observacao(String _observacao) {
-        this._observacao = _observacao;
-    }
-
-
-    public Double get_valor() {
-        return _valor;
-    }
-
-    public void set_valor(Double _valor) {
-        this._valor = _valor;
-    }
-
-    public void setIdAgenda(final String _idAgenda) {
-        this._idAgenda = _idAgenda;
-    }
-
     public String getStatus() {
-        return _status;
+        return status;
     }
 
-    public void setStatus(final String _status) {
-        this._status = _status;
+    public void setStatus(String status) {
+        this.status = status;
     }
-
 
     public String getArena() {
-        return _arena;
+        return arena;
     }
 
-    public void setArena(final String _arena) {
-        this._arena = _arena;
+    public void setArena(String arena) {
+        this.arena = arena;
     }
 
     public Long getData() {
-        return _data;
+        return data;
     }
 
-    public void setData(final Long _data) {
-        this._data = _data;
+    public void setData(Long data) {
+        this.data = data;
     }
 
     public int getDiaSemana() {
-        return _diaSemana;
+        return diaSemana;
     }
 
-    public void setDiaSemana(final int _diaSemana) {
-        this._diaSemana = _diaSemana;
+    public void setDiaSemana(int diaSemana) {
+        this.diaSemana = diaSemana;
     }
 
     public String getEvento() {
-        return _evento;
+        return evento;
     }
 
-    public void setEvento(final String _evento) {
-        this._evento = _evento;
+    public void setEvento(String evento) {
+        this.evento = evento;
     }
 
     public Long getHora() {
-        return _hora;
+        return hora;
     }
 
-    public void setHora(final Long _hora) {
-        this._hora = _hora;
+    public void setHora(Long hora) {
+        this.hora = hora;
     }
 
     public String getIdUser() {
-        return _idUser;
+        return idUser;
     }
 
-    public void setIdUser(final String _idUser) {
-        this._idUser = _idUser;
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
     }
 
     public String getObservacao() {
-        return _observacao;
+        return observacao;
+    }
+    @Exclude
+    public Boolean getDataFutura() {
+        return dataFutura;
     }
 
-    public void setObservacao(final String _observacao) {
-        this._observacao = _observacao;
+    public void setDataFutura(Boolean dataFutura) {
+        this.dataFutura = dataFutura;
     }
 
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
 
     public Double getValor() {
-        return _valor;
+        return valor;
     }
 
-    public void setValor(final Double _valor) {
-        this._valor = _valor;
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
+    @Exclude
+    public Resultado getResultado() {
+        return resultado;
     }
 
+    public void setResultado(Resultado resultado) {
+        this.resultado = resultado;
+    }
 }
