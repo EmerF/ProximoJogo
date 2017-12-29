@@ -84,6 +84,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
                                 adv.setText(agenda.getResultado().getTime2());
 
                                 TextView resultado = v.findViewById(R.id.resultado_jogo);
+                                resultado.setVisibility(View.VISIBLE);
                                 resultado.setText(
                                         agenda.getResultado().getTime1() + " " +
                                         agenda.getResultado().getGols1() + " X " +
@@ -104,6 +105,10 @@ public class ListaEventosPassadosAgenda extends Fragment {
                 data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
                 TextView hora =  v.findViewById(R.id.hora_evento);
                 hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
+                TextView local = v.findViewById(R.id.local_evento);
+                local.setText("Local: " + agenda.getArena());
+
+
                 ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,7 +116,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
                         AgendaDO item = getItem(pos);
                         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" +
                                 GetUser.getUserLogado() + "/" + item.getIdAgenda());
-                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultado/" + agenda.getIdResultado());
+                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultados/" + agenda.getIdResultado());
 
                         mDatabaseAgenda.removeValue();
                         mResultados.removeValue();

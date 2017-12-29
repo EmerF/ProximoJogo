@@ -16,14 +16,11 @@
         tools:context="br.com.proximojogo.proximojogo.ui.ListaEventosAgenda">
 
         <ListView
+            android:id="@+id/list_view_agenda"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
-            android:id="@+id/list_view_agenda" />
+            android:layout_below="@+id/novo_agenda" />
 
         <Button
             android:layout_width="56dp"

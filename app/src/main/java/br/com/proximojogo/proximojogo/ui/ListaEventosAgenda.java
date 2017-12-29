@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -54,20 +53,10 @@ public class ListaEventosAgenda extends Fragment {
          */
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
         mDatabaseAgenda.keepSynced(true);
-        mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
+        mListView = eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
 
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
-                agenda = (AgendaDO) lista.getItemAtPosition(position);
-
-
-            }
-        });
-
-        Button novaAgenda = (Button) eventosDaAgendaView.findViewById(R.id.novo_agenda);
+        Button novaAgenda =  eventosDaAgendaView.findViewById(R.id.novo_agenda);
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,20 +93,22 @@ public class ListaEventosAgenda extends Fragment {
                         agenda.setResultado(ConverteSnapshotResultado.converteSnapShotParaResultado(dataSnapshot));
 
                         if(agenda.getIdResultado() != null){
-                            TextView time = (TextView) v.findViewById(R.id.time_evento);
+                            TextView time =  v.findViewById(R.id.time_evento);
                             time.setText(dataSnapshot.child("time1").getValue(String.class));
-                            TextView adv = (TextView) v.findViewById(R.id.adversario_evento);
-                            adv.setText(" " + dataSnapshot.child("time2").getValue(String.class));
+
+                            TextView adv =  v.findViewById(R.id.adversario_evento);
+                            adv.setText(dataSnapshot.child("time2").getValue(String.class));
 
                         }
 
-
-                        TextView local = (TextView) v.findViewById(R.id.local_evento);
-                        local.setText("Local: " + agenda.getArena());
-                        TextView data = (TextView) v.findViewById(R.id.data_evento);
+                        TextView data =  v.findViewById(R.id.data_evento);
                         data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
-                        TextView hora = (TextView) v.findViewById(R.id.hora_evento);
+
+                        TextView hora =  v.findViewById(R.id.hora_evento);
                         hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
+
+                        TextView local =  v.findViewById(R.id.local_evento);
+                        local.setText("Local: " + agenda.getArena());
 
 
                     }
@@ -135,7 +126,7 @@ public class ListaEventosAgenda extends Fragment {
                         AgendaDO item = getItem(pos);
                         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" + GetUser.getUserLogado()
                                 + "/" + item.getIdAgenda());
-                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultado/" + agenda.getIdResultado());
+                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultados/" + agenda.getIdResultado());
                         mDatabaseAgenda.removeValue();
                         mResultados.removeValue();
                         //Acao do primeiro botao
