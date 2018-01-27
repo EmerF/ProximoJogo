@@ -59,7 +59,7 @@ public class ListaEventosPassadosAgenda extends Fragment {
         FirebaseListAdapter<AgendaDO> firebaseListAdapter = new FirebaseListAdapter<AgendaDO>(
                 getActivity(),
                 AgendaDO.class,
-                R.layout.row_evento_excluir,
+                R.layout.row_evento_excluir_passados,
                 mDatabaseAgenda.endAt(c.getTimeInMillis()).orderByChild("data") // ordena os dados pelo campo informado...
 
 
@@ -76,20 +76,19 @@ public class ListaEventosPassadosAgenda extends Fragment {
                                 setResultado(dataSnapshot);
                                 agenda.setResultado(ConverteSnapshotResultado.converteSnapShotParaResultado(dataSnapshot));
 
+                                TextView time =  v.findViewById(R.id.time_evento_passado);
+                                time.setText(dataSnapshot.child("time1").getValue(String.class));
 
-                                TextView time = v.findViewById(R.id.time_evento);
-                                time.setText(agenda.getResultado().getTime1());
+                                TextView adv =  v.findViewById(R.id.adversario_evento_passado);
+                                adv.setText(dataSnapshot.child("time2").getValue(String.class));
 
-                                TextView adv = v.findViewById(R.id.adversario_evento);
-                                adv.setText(agenda.getResultado().getTime2());
 
                                 TextView resultado = v.findViewById(R.id.resultado_jogo);
-                                resultado.setVisibility(View.VISIBLE);
                                 resultado.setText(
-                                        agenda.getResultado().getTime1() + " " +
+                                        //agenda.getResultado().getTime1() + "   " +
                                         agenda.getResultado().getGols1() + " X " +
-                                        agenda.getResultado().getGols2() + " " +
-                                        agenda.getResultado().getTime2());
+                                        agenda.getResultado().getGols2());
+                                        //agenda.getResultado().getTime2());
 
                             }
 
@@ -103,13 +102,11 @@ public class ListaEventosPassadosAgenda extends Fragment {
 
                 TextView data =  v.findViewById(R.id.data_evento);
                 data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
-                TextView hora =  v.findViewById(R.id.hora_evento);
-                hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
                 TextView local = v.findViewById(R.id.local_evento);
                 local.setText("Local: " + agenda.getArena());
 
 
-                ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
+                ImageButton btnExcluir = v.findViewById(R.id.row_excluir_passados);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -124,19 +121,20 @@ public class ListaEventosPassadosAgenda extends Fragment {
                         Toast.makeText(v.getContext(), "Excluido! ", Toast.LENGTH_SHORT).show();
                     }
                 });
-                ImageButton btnEditar = v.findViewById(R.id.row_edit);
+                ImageButton btnEditar = v.findViewById(R.id.row_edit_passados);
                 btnEditar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AgendaDO agenda = getItem(pos);
-                        agenda.setResultado(resultado);
-                        agenda.setDataFutura(false);
+                        AgendaDO agenda2 = getItem(pos);
+                        agenda2.setResultado(agenda.getResultado());
+                        agenda2.setDataFutura(false);
                         /**
                          * esse bundle que envia o valor para outro fragment (evitar acoplamento seria interessante
                          * utilizar uma interface) mas não vi necessidade aqui.
                          */
                         AgendaFragment agendaFragment = new AgendaFragment();
-                        Bundle bundle = BundleAgenda.retornaBundle(agenda);
+                        BundleAgenda bundleAgenda = new BundleAgenda();
+                        Bundle bundle = bundleAgenda.retornaBundle(agenda2);
                         agendaFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();
 

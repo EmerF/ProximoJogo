@@ -69,8 +69,6 @@ public class ListaEventosAgenda extends Fragment {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day - 1);
-        FirebaseDatabase fdb = null;
-        String nome;
 
 
         Query queryRef = mDatabaseAgenda.startAt(c.getTimeInMillis()).orderByChild("data"); // ordena os dados pelo campo informado...
@@ -119,7 +117,7 @@ public class ListaEventosAgenda extends Fragment {
                     }
                 });
 
-                ImageButton btnExcluir = v.findViewById(R.id.main_line_more);
+                ImageButton btnExcluir = v.findViewById(R.id.excluir_evento);
                 btnExcluir.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -137,14 +135,15 @@ public class ListaEventosAgenda extends Fragment {
                 btnEditar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AgendaDO agenda = getItem(pos);
-                        agenda.setDataFutura(true);
-                        agenda.setResultado(resultado);
+                        AgendaDO agenda2 = getItem(pos);
+                        agenda2.setDataFutura(true);
+                        agenda2.setResultado(agenda.getResultado());
                         /**
                          * esse bundle envia o valor para outro fragment (evitar acoplamento seria interessante
                          * utilizar uma interface) mas não vi necessidade aqui.
                          */
-                        Bundle bundle = BundleAgenda.retornaBundle(agenda);
+                        BundleAgenda bundleAgenda = new BundleAgenda();
+                        Bundle bundle = bundleAgenda.retornaBundle(agenda2);
                         AgendaFragment agendaFragment = new AgendaFragment();
                         agendaFragment.setArguments(bundle);
                         getFragmentManager().beginTransaction().replace(R.id.container, agendaFragment).commit();

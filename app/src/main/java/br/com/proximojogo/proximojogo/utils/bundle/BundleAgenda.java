@@ -11,9 +11,9 @@ import br.com.proximojogo.proximojogo.entity.AgendaDO;
  */
 
 public class BundleAgenda {
-
-   public static Bundle retornaBundle(AgendaDO agenda){
-       Bundle bundle = new Bundle();
+   private Bundle bundle;
+   public  Bundle retornaBundle(AgendaDO agenda){
+       bundle = new Bundle();
 
        bundle.putString("idAgenda", agenda.getIdAgenda());
        bundle.putString("evento", agenda.getEvento());

@@ -112,10 +112,8 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             agenda.setIdAgenda(idAgenda);
             agenda.setEvento(bundle.getString("evento"));
             agenda.setArena(bundle.getString("local"));
-            //agenda.setTimes(bundle.getString("time"));
             agenda.setData(Long.parseLong(bundle.getString("data")));
             agenda.setHora(Long.parseLong(bundle.getString("hora")));
-            // agenda.setAdversario(bundle.getString("adversario"));
             agenda.setDataFutura(Boolean.valueOf(bundle.getString("dataFutura")));
             agenda.setValor(Double.parseDouble(bundle.getString("valor")));
             agenda.setResultado(new Resultado(
@@ -127,7 +125,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
             dataFutura = agenda.getDataFutura();
             try {
                     helper.inicializaCamposTela(agendaView, agenda);
-                helper.preencheFormulario(agenda);
+                  helper.preencheFormulario(agenda);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
