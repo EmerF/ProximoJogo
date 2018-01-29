@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
+import br.com.proximojogo.proximojogo.ui.GoogleAuthFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
@@ -65,10 +66,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragmentById == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-        }
+//
+//        if(fragmentById == null){
+//            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+//        }
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
