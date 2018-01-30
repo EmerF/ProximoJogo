@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -69,11 +70,12 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
+
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
-//
-//        if(fragmentById == null){
-//            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-//        }
+
+        /*if(fragmentById == null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+        }*/
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -103,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -149,11 +152,20 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
         }
+        else if (id == R.id.logout) {
+            FirebaseAuth.getInstance().signOut();
+            Bundle bundle = new Bundle();
+            GoogleAuthFragment googleFragment = new GoogleAuthFragment();
+            bundle.putString("logoff", "S");
+            //fragmentManager.beginTransaction().replace(R.id.container, new CadAbastecimentoFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
 
     @Override

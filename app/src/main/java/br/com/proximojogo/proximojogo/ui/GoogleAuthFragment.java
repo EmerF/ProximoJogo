@@ -46,7 +46,7 @@ public class GoogleAuthFragment extends Fragment implements
     //private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
-    private String webClientId = "685718931289-pahr1pabp7uv56op0n8pg89nlijif77k.apps.googleusercontent.com";
+    private String webClientId = "562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com";
     private String logoff="";
 
     @Override
@@ -58,7 +58,7 @@ public class GoogleAuthFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                            Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_google_auth, container, false);
 
         // Views
@@ -102,6 +102,13 @@ public class GoogleAuthFragment extends Fragment implements
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
     // [START on_start_check_user]
     @Override
     public void onStart() {
@@ -115,17 +122,18 @@ public class GoogleAuthFragment extends Fragment implements
 
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
-        if (user != null) {
+        if (user != null && logoff.equals("")) {
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
             Toast.makeText(getActivity(),"Usuário logado", Toast.LENGTH_SHORT).show();
-
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+
         } else {
+
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
@@ -159,7 +167,7 @@ public class GoogleAuthFragment extends Fragment implements
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-        // showProgressDialog();
+         //showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -237,7 +245,8 @@ public class GoogleAuthFragment extends Fragment implements
         if (i == R.id.sign_in_button) {
             signIn();
         } else if (i == R.id.sign_out_button) {
-            signOut();
+            //signOut();
+            revokeAccess();
         } else if (i == R.id.disconnect_button) {
             revokeAccess();
         }

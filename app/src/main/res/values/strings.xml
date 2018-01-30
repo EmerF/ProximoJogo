@@ -6,6 +6,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="logout">Logout</string>
     <string name="title_activity_main">Próximo Jogo</string>
 
     <!-- Agenda Fragment -->
@@ -36,5 +37,6 @@
     <string name="resultado">Resultado</string>
     <string name="sign_out">Deslogar</string>
     <string name="disconnect">Desconectar</string>
+    <string name="server_client_id">562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com</string>
 
 </resources>
