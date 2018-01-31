@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 
 public class GoogleAuthFragment extends Fragment implements
@@ -129,8 +129,9 @@ public class GoogleAuthFragment extends Fragment implements
             getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
             Toast.makeText(getActivity(),"Usuário logado", Toast.LENGTH_SHORT).show();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            startActivity(new Intent(getActivity(), MainActivity.class));
+            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            //fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
         } else {
 

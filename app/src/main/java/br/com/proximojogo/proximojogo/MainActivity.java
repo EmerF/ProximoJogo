@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -51,34 +50,44 @@ public class MainActivity extends AppCompatActivity
     private Bitmap bitmap;
     private Uri mCropImageUri;
     private String avatarProximoJogo = "avatar_proximo_jogo.png";
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar =  findViewById(R.id.toolbar);
+
 
         requestStoragePermission();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+
+
+
+            /*Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
+
+            if(fragmentById == null){
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+                 }*/
+        mAuth = FirebaseAuth.getInstance();
+
+        if(mAuth.getCurrentUser() == null){
+            toolbar.setVisibility(View.GONE);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, new  GoogleAuthFragment()).commit();
+
+        }
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
-
-        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
-
-        /*if(fragmentById == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-        }*/
-
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
         ivAvatar = (ImageView) hView.findViewById(R.id.ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +103,7 @@ public class MainActivity extends AppCompatActivity
 
         leituraAvatar();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
 
@@ -155,7 +165,6 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
             Bundle bundle = new Bundle();
-            GoogleAuthFragment googleFragment = new GoogleAuthFragment();
             bundle.putString("logoff", "S");
             //fragmentManager.beginTransaction().replace(R.id.container, new CadAbastecimentoFragment()).commit();
             fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
