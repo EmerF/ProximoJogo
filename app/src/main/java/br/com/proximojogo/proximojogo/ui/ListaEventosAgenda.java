@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,12 +38,14 @@ public class ListaEventosAgenda extends Fragment {
     AgendaDO agenda;
     private DatabaseReference mDatabaseAgenda;
     private boolean online = false;
+    private AdView mAdView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
+        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544/6300978111");
         /**
          * Teste da documentação
          */
@@ -51,6 +56,10 @@ public class ListaEventosAgenda extends Fragment {
         mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
         mDatabaseAgenda.keepSynced(true);
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
+
+        mAdView = eventosDaAgendaView.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
 
