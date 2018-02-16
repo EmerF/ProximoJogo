@@ -1,7 +1,9 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,13 +43,74 @@ public class ListaEventosAgenda extends Fragment {
     private DatabaseReference mDatabaseAgenda;
     private boolean online = false;
     private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mAdView = getView().findViewById(R.id.adView);
+
+
+
+        mAdView.setAdListener(new AdListener() {
+            private void showToast(String message) {
+                View view = getView();
+                if (view != null) {
+                    Toast.makeText(getView().getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onAdLoaded() {
+                showToast("Ad loaded.");
+                showInterstitial();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                showToast(String.format("Ad failed to load with error code %d.", errorCode));
+            }
+
+            @Override
+            public void onAdOpened() {
+                showToast("Ad opened.");
+            }
+
+            @Override
+            public void onAdClosed() {
+                showToast("Ad closed.");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                showToast("Ad left application.");
+            }
+        });
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
-        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544/6300978111");
+        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544~3347511713");
+        mInterstitialAd = new InterstitialAd(eventosDaAgendaView.getContext());
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
+
         /**
          * Teste da documentação
          */
@@ -57,9 +122,9 @@ public class ListaEventosAgenda extends Fragment {
         mDatabaseAgenda.keepSynced(true);
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
-        mAdView = eventosDaAgendaView.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+//        mAdView = eventosDaAgendaView.findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
 
 
@@ -92,7 +157,12 @@ public class ListaEventosAgenda extends Fragment {
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
+               // getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
             }
         });
 //        mDatabaseAgenda.child(GetUser.getUserLogado());
@@ -168,6 +238,19 @@ public class ListaEventosAgenda extends Fragment {
 
     public void populaListView(){
 
+    }
+
+    /**
+     * Cria o Banner que ocupa a tela inteira
+     */
+    private void showInterstitial() {
+        // Show the ad if it's ready. Otherwise toast and restart the game.
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Toast.makeText(getContext(), "Ad did not load", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     /**
