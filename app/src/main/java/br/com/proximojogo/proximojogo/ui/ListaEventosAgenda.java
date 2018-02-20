@@ -51,7 +51,6 @@ public class ListaEventosAgenda extends Fragment {
         mAdView = getView().findViewById(R.id.adView);
 
 
-
         mAdView.setAdListener(new AdListener() {
             private void showToast(String message) {
                 View view = getView();
@@ -63,7 +62,7 @@ public class ListaEventosAgenda extends Fragment {
             @Override
             public void onAdLoaded() {
                 showToast("Ad loaded.");
-                showInterstitial();
+//                showInterstitial();
             }
 
             @Override
@@ -78,6 +77,8 @@ public class ListaEventosAgenda extends Fragment {
 
             @Override
             public void onAdClosed() {
+                mAdView.destroy();
+                mAdView.setVisibility(View.GONE);
                 showToast("Ad closed.");
             }
 
@@ -87,7 +88,12 @@ public class ListaEventosAgenda extends Fragment {
             }
         });
 
-        AdRequest adRequest = new AdRequest.Builder().build();
+        //produção
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build();
         mAdView.loadAd(adRequest);
 
 
@@ -98,18 +104,22 @@ public class ListaEventosAgenda extends Fragment {
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
-        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544~3347511713");
-        mInterstitialAd = new InterstitialAd(eventosDaAgendaView.getContext());
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
 
-        });
+        //parece que isso não fez falta
+//        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544~3347511713");
+
+        //anuncio que ocupa a tela inteira
+//        mInterstitialAd = new InterstitialAd(eventosDaAgendaView.getContext());
+//        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//
+//        });
 
         /**
          * Teste da documentação
@@ -125,7 +135,6 @@ public class ListaEventosAgenda extends Fragment {
 //        mAdView = eventosDaAgendaView.findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        mAdView.loadAd(adRequest);
-
 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -157,7 +166,7 @@ public class ListaEventosAgenda extends Fragment {
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
+                // getFragmentManager().beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 } else {
@@ -236,12 +245,12 @@ public class ListaEventosAgenda extends Fragment {
         return eventosDaAgendaView;
     }
 
-    public void populaListView(){
+    public void populaListView() {
 
     }
 
     /**
-     * Cria o Banner que ocupa a tela inteira
+     * Cria o Banner que ocupa a tela inteira, hoje ele é chamado no onLoad do adView
      */
     private void showInterstitial() {
         // Show the ad if it's ready. Otherwise toast and restart the game.
@@ -265,13 +274,13 @@ public class ListaEventosAgenda extends Fragment {
                 boolean connected = snapshot.getValue(Boolean.class);
                 if (connected) {
                     System.out.println("connected");
-                    online[0] =true;
+                    online[0] = true;
                     if (getActivity() != null)
                         Toast.makeText(getActivity(), "Conectado", Toast.LENGTH_SHORT).show();
 
                 } else {
                     System.out.println("not connected");
-                    online[0] =false;
+                    online[0] = false;
                     if (getActivity() != null)
                         Toast.makeText(getActivity(), "Não Conectado", Toast.LENGTH_SHORT).show();
                 }
@@ -280,7 +289,7 @@ public class ListaEventosAgenda extends Fragment {
             @Override
             public void onCancelled(DatabaseError error) {
                 System.err.println("Listener was cancelled");
-                online[0] =false;
+                online[0] = false;
             }
         });
         return online[0];
