@@ -43,7 +43,7 @@ public class ListaEventosAgenda extends Fragment {
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
-        eventosDaAgendaView.getContext().startService(new Intent(eventosDaAgendaView.getContext(), VerificarEventosPassadosTask.class));
+//        eventosDaAgendaView.getContext().startService(new Intent(eventosDaAgendaView.getContext(), VerificarEventosPassadosTask.class));
         /**
          * Teste da documentação
          */
