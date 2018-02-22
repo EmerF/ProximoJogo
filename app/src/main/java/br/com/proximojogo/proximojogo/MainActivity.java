@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        new ExecutarTarefaAgendadaReceive().onReceive(this,new Intent());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,6 +64,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
 
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if(fragmentById == null){
