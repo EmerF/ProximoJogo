@@ -29,6 +29,10 @@ public class EstatisticaDeJogos {
         return dataUltimoComfronto;
     }
 
+    public String dataFormatada() {
+        return FormatarData.getDf().format(this.dataUltimoComfronto);
+    }
+
     public void setDataUltimoComfronto(Long dataUltimoComfronto) {
         this.dataUltimoComfronto = dataUltimoComfronto;
     }

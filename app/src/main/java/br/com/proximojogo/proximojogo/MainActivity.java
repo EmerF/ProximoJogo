@@ -27,12 +27,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Trigger;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
+import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
@@ -65,9 +69,28 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        startService(new Intent(this, VerificarEventosPassadosTask.class));
+        /**
+         * Agendando pelo service
+         */
+//        startService(new Intent(this, VerificarEventosPassadosTask.class));
+        /**
+         * Aqui agendo o serviço
+         */
+        int seisHoras = 6 * 60 * 60;
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(VerificaEventosService.class)
+                        .setTag("JOGOS_MAIS_30_DIAS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
+                        .build()
+        );
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragmentById == null){
+        if (fragmentById == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
 
@@ -139,7 +162,7 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
-        }else if(id == R.id.drawer_cadastrar_arena){
+        } else if (id == R.id.drawer_cadastrar_arena) {
 
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
