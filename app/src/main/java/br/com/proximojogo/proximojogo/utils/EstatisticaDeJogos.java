@@ -6,6 +6,10 @@ package br.com.proximojogo.proximojogo.utils;
 
 public class EstatisticaDeJogos {
 
+    public EstatisticaDeJogos(){
+
+    }
+
     public EstatisticaDeJogos(Long dataUltimoComfronto, String time1, String time2, String obs) {
         this.dataUltimoComfronto = dataUltimoComfronto;
         this.time1 = time1;

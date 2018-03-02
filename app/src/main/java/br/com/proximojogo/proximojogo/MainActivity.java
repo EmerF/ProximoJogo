@@ -36,6 +36,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import br.com.proximojogo.proximojogo.service.ProcessaEstatisticaJogosService;
 import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
@@ -73,22 +74,8 @@ public class MainActivity extends AppCompatActivity
          * Agendando pelo service
          */
 //        startService(new Intent(this, VerificarEventosPassadosTask.class));
-        /**
-         * Aqui agendo o serviço
-         */
-        int seisHoras = 6 * 60 * 60;
-        FirebaseJobDispatcher dispatcher =
-                new FirebaseJobDispatcher(
-                        new GooglePlayDriver(MainActivity.this)
-                );
-        dispatcher.mustSchedule(
-                dispatcher.newJobBuilder()
-                        .setService(VerificaEventosService.class)
-                        .setTag("JOGOS_MAIS_30_DIAS")
-                        .setRecurring(true)
-                        .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
-                        .build()
-        );
+        iniciaServices();
+
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentById == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
@@ -234,6 +221,39 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void iniciaServices(){
+        /**
+         * Aqui agendo o serviço
+         */
+//        int seisHoras = 6 * 60 * 60;
+        int seisHoras = 1;
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(VerificaEventosService.class)
+                        .setTag("JOGOS_MAIS_30_DIAS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
+                        .build()
+        );
+//        int tempo = 2 * 60;
+//        FirebaseJobDispatcher dispatcher =
+//                new FirebaseJobDispatcher(
+//                        new GooglePlayDriver(MainActivity.this)
+//                );
+//        dispatcher.mustSchedule(
+//                dispatcher.newJobBuilder()
+//                        .setService(ProcessaEstatisticaJogosService.class)
+//                        .setTag("PROCESSA_ESTATISICA_JOGOS")
+//                        .setRecurring(true)
+//                        .setTrigger(Trigger.executionWindow(tempo, tempo))
+//                        .build()
+//        );
+
+    }
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
