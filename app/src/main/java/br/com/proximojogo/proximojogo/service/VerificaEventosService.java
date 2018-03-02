@@ -53,11 +53,11 @@ public class VerificaEventosService extends JobService {
         return false;
     }
 
-    private void postNotif(EstatisticaDeJogos estatisticaDeJogos) {
+    private void postNotif(List<EstatisticaDeJogos> estatisticaDeJogosList) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.soccer_player_icon)
                 .setTicker("Há confrontos com mais de 30 dias!")
-                .setContentTitle("Há " + eventos.size()+" com mais de 30 dias!")
+                .setContentTitle("Há " + estatisticaDeJogosList.size()+" jogos com mais de 30 dias!")
                 .setContentText("Vai Audax! Vamos ganhar!")
                 .setAutoCancel(true);
 
@@ -87,9 +87,11 @@ public class VerificaEventosService extends JobService {
 //    }
 
     public void buscaEventos() {
+
         LocalDate hoje = new LocalDate(new Date());
-        LocalDate trintaDiasAtras = hoje.minusDays(120);
-        Query query1 = estatisticaReference.orderByChild("tim2").equalTo("GALATICOS");
+        LocalDate trintaDiasAtras = hoje.minusDays(30);
+        Date date = trintaDiasAtras.toDate();
+        Query query1 = estatisticaReference.orderByChild("dataUltimoComfronto").endAt(date.getTime());
         query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,5 +138,6 @@ public class VerificaEventosService extends JobService {
         for(EstatisticaDeJogos a: estatisticas){
             Log.i("EVENTOS", a.getTime2()+" Data: "+FormatarData.getDf().format(a.getDataUltimoComfronto()));
         }
+        postNotif(estatisticas);
     }
 }

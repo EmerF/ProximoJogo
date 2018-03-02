@@ -225,8 +225,9 @@ public class MainActivity extends AppCompatActivity
         /**
          * Aqui agendo o serviço
          */
-//        int seisHoras = 6 * 60 * 60;
-        int seisHoras = 1;
+        int seisHoras = 6 * 60 * 60;
+        int tempo = 5 * 60 * 60;
+//        int seisHoras = 1;
         FirebaseJobDispatcher dispatcher =
                 new FirebaseJobDispatcher(
                         new GooglePlayDriver(MainActivity.this)
@@ -239,19 +240,18 @@ public class MainActivity extends AppCompatActivity
                         .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
                         .build()
         );
-//        int tempo = 2 * 60;
-//        FirebaseJobDispatcher dispatcher =
-//                new FirebaseJobDispatcher(
-//                        new GooglePlayDriver(MainActivity.this)
-//                );
-//        dispatcher.mustSchedule(
-//                dispatcher.newJobBuilder()
-//                        .setService(ProcessaEstatisticaJogosService.class)
-//                        .setTag("PROCESSA_ESTATISICA_JOGOS")
-//                        .setRecurring(true)
-//                        .setTrigger(Trigger.executionWindow(tempo, tempo))
-//                        .build()
-//        );
+        FirebaseJobDispatcher dispatcher2 =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher2.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(ProcessaEstatisticaJogosService.class)
+                        .setTag("PROCESSA_ESTATISICA_JOGOS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(tempo, tempo))
+                        .build()
+        );
 
     }
 
