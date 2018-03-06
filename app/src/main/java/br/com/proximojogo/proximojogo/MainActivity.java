@@ -41,6 +41,7 @@ import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
+import br.com.proximojogo.proximojogo.ui.ListaEstatisticaJogos;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentById == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
         }
 
 
