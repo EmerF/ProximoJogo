@@ -15,6 +15,7 @@ import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
+import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 /**
@@ -46,23 +47,81 @@ public class EstatisticaJogosBack {
             AgendaDO agendaDO = ds.getValue(AgendaDO.class);
             eventos.add(agendaDO);
         }
-        ordenaListAdversarioData();
+//        ordenaListAdversarioData();
+        ordenaListAdversarioDataConfrontos();
     }
 
-    public List<EstatisticaDeJogos> ordenaListAdversarioData() {
+//    public List<EstatisticaDeJogos> ordenaListAdversarioData() {
+//        List<EstatisticaDeJogos> listEstatistica = new ArrayList<>();
+//        if (eventos.size() > 0 && !eventos.isEmpty()) {
+//            Collections.sort(eventos, new OrdenaEventoTimeData());
+//            AgendaDO anterior = eventos.get(0);
+//            for (int i = 1; i < eventos.size(); i++) {
+//                if (!anterior.getAdversario().equals(eventos.get(i).getAdversario())) {
+//                    listEstatistica.add(new EstatisticaDeJogos(anterior.getData(), anterior.getTimes(), anterior.getAdversario(), anterior.getObservacao()));
+//                    anterior = eventos.get(i);
+//                }
+//            }
+//            Collections.sort(listEstatistica, new OrdenaEstatiscaJogosPorData());
+//            estatisticaReference.setValue(listEstatistica);
+//
+//        }
+//
+//        return listEstatistica;
+//
+//    }
+
+    public List<EstatisticaDeJogos> ordenaListAdversarioDataConfrontos() {
         List<EstatisticaDeJogos> listEstatistica = new ArrayList<>();
         if (eventos.size() > 0 && !eventos.isEmpty()) {
             Collections.sort(eventos, new OrdenaEventoTimeData());
+            List<List<AgendaDO>> listaDeLista = new ArrayList<>();
+            List<AgendaDO> listTime = new ArrayList<>();
             AgendaDO anterior = eventos.get(0);
+            listTime.add(anterior);
             for (int i = 1; i < eventos.size(); i++) {
-                if (!anterior.getAdversario().equals(eventos.get(i).getAdversario())) {
-                    listEstatistica.add(new EstatisticaDeJogos(anterior.getData(), anterior.getTimes(), anterior.getAdversario(), anterior.getObservacao()));
+                String adversarioStr;
+                String adversarioStr2;
+                if("AUDAX".equals(anterior.getAdversario())){
+                    adversarioStr = anterior.getTimes();
+                }else{
+                    adversarioStr = anterior.getAdversario();
+
+                }
+                if("AUDAX".equals(eventos.get(i).getAdversario())){
+                    adversarioStr2 = eventos.get(i).getTimes();
+                }else{
+                    adversarioStr2 = eventos.get(i).getAdversario();
+
+                }
+
+                if (adversarioStr.equals(adversarioStr2)) {
+                    listTime.add(eventos.get(i));
+                } else {
+                    listaDeLista.add(listTime);
+                    listTime = new ArrayList<>();
                     anterior = eventos.get(i);
+                    listTime.add(anterior);
                 }
             }
-            Collections.sort(listEstatistica, new OrdenaEstatiscaJogosPorData());
-            estatisticaReference.setValue(listEstatistica);
+            listaDeLista.add(listTime);
 
+            for (List<AgendaDO> list : listaDeLista) {
+                AgendaDO evento;
+                if (list.size() > 1) {
+                    evento = list.get(list.size() - 1);
+                } else {
+                    evento = list.get(0);
+                }
+                listEstatistica.add(new EstatisticaDeJogos(evento.getData(), evento.getTimes(), evento.getAdversario(), evento.getObservacao(), list.size()));
+            }
+            //só para ver no console
+//            for (EstatisticaDeJogos es : listEstatistica) {
+//                System.out.println(es.getTime2());
+//                System.out.println(FormatarData.getDf().format(es.getDataUltimoComfronto()));
+//                System.out.println(es.getConfrontos());
+//            }
+            estatisticaReference.setValue(listEstatistica);
         }
 
         return listEstatistica;

@@ -10,11 +10,12 @@ public class EstatisticaDeJogos {
 
     }
 
-    public EstatisticaDeJogos(Long dataUltimoComfronto, String time1, String time2, String obs) {
+    public EstatisticaDeJogos(Long dataUltimoComfronto, String time1, String time2, String obs, int confrontos) {
         this.dataUltimoComfronto = dataUltimoComfronto;
         this.time1 = time1;
         this.time2 = time2;
         this.obs = obs;
+        this.confrontos = confrontos;
     }
 
     private Long dataUltimoComfronto;
@@ -28,6 +29,7 @@ public class EstatisticaDeJogos {
     private Integer golsTime1;
     private Integer golsTime2;
     private String obs;
+    private int confrontos;
 
     public Long getDataUltimoComfronto() {
         return dataUltimoComfronto;
@@ -73,5 +75,13 @@ public class EstatisticaDeJogos {
                 ", time2='" + time2 + '\'' +
                 ", obs='" + obs + '\'' +
                 '}';
+    }
+
+    public int getConfrontos() {
+        return confrontos;
+    }
+
+    public void setConfrontos(int confrontos) {
+        this.confrontos = confrontos;
     }
 }
