@@ -49,7 +49,7 @@ public class EstatisticaJogoAdapter extends ArrayAdapter<EstatisticaDeJogos> imp
         switch (v.getId())
         {
             case R.id.item_info:
-                Snackbar.make(v, "Release date " +dataModel.getDataUltimoComfronto(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Release date " +dataModel.getObs(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -90,7 +90,7 @@ public class EstatisticaJogoAdapter extends ArrayAdapter<EstatisticaDeJogos> imp
 
         viewHolder.txtName.setText(dataModel.getTime1());
         viewHolder.txtType.setText(dataModel.getTime2());
-        viewHolder.txtVersion.setText(dataModel.getConfrontos());
+        viewHolder.txtVersion.setText(dataModel.getObs());
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         // Return the completed view to render on screen

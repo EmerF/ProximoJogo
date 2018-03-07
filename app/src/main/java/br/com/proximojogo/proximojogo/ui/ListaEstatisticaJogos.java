@@ -41,17 +41,11 @@ public class ListaEstatisticaJogos extends Fragment {
     private static EstatisticaJogoAdapter adapter;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        pesquisaEstatisticas();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_estatistica_jogos, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Estatistica Jogos");
-//        pesquisaEstatisticas();
+        pesquisaEstatisticas();
         estatisticaReference.keepSynced(true);
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_estatistica_jogo);
         adapter= new EstatisticaJogoAdapter(estatisticas,getContext());
@@ -76,6 +70,7 @@ public class ListaEstatisticaJogos extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 fetchData(dataSnapshot);//Passar os dados para a interface grafica
+                adapter.notifyDataSetChanged();
             }
 
             @Override
