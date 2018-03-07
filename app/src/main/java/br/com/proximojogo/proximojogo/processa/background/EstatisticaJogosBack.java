@@ -82,15 +82,15 @@ public class EstatisticaJogosBack {
             for (int i = 1; i < eventos.size(); i++) {
                 String adversarioStr;
                 String adversarioStr2;
-                if("AUDAX".equals(anterior.getAdversario())){
+                if ("AUDAX".equals(anterior.getAdversario())) {
                     adversarioStr = anterior.getTimes();
-                }else{
+                } else {
                     adversarioStr = anterior.getAdversario();
 
                 }
-                if("AUDAX".equals(eventos.get(i).getAdversario())){
+                if ("AUDAX".equals(eventos.get(i).getAdversario())) {
                     adversarioStr2 = eventos.get(i).getTimes();
-                }else{
+                } else {
                     adversarioStr2 = eventos.get(i).getAdversario();
 
                 }
@@ -121,6 +121,7 @@ public class EstatisticaJogosBack {
 //                System.out.println(FormatarData.getDf().format(es.getDataUltimoComfronto()));
 //                System.out.println(es.getConfrontos());
 //            }
+            Collections.sort(listEstatistica, new OrdenaEstatiscaJogosPorData());
             estatisticaReference.setValue(listEstatistica);
         }
 

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
+import br.com.proximojogo.proximojogo.utils.FormatarData;
 
 /**
  * Created by ale on 06/03/2018.
@@ -35,21 +36,20 @@ public class EstatisticaJogoAdapter extends ArrayAdapter<EstatisticaDeJogos> imp
     public EstatisticaJogoAdapter(ArrayList<EstatisticaDeJogos> data, Context context) {
         super(context, R.layout.row_estatistica_jogo, data);
         this.dataSet = data;
-        this.mContext=context;
+        this.mContext = context;
 
     }
 
     @Override
     public void onClick(View v) {
 
-        int position=(Integer) v.getTag();
-        Object object= getItem(position);
-        EstatisticaDeJogos dataModel=(EstatisticaDeJogos)object;
+        int position = (Integer) v.getTag();
+        Object object = getItem(position);
+        EstatisticaDeJogos dataModel = (EstatisticaDeJogos) object;
 
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.item_info:
-                Snackbar.make(v, "Release date " +dataModel.getObs(), Snackbar.LENGTH_LONG)
+                Snackbar.make(v, ("AUDAX".equals(dataModel.getTime1()) ? dataModel.getTime2() : dataModel.getTime1()) + "\n"+" Último confronto: " + FormatarData.getDf().format(dataModel.getDataUltimoComfronto()), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 break;
         }
@@ -76,12 +76,12 @@ public class EstatisticaJogoAdapter extends ArrayAdapter<EstatisticaDeJogos> imp
             viewHolder.txtVersion = (TextView) convertView.findViewById(R.id.version_number);
             viewHolder.info = (ImageView) convertView.findViewById(R.id.item_info);
 
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            result = convertView;
         }
 
         Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
@@ -90,7 +90,7 @@ public class EstatisticaJogoAdapter extends ArrayAdapter<EstatisticaDeJogos> imp
 
         viewHolder.txtName.setText(dataModel.getTime1());
         viewHolder.txtType.setText(dataModel.getTime2());
-        viewHolder.txtVersion.setText(dataModel.getObs());
+        viewHolder.txtVersion.setText(String.valueOf(dataModel.getConfrontos()));
         viewHolder.info.setOnClickListener(this);
         viewHolder.info.setTag(position);
         // Return the completed view to render on screen

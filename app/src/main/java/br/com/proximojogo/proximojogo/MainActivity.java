@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentById == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
 
 
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         FragmentManager fragmentManager = getSupportFragmentManager();
         int id = item.getItemId();
-
         if (id == R.id.nav_camera) {
             fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
         } else if (id == R.id.nav_gallery) {
@@ -155,7 +154,10 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
+        } else if (id == R.id.jogos_mais_30_dias) {
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -222,12 +224,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void iniciaServices(){
+    private void iniciaServices() {
         /**
          * Aqui agendo o serviço
          */
         int seisHoras = 6 * 60 * 60;
-        int tempo = 5 * 60 * 60;
+        int tempo = 12 * 60 * 60;
 //        int seisHoras = 1;
         FirebaseJobDispatcher dispatcher =
                 new FirebaseJobDispatcher(

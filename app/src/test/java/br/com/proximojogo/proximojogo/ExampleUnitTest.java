@@ -48,7 +48,7 @@ public class ExampleUnitTest {
         List<AgendaDO> agendaDOS = geraListaEventos();
       /*  for (AgendaDO a : agendaDOS
                 ) {
-            System.out.println(FormatarData.getDf().format(a.getData()));
+            System.out.println(c);
             System.out.println(a);
 
         }*/

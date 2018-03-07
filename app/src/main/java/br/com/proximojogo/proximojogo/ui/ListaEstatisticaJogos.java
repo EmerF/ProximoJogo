@@ -23,13 +23,18 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.custom.adapter.EstatisticaJogoAdapter;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
@@ -56,7 +61,7 @@ public class ListaEstatisticaJogos extends Fragment {
 
                 EstatisticaDeJogos dataModel= estatisticas.get(position);
 
-                Snackbar.make(view, dataModel.getTime1()+"\n"+dataModel.getTime2()+" API: "+dataModel.getConfrontos(), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, dataModel.getTime1()+"\n"+dataModel.getTime2()+"           Confrontos: "+dataModel.getConfrontos(), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
             }
         });
@@ -66,7 +71,11 @@ public class ListaEstatisticaJogos extends Fragment {
 
 
     public void pesquisaEstatisticas() {
-        estatisticaReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        LocalDate hoje = new LocalDate(new Date());
+        LocalDate trintaDiasAtras = hoje.minusDays(30);
+        Date date = trintaDiasAtras.toDate();
+        Query query1 = estatisticaReference.orderByChild("dataUltimoComfronto").endAt(date.getTime());
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 fetchData(dataSnapshot);//Passar os dados para a interface grafica
@@ -86,6 +95,7 @@ public class ListaEstatisticaJogos extends Fragment {
             EstatisticaDeJogos esj = ds.getValue(EstatisticaDeJogos.class);
             estatisticas.add(esj);
         }
+        Collections.sort(estatisticas, new OrdenaEstatiscaJogosPorData());
 
 
     }
