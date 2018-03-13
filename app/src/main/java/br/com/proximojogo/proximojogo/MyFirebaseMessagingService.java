@@ -1,5 +1,6 @@
 package br.com.proximojogo.proximojogo;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,5 +31,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated.
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        RemoteMessage.Notification notification =
+                remoteMessage.getNotification();
+        mostrarNotificacao(notification);
+    }
+    public void mostrarNotificacao(RemoteMessage.Notification notification) {
+        String titulo = notification.getTitle();
+        String mensagem = notification.getBody();
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent
+                .getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        Notification notificacao = builder.setContentTitle(titulo)
+                .setContentText(mensagem)
+                .setSmallIcon(R.drawable.soccer_player_icon)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build();
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificacao);
     }
 }

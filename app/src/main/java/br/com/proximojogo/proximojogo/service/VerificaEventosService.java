@@ -1,6 +1,8 @@
 package br.com.proximojogo.proximojogo.service;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -22,10 +24,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
+import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
@@ -54,11 +58,15 @@ public class VerificaEventosService extends JobService {
     }
 
     private void postNotif(List<EstatisticaDeJogos> estatisticaDeJogosList) {
+        Intent intent = new Intent(this, ListaEventosPassadosAgenda.class);
+        PendingIntent pendingIntent = PendingIntent
+                .getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.soccer_player_icon)
                 .setTicker("Há confrontos com mais de 30 dias!")
                 .setContentTitle("Há " + estatisticaDeJogosList.size()+" jogos com mais de 30 dias!")
                 .setContentText("Vai Audax! Vamos ganhar!")
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
         int id = 1;
