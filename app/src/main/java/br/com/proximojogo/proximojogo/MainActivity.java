@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.d("APP_DEBUG", String.valueOf(requestCode));
+        Log .d("APP_DEBUG", String.valueOf(requestCode));
 
         try {
             // When an Image is picked
