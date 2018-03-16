@@ -46,7 +46,7 @@ public class GoogleAuthFragment extends Fragment implements
     //private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
-    private String webClientId = "562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com";
+    private String webClientId = "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com";
     private String logoff="";
 
     @Override
@@ -74,7 +74,7 @@ public class GoogleAuthFragment extends Fragment implements
         // Configure Google Sign In
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder
                     (GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(webClientId)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
@@ -158,13 +158,14 @@ public class GoogleAuthFragment extends Fragment implements
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
                 updateUI(null);
+                Log.d("ERRO LOGIN: " , (String.valueOf(result.getStatus().getStatusCode())));
                 // [END_EXCLUDE]
             }
         }
     }
     // [END onactivityresult]
 
-    // [START auth_with_google]
+    // [START auth_with_google](
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
