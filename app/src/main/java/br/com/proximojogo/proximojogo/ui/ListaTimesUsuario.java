@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,13 +14,9 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
-
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Time;
-import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class ListaTimesUsuario extends Fragment {

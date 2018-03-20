@@ -69,7 +69,6 @@ public class GoogleAuthFragment extends Fragment implements
         view.findViewById(R.id.sign_in_button).setOnClickListener(this);
         view.findViewById(R.id.sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.disconnect_button).setOnClickListener(this);
-
         // [START config_signin]
         // Configure Google Sign In
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder

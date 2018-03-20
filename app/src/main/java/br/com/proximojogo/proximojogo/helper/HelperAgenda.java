@@ -105,7 +105,7 @@ public class HelperAgenda {
 
             }
             mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Agendas");
-            mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
+            mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda).getResult();
             Toast.makeText(activity.getContext(), "Agenda salva com sucesso!", Toast.LENGTH_SHORT).show();
             salvou = true;
         } catch (ParseException e) {

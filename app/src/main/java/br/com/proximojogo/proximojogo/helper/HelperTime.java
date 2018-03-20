@@ -83,9 +83,15 @@ public class HelperTime {
             // e colocar o nome junto com o id para identificar o nó
             String key = mDatabaseAgenda.push().getKey();
             time.setIdTime(key);
-            //time.setIdResponsavel(id);// substituir pelo id do usuário qdo o login estiver pronto
-            //mDatabaseAgenda.child(agenda.getIdAgenda()).setValue(agenda);
-            mDatabaseAgenda.child(time.getIdResponsavel()+ "/" +  time.getIdTime()).setValue(time);
+
+            try {
+                mDatabaseAgenda.child(time.getIdResponsavel()+ "/" +  time.getIdTime()).setValue(time);
+
+
+            }catch (Exception e){
+                Toast.makeText(activity.getContext(), "Erro ao cadastrar time: " + e.getCause(), Toast.LENGTH_SHORT).show();
+            }
+
 
             Toast.makeText(activity.getContext(), "Time Cadastrado com Sucesso!", Toast.LENGTH_SHORT).show();
         } else {
