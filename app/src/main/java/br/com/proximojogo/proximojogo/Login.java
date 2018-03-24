@@ -17,10 +17,9 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
-        //if(mAuth.getCurrentUser() == null){
-            FragmentManager fragmentManager = this.getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.containerTeste, new  GoogleAuthFragment()).commit();
+    }
+    public boolean SalvarTelefoneUsuario(String telefone){
 
-       // }
+        return false;
     }
 }

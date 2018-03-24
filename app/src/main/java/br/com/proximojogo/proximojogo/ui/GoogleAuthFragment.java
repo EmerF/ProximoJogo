@@ -19,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +28,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserInfo;
 
+import java.util.List;
+
+import br.com.proximojogo.proximojogo.Login;
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
 
@@ -43,11 +48,10 @@ public class GoogleAuthFragment extends Fragment implements
     // [END declare_auth]
 
     private GoogleApiClient mGoogleApiClient;
-    //private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
-    private String webClientId = "301914957722-dr9jrirqjicap3vkuf4is7g9p1fit905.apps.googleusercontent.com";
     private String logoff="";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,8 +66,8 @@ public class GoogleAuthFragment extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_google_auth, container, false);
 
         // Views
-        mStatusTextView = (TextView) view.findViewById(R.id.status);
-        mDetailTextView = (TextView) view.findViewById(R.id.detail);
+        mStatusTextView =  view.findViewById(R.id.status);
+        mDetailTextView =  view.findViewById(R.id.detail);
 
         // Button listeners
         view.findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -121,16 +125,16 @@ public class GoogleAuthFragment extends Fragment implements
 
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
+
         if (user != null && logoff.equals("")) {
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
             getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),"Usuário logado", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Seja bem vindo " + user.getDisplayName() + "!!!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), MainActivity.class));
-            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            //fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            //startActivity(new Intent(getActivity(), Login.class));
+
 
         } else {
 
@@ -140,6 +144,11 @@ public class GoogleAuthFragment extends Fragment implements
             getActivity().findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
+    }
+    private void SalvarTelefoneUser(String userId){
+
+
+
     }
 
     // [START onactivityresult]
@@ -167,6 +176,7 @@ public class GoogleAuthFragment extends Fragment implements
     // [START auth_with_google](
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
         // [START_EXCLUDE silent]
          //showProgressDialog();
         // [END_EXCLUDE]
@@ -251,5 +261,11 @@ public class GoogleAuthFragment extends Fragment implements
         } else if (i == R.id.disconnect_button) {
             revokeAccess();
         }
+    }
+    public String getTelefoneUsuario(){
+
+
+        return "";
+
     }
 }

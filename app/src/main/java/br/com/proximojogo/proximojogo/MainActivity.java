@@ -33,6 +33,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import br.com.proximojogo.proximojogo.helper.HelperUsuario;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
@@ -61,10 +62,6 @@ public class MainActivity extends AppCompatActivity
 
 
         requestStoragePermission();
-
-
-
-
 
             /*Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
 
