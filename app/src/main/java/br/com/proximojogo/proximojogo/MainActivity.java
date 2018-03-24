@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        startService(new Intent(this, VerificarEventosPassadosTask.class));
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if(fragmentById == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();

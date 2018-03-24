@@ -1,5 +1,6 @@
 package br.com.proximojogo.proximojogo.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import java.util.Calendar;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.VerificarEventosPassadosTask;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
@@ -41,6 +43,7 @@ public class ListaEventosAgenda extends Fragment {
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
+//        eventosDaAgendaView.getContext().startService(new Intent(eventosDaAgendaView.getContext(), VerificarEventosPassadosTask.class));
         /**
          * Teste da documentação
          */

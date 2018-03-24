@@ -39,6 +39,11 @@
 
         </activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
+        <receiver android:name=".ExecutarTarefaAgendadaReceive" />
+        <service
+            android:name=".VerificarEventosPassadosTask"
+            android:label="My Service" >
+        </service>
     </application>
 
 </manifest>
