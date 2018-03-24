@@ -1,6 +1,5 @@
 package br.com.proximojogo.proximojogo.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import java.util.Calendar;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.VerificarEventosPassadosTask;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
@@ -37,13 +35,85 @@ public class ListaEventosAgenda extends Fragment {
     AgendaDO agenda;
     private DatabaseReference mDatabaseAgenda;
     private boolean online = false;
+    private AdView mAdView;
+    private InterstitialAd mInterstitialAd;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mAdView = getView().findViewById(R.id.adView);
+
+
+        mAdView.setAdListener(new AdListener() {
+            private void showToast(String message) {
+                View view = getView();
+                if (view != null) {
+                    Toast.makeText(getView().getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onAdLoaded() {
+                showToast("Ad loaded.");
+//                showInterstitial();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                showToast(String.format("Ad failed to load with error code %d.", errorCode));
+            }
+
+            @Override
+            public void onAdOpened() {
+                showToast("Ad opened.");
+            }
+
+            @Override
+            public void onAdClosed() {
+                mAdView.destroy();
+                mAdView.setVisibility(View.GONE);
+                showToast("Ad closed.");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                showToast("Ad left application.");
+            }
+        });
+
+        //produção
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
+
+
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("33BE2250B43518CCDA7DE426D04EE231").build();
+        mAdView.loadAd(adRequest);
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View eventosDaAgendaView = inflater.inflate(R.layout.fragment_lista_eventos_agenda, container, false);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Eventos do Time");
-//        eventosDaAgendaView.getContext().startService(new Intent(eventosDaAgendaView.getContext(), VerificarEventosPassadosTask.class));
+
+        //parece que isso não fez falta
+//        MobileAds.initialize(eventosDaAgendaView.getContext(), "ca-app-pub-3940256099942544~3347511713");
+
+        //anuncio que ocupa a tela inteira
+//        mInterstitialAd = new InterstitialAd(eventosDaAgendaView.getContext());
+//        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdClosed() {
+//                // Load the next interstitial.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//            }
+//
+//        });
+
         /**
          * Teste da documentação
          */
@@ -55,6 +125,9 @@ public class ListaEventosAgenda extends Fragment {
         mDatabaseAgenda.keepSynced(true);
         mListView = (ListView) eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
+//        mAdView = eventosDaAgendaView.findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

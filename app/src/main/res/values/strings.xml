@@ -34,5 +34,6 @@
     <string name="telefone">Telefone</string>
     <string name="horario_fim">Horario_fim</string>
     <string name="resultado">Resultado</string>
+    <string name="adUnitIdTeste">ca-app-pub-3940256099942544/6300978111</string>
 
 </resources>

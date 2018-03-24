@@ -27,6 +27,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -50,11 +53,14 @@ public class MainActivity extends AppCompatActivity
     private Uri mCropImageUri;
     private String avatarProximoJogo = "avatar_proximo_jogo.png";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        //teste
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544/6300978111");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity
 
         leituraAvatar();
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
 
