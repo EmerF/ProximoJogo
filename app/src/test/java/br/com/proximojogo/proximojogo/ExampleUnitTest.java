@@ -1,4 +1,3 @@
-package br.com.proximojogo.proximojogo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +36,6 @@ public class ExampleUnitTest {
         List<AgendaDO> agendaDOS = geraListaEventos();
         List<List<AgendaDO>> listaDeLista = ordenaListAdversarioDataEmLista(agendaDOS);
         for (List<AgendaDO> list : listaDeLista ) {
-            System.out.println(list.get(0).getAdversario());
             for (AgendaDO a: list ) {
                 System.out.println(FormatarData.getDf().format(a.getData()));
             }
@@ -70,14 +68,14 @@ public class ExampleUnitTest {
             AgendaDO anterior = list.get(0);
             listTime.add(anterior);
             for (int i = 1; i < list.size(); i++) {
-                if (anterior.getAdversario().equals(list.get(i).getAdversario())) {
-                    listTime.add(list.get(i));
-                }else{
-                    listaDeLista.add(listTime);
-                    listTime = new ArrayList<>();
-                    anterior = list.get(i);
-                    listTime.add(anterior);
-                }
+//                if (anterior.getAdversario().equals(list.get(i).getAdversario())) {
+//                    listTime.add(list.get(i));
+//                }else{
+//                    listaDeLista.add(listTime);
+//                    listTime = new ArrayList<>();
+//                    anterior = list.get(i);
+//                    listTime.add(anterior);
+//                }
                 listaDeLista.add(listTime);
             }
         }
@@ -89,15 +87,15 @@ public class ExampleUnitTest {
     public List<EstatisticaDeJogos> ordenaListAdversarioData(List<AgendaDO> list) {
         Collections.sort(list, new OrdenaEventoTimeData());
         List<EstatisticaDeJogos> listEstatistica = new ArrayList<>();
-        if (!list.isEmpty()) {
-            AgendaDO anterior = list.get(0);
-            for (int i = 1; i < list.size(); i++) {
-                if (!anterior.getAdversario().equals(list.get(i).getAdversario())) {
-                    listEstatistica.add(new EstatisticaDeJogos(anterior.getData(), anterior.getTimes(), anterior.getAdversario(), anterior.getObservacao(),0));
-                    anterior = list.get(i);
-                }
-            }
-        }
+//        if (!list.isEmpty()) {
+//            AgendaDO anterior = list.get(0);
+//            for (int i = 1; i < list.size(); i++) {
+//                if (!anterior.getAdversario().equals(list.get(i).getAdversario())) {
+//                    listEstatistica.add(new EstatisticaDeJogos(anterior.getData(), anterior.getTimes(), anterior.getAdversario(), anterior.getObservacao(),0));
+//                    anterior = list.get(i);
+//                }
+//            }
+//        }
 
         return listEstatistica;
 
