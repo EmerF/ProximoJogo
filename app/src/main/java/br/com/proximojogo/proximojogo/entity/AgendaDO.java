@@ -1,6 +1,10 @@
 package br.com.proximojogo.proximojogo.entity;
 
-public class AgendaDO {
+import android.support.annotation.NonNull;
+
+import java.util.Comparator;
+
+public class AgendaDO{
     private String _idAgenda;
     private String _status;
     private String _adversario;
@@ -112,5 +116,6 @@ public class AgendaDO {
     public void setValor(final Double _valor) {
         this._valor = _valor;
     }
+
 
 }

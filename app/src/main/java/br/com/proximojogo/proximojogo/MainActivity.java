@@ -30,15 +30,21 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Trigger;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
+import br.com.proximojogo.proximojogo.service.ProcessaEstatisticaJogosService;
+import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
+import br.com.proximojogo.proximojogo.ui.ListaEstatisticaJogos;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
@@ -71,9 +77,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        startService(new Intent(this, VerificarEventosPassadosTask.class));
+        /**
+         * Agendando pelo service
+         */
+//        startService(new Intent(this, VerificarEventosPassadosTask.class));
+        iniciaServices();
+
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragmentById == null){
+        if (fragmentById == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
         }
 
@@ -146,12 +157,15 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
-        }else if(id == R.id.drawer_cadastrar_arena){
+        } else if (id == R.id.drawer_cadastrar_arena) {
 
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
+        } else if (id == R.id.jogos_mais_30_dias) {
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -218,6 +232,39 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void iniciaServices() {
+        /**
+         * Aqui agendo o serviço
+         */
+        int seisHoras = 6 * 60 * 60;
+        int tempo = 12 * 60 * 60;
+//        int seisHoras = 1;
+        FirebaseJobDispatcher dispatcher =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(VerificaEventosService.class)
+                        .setTag("JOGOS_MAIS_30_DIAS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
+                        .build()
+        );
+        FirebaseJobDispatcher dispatcher2 =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher2.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(ProcessaEstatisticaJogosService.class)
+                        .setTag("PROCESSA_ESTATISICA_JOGOS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(tempo, tempo))
+                        .build()
+        );
+
+    }
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)

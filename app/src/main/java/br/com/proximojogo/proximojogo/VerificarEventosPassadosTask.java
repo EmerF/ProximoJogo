@@ -42,7 +42,7 @@ public class VerificarEventosPassadosTask extends Service {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 1);
+        calendar.add(Calendar.MINUTE, 5);
 
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         stopService(myIntent);

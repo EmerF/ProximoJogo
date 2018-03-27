@@ -26,6 +26,10 @@
     <item android:title="Estatisticas">
         <menu>
             <item
+                android:id="@+id/jogos_mais_30_dias"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Jogos +30 dias"/>
+            <item
                 android:id="@+id/jogos_passados"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Jogos Passados"/>

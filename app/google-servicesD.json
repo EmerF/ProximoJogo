@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "427658147652",
-    "firebase_url": "https://testeale-773b9.firebaseio.com",
-    "project_id": "testeale-773b9",
-    "storage_bucket": "testeale-773b9.appspot.com"
+    "project_number": "562645584714",
+    "firebase_url": "https://proximojogodev.firebaseio.com",
+    "project_id": "proximojogodev",
+    "storage_bucket": "proximojogodev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:427658147652:android:3f4d99fe106e066d",
+        "mobilesdk_app_id": "1:562645584714:android:3f4d99fe106e066d",
         "android_client_info": {
           "package_name": "br.com.proximojogo.proximojogo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "427658147652-21hjjjlp1njukuu0a5trk6cr1h3clsof.apps.googleusercontent.com",
+          "client_id": "562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDauNXqd50srvrVYMgFkFANUuHf_Us_j4"
+          "current_key": "AIzaSyCawLfHsCwhMfsorZz_vZrlRxCJFe-XA6w"
         }
       ],
       "services": {
