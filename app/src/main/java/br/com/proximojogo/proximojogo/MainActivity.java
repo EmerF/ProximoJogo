@@ -33,14 +33,14 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import br.com.proximojogo.proximojogo.helper.HelperUsuario;
+import br.com.proximojogo.proximojogo.helper.HelperJogador;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.GoogleAuthFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
-import br.com.proximojogo.proximojogo.ui.TimeFragment;
+import br.com.proximojogo.proximojogo.ui.ListaJogadoresTime;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private Uri mCropImageUri;
     private String avatarProximoJogo = "avatar_proximo_jogo.png";
     private FirebaseAuth mAuth;
-
+    private HelperJogador helperUsuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
                  }*/
         mAuth = FirebaseAuth.getInstance();
-
         if(mAuth.getCurrentUser() == null){
             toolbar.setVisibility(View.GONE);
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, new  GoogleAuthFragment()).commit();
+
 
         }
         setSupportActionBar(toolbar);
@@ -149,8 +149,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
-        } else if (id == R.id.drawer_cadastrar_time) {
-            fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
+        } else if (id == R.id.drawer_criar_time) {
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaJogadoresTime()).commit();
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
         }else if(id == R.id.drawer_cadastrar_arena){

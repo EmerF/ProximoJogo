@@ -1,8 +1,8 @@
 package br.com.proximojogo.proximojogo.helper;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -12,11 +12,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.ParseException;
 
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
+import br.com.proximojogo.proximojogo.entity.Jogador;
 import br.com.proximojogo.proximojogo.entity.Time;
-import br.com.proximojogo.proximojogo.enuns.Eventos;
-import br.com.proximojogo.proximojogo.enuns.NomeArena;
-import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 
@@ -25,7 +22,7 @@ import br.com.proximojogo.proximojogo.utils.GetUser;
  */
 
 public class HelperTime {
-
+    private static final String TAG = HelperTime.class.getName().toUpperCase();
     private final View viewAtiva;
     private EditText campoNomeTime;
     private EditText campoResponsavelTime;
@@ -86,6 +83,11 @@ public class HelperTime {
 
             try {
                 mDatabaseAgenda.child(time.getIdResponsavel()+ "/" +  time.getIdTime()).setValue(time);
+                try {
+                    AtualizarJogadorParaAdm(activity);
+                }catch (Exception e){
+                    Log.d(TAG,"Erro atualizar User Para Administrador");
+                }
 
 
             }catch (Exception e){
@@ -98,6 +100,15 @@ public class HelperTime {
             mDatabaseAgenda.child(time.getIdResponsavel()+ "/" + time.getIdTime()).setValue(time);
             Toast.makeText(activity.getContext(), "Time Editado com Sucesso!", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void AtualizarJogadorParaAdm(View activity){
+        boolean salvou = false;
+        Jogador Jogador = new Jogador();
+        Jogador.set_idUser(GetUser.getUserLogado());
+        Jogador.setTipoUser("Administrador");
+        HelperJogador helperJogador = new HelperJogador();
+        salvou = helperJogador.atualizarTipoUser(activity,Jogador);
+
     }
 
 

@@ -43,7 +43,7 @@ import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class HelperAgenda {
 
-    private static final String TAG = "ASYNC_DAO_AGENDA";
+    private static final String TAG = HelperAgenda.class.getName().toUpperCase();
     //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
     private Spinner campoEvento;
@@ -370,13 +370,13 @@ public class HelperAgenda {
                 }
                 Collections.sort(times);
                 ArrayAdapter<String> adapterTimes;
-                adapterTimes = new ArrayAdapter<String>
+                adapterTimes = new ArrayAdapter<>
                         (activity.getContext(), R.layout.support_simple_spinner_dropdown_item, times);
                 adapterTimes.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
 
                 int pos = 0;
-                Spinner campoLocal = (Spinner) activity.findViewById(idSpinner);
+                Spinner campoLocal =  activity.findViewById(idSpinner);
 
                 if (valorParaFiltrarPosicao != null) {
                     pos = adapterTimes.getPosition(valorParaFiltrarPosicao);

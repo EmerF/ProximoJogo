@@ -35,6 +35,8 @@ import java.util.List;
 import br.com.proximojogo.proximojogo.Login;
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.entity.Jogador;
+import br.com.proximojogo.proximojogo.helper.HelperJogador;
 
 public class GoogleAuthFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -51,6 +53,8 @@ public class GoogleAuthFragment extends Fragment implements
     private TextView mStatusTextView;
     private TextView mDetailTextView;
     private String logoff="";
+    private HelperJogador helperJogador;
+    private TextView mDetailTextView1;
 
 
     @Override
@@ -127,12 +131,17 @@ public class GoogleAuthFragment extends Fragment implements
         //hideProgressDialog();
 
         if (user != null && logoff.equals("")) {
-            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-            getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(),"Seja bem vindo " + user.getDisplayName() + "!!!", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getActivity(), MainActivity.class));
+
+            boolean salvouJogador = SalvarJogador(user.getUid(), user.getDisplayName());
+            if (salvouJogador) {
+                Toast.makeText(getActivity(), "Seja bem vindo " + user.getDisplayName() + "!!!", Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getActivity(), MainActivity.class));
+                ExibeDeslogar(user);
+            } else {
+                ExibeDeslogar(user);
+
+            }
+
             //startActivity(new Intent(getActivity(), Login.class));
 
 
@@ -145,10 +154,26 @@ public class GoogleAuthFragment extends Fragment implements
             getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
-    private void SalvarTelefoneUser(String userId){
+    public boolean SalvarJogador(String userId, String userName){
+        boolean salvou = false;
+        Jogador jogador = new Jogador();
+        jogador.set_idUser(userId);
+        jogador.setTipoUser("Jogador");
+        jogador.setTelefoneUser("(41)3621-6517");// este telefone vai vir da tela de login
+                                                 // que vamos disparar após o login.
+        jogador.setNomeUser(userName);
+        jogador.setPosicao("Atacante");
 
+        helperJogador = new HelperJogador();
+        salvou = helperJogador.salvar(getView(),jogador);
 
-
+        return salvou;
+    }
+    public void ExibeDeslogar(FirebaseUser user){
+        mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+        mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+        getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
     }
 
     // [START onactivityresult]
@@ -176,6 +201,7 @@ public class GoogleAuthFragment extends Fragment implements
     // [START auth_with_google](
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
 
         // [START_EXCLUDE silent]
          //showProgressDialog();
@@ -262,7 +288,7 @@ public class GoogleAuthFragment extends Fragment implements
             revokeAccess();
         }
     }
-    public String getTelefoneUsuario(){
+    public String getTelefoneJogador(){
 
 
         return "";

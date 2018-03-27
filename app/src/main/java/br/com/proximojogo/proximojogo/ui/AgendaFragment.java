@@ -48,7 +48,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
         WeakReference<AgendaFragment> weakAgendaFragment;
 
         public AgendaHandler(AgendaFragment agendaFragment) {
-            weakAgendaFragment = new WeakReference<AgendaFragment>(agendaFragment);
+            weakAgendaFragment = new WeakReference<>(agendaFragment);
         }
 
         @SuppressWarnings("unchecked")
