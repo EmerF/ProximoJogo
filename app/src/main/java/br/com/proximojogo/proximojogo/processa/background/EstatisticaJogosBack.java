@@ -82,27 +82,27 @@ public class EstatisticaJogosBack {
             for (int i = 1; i < eventos.size(); i++) {
                 String adversarioStr;
                 String adversarioStr2;
-                if ("AUDAX".equals(anterior.getAdversario())) {
-                    adversarioStr = anterior.getTimes();
-                } else {
-                    adversarioStr = anterior.getAdversario();
-
-                }
-                if ("AUDAX".equals(eventos.get(i).getAdversario())) {
-                    adversarioStr2 = eventos.get(i).getTimes();
-                } else {
-                    adversarioStr2 = eventos.get(i).getAdversario();
-
-                }
-
-                if (adversarioStr.equals(adversarioStr2)) {
-                    listTime.add(eventos.get(i));
-                } else {
-                    listaDeLista.add(listTime);
-                    listTime = new ArrayList<>();
-                    anterior = eventos.get(i);
-                    listTime.add(anterior);
-                }
+//                if ("AUDAX".equals(anterior.getAdversario())) {
+//                    adversarioStr = anterior.getTimes();
+//                } else {
+//                    adversarioStr = anterior.getAdversario();
+//
+//                }
+//                if ("AUDAX".equals(eventos.get(i).getAdversario())) {
+//                    adversarioStr2 = eventos.get(i).getTimes();
+//                } else {
+//                    adversarioStr2 = eventos.get(i).getAdversario();
+//
+//                }
+//
+//                if (adversarioStr.equals(adversarioStr2)) {
+//                    listTime.add(eventos.get(i));
+//                } else {
+//                    listaDeLista.add(listTime);
+//                    listTime = new ArrayList<>();
+//                    anterior = eventos.get(i);
+//                    listTime.add(anterior);
+//                }
             }
             listaDeLista.add(listTime);
 
@@ -113,7 +113,8 @@ public class EstatisticaJogosBack {
                 } else {
                     evento = list.get(0);
                 }
-                listEstatistica.add(new EstatisticaDeJogos(evento.getData(), evento.getTimes(), evento.getAdversario(), evento.getObservacao(), list.size()));
+                //TODO comentei pq agora não existe mais adversario
+//                listEstatistica.add(new EstatisticaDeJogos(evento.getData(), evento.getTimes(), evento.getAdversario(), evento.getObservacao(), list.size()));
             }
             //só para ver no console
 //            for (EstatisticaDeJogos es : listEstatistica) {

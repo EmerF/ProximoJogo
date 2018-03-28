@@ -12,7 +12,7 @@ import br.com.proximojogo.proximojogo.utils.FormatarData;
 public class OrdenaEventoTimeData implements Comparator<AgendaDO> {
     @Override
     public int compare(AgendaDO a1, AgendaDO a2) {
-        int i = a1.getAdversario().compareTo(a2.getAdversario());
+        int i = a1.getEvento().compareTo(a2.getEvento());
         if (i != 0) {
             return i;
         }

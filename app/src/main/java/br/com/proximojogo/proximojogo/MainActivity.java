@@ -27,12 +27,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;
 import com.firebase.jobdispatcher.Trigger;
+import com.google.android.gms.ads.MobileAds;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity
                         .setService(VerificaEventosService.class)
                         .setTag("JOGOS_MAIS_30_DIAS")
                         .setRecurring(true)
-                        .setTrigger(Trigger.executionWindow(seisHoras, seisHoras))
+                        .setTrigger(Trigger.executionWindow(2, 2))
                         .build()
         );
         FirebaseJobDispatcher dispatcher2 =
@@ -260,7 +258,7 @@ public class MainActivity extends AppCompatActivity
                         .setService(ProcessaEstatisticaJogosService.class)
                         .setTag("PROCESSA_ESTATISICA_JOGOS")
                         .setRecurring(true)
-                        .setTrigger(Trigger.executionWindow(tempo, tempo))
+                        .setTrigger(Trigger.executionWindow(1, 1))
                         .build()
         );
 
