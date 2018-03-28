@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.com.proximojogo.proximojogo.entity.Jogador;
 
-public class AdapterJogador extends ArrayAdapter<Jogador> {
+/*public class AdapterJogador extends ArrayAdapter<Jogador> {
 
     public ListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -50,5 +50,5 @@ public class AdapterJogador extends ArrayAdapter<Jogador> {
         return v;
     }
 
-}
+}*/
 

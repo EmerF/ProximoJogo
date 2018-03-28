@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserInfo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import br.com.proximojogo.proximojogo.Login;
@@ -49,12 +51,11 @@ public class GoogleAuthFragment extends Fragment implements
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
-    private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
-    private String logoff="";
+
     private HelperJogador helperJogador;
     private TextView mDetailTextView1;
+    public Button btLogin;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -65,17 +66,43 @@ public class GoogleAuthFragment extends Fragment implements
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("Destroy", "Destruindo fragment Google..");
+        mGoogleApiClient = null;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("Pause", "Pausando Google..");
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_google_auth, container, false);
 
-        // Views
-        mStatusTextView =  view.findViewById(R.id.status);
-        mDetailTextView =  view.findViewById(R.id.detail);
 
-        // Button listeners
+        //btLogin =  view.findViewById(R.id.sign_in_button);
+        //btLogin.setOnClickListener(this);
+
         view.findViewById(R.id.sign_in_button).setOnClickListener(this);
-        view.findViewById(R.id.sign_out_button).setOnClickListener(this);
         view.findViewById(R.id.disconnect_button).setOnClickListener(this);
         // [START config_signin]
         // Configure Google Sign In
@@ -99,23 +126,6 @@ public class GoogleAuthFragment extends Fragment implements
         return view;
     }
 
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-       if(savedInstanceState != null){
-           logoff = savedInstanceState.getString("logoff");
-       }
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
-    }
-
     // [START on_start_check_user]
     @Override
     public void onStart() {
@@ -130,15 +140,17 @@ public class GoogleAuthFragment extends Fragment implements
     private void updateUI(FirebaseUser user) {
         //hideProgressDialog();
 
-        if (user != null && logoff.equals("")) {
+        //if (user != null && logoff.equals("")) {
+        if (user != null ) {
 
             boolean salvouJogador = SalvarJogador(user.getUid(), user.getDisplayName());
             if (salvouJogador) {
                 Toast.makeText(getActivity(), "Seja bem vindo " + user.getDisplayName() + "!!!", Toast.LENGTH_SHORT).show();
                 //startActivity(new Intent(getActivity(), MainActivity.class));
-                ExibeDeslogar(user);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+                //ExibeDeslogar(user);
             } else {
-                ExibeDeslogar(user);
+               // ExibeDeslogar(user);
 
             }
 
@@ -147,11 +159,11 @@ public class GoogleAuthFragment extends Fragment implements
 
         } else {
 
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
+            /*mStatusTextView.setText(R.string.signed_out);
+            mDetailTextView.setText(null);*/
 
             getActivity().findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.disconnect_button).setVisibility(View.GONE);
         }
     }
     public boolean SalvarJogador(String userId, String userName){
@@ -170,8 +182,8 @@ public class GoogleAuthFragment extends Fragment implements
         return salvou;
     }
     public void ExibeDeslogar(FirebaseUser user){
-        mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
-        mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+        //mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+        //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
         getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
         getActivity().findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
     }
@@ -281,17 +293,11 @@ public class GoogleAuthFragment extends Fragment implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-        } else if (i == R.id.sign_out_button) {
+        } /*else if (i == R.id.sign_out_button) {
             //signOut();
+            revokeAccess();*/
+        /*} else if (i == R.id.disconnect_button) {
             revokeAccess();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }
-    }
-    public String getTelefoneJogador(){
-
-
-        return "";
-
+        }*/
     }
 }

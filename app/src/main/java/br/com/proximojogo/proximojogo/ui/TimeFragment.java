@@ -107,6 +107,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         btListar.setOnClickListener(this);
 
 
+
         return timeView;
     }
 
