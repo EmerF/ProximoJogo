@@ -30,12 +30,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO;
 import br.com.proximojogo.proximojogo.date.PickersActivity;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Resultado;
 import br.com.proximojogo.proximojogo.enuns.Eventos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
+
+import static br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO.AGENDA_DAO;
+import static br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO.RESULTADO_DAO;
 
 /**
  * Created by ale on 08/08/2017.
@@ -76,8 +80,8 @@ public class HelperAgenda {
 
 
     /*
-        * Captura valores inseridos no formulário...
-        * */
+     * Captura valores inseridos no formulário...
+     * */
     public HelperAgenda(View view, Handler handler) {
         this.handler = handler;
         viewAtiva = view;
@@ -104,7 +108,7 @@ public class HelperAgenda {
                 // substituir pelo id do usuário qdo o login estiver pronto
 
             }
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Agendas");
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference(AGENDA_DAO);
             mDatabaseAgenda.child(agenda.getIdUser() + "/" + agenda.getIdAgenda()).setValue(agenda);
             Toast.makeText(activity.getContext(), "Agenda salva com sucesso!", Toast.LENGTH_SHORT).show();
             salvou = true;
@@ -122,7 +126,7 @@ public class HelperAgenda {
 
         boolean salvou = false;
         try {
-            mDatabaseRes = FirebaseDatabase.getInstance().getReference("Resultados");
+            mDatabaseRes = FirebaseDatabase.getInstance().getReference(RESULTADO_DAO);
             Resultado resultado = pegaResultadoTela();
             if (resultado.getIdResultado() == null) {
                 //getUser id do Firebase para setar na agenda
@@ -146,7 +150,7 @@ public class HelperAgenda {
 
     public void excluir(View activity, String idAgenda) {
         try {
-            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("agendas/" + GetUser.getUserLogado() + "/" + idAgenda);
+            mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(AGENDA_DAO + "/" + GetUser.getUserLogado() + "/" + idAgenda);
             mDatabaseAgenda.removeValue();
             Toast.makeText(activity.getContext(), "Agenda Apagada com Sucesso!", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
@@ -179,7 +183,7 @@ public class HelperAgenda {
     public Resultado pegaResultadoTela() {
         resultado.setTime1(campoTime.getSelectedItem().toString());
         resultado.setTime2(campoAdversario.getSelectedItem().toString());
-        if(!agenda.getDataFutura()){
+        if (!agenda.getDataFutura()) {
             resultado.setGols1(gols1.getText().toString());
             resultado.setGols2(gols2.getText().toString());
         }
@@ -190,9 +194,9 @@ public class HelperAgenda {
 
 
     /*  Preenche o formulário com os dados do objeto recebido como parametro
-    *   Seta o objeto recebido no objeto local para fins de edição
-    *   Os spinners são preenchidos na inicialização da tela
-    *
+     *   Seta o objeto recebido no objeto local para fins de edição
+     *   Os spinners são preenchidos na inicialização da tela
+     *
      */
     public void preencheFormulario(final AgendaDO agenda) throws ParseException {
 
@@ -201,7 +205,7 @@ public class HelperAgenda {
             campoEvento.setSelection(Eventos.valueOf(agenda.getEvento()).ordinal());
             campoDat.setText(FormatarData.getDf().format(agenda.getData()));
             campoHora.setText(FormatarData.getDfHora().format(agenda.getHora()));
-            if(!agenda.getDataFutura()){
+            if (!agenda.getDataFutura()) {
                 gols1.setText(agenda.getResultado().getGols1());
                 gols2.setText(agenda.getResultado().getGols2());
             }
@@ -229,10 +233,10 @@ public class HelperAgenda {
 
     }
     /*
-    *
-    * @param data no formato (dd/MM/yyyy)
-    * return dia da semana inteiro. 0 Sunday, 1 monday etc..
-    * */
+     *
+     * @param data no formato (dd/MM/yyyy)
+     * return dia da semana inteiro. 0 Sunday, 1 monday etc..
+     * */
 
     private int diaDaSemana(Date data) {
         GregorianCalendar gc = new GregorianCalendar();
@@ -246,9 +250,9 @@ public class HelperAgenda {
         String valorCampo = agenda.getArena();
         String no = "Arenas";
         String nomeCampo = "nomeArena";
-        if(agenda.getResultado() != null){
+        if (agenda.getResultado() != null) {
             this.resultado = agenda.getResultado();
-        }else {
+        } else {
             this.resultado = new Resultado();
         }
 

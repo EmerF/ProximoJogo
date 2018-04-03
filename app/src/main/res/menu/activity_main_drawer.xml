@@ -33,6 +33,10 @@
                 android:id="@+id/jogos_passados"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Jogos Passados"/>
+            <item
+                android:id="@+id/teste_push"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Enviar PUSH"/>
         </menu>
     </item>
 

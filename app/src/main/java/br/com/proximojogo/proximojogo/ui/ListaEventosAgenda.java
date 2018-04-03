@@ -29,12 +29,15 @@ import java.util.Calendar;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
+import br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO;
 import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Resultado;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 import br.com.proximojogo.proximojogo.utils.bundle.BundleAgenda;
 import br.com.proximojogo.proximojogo.utils.snapshot.ConverteSnapshotResultado;
+
+import static br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO.RESULTADO_DAO;
 
 public class ListaEventosAgenda extends Fragment {
     private ListView mListView;
@@ -112,12 +115,12 @@ public class ListaEventosAgenda extends Fragment {
         /**
          * Teste da documentação
          */
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("agendas");
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference(ConstantesDAO.AGENDA_DAO);
         mDatabaseAgenda.keepSynced(true);
         mListView = eventosDaAgendaView.findViewById(R.id.list_view_agenda);
 
 
-        Button novaAgenda =  eventosDaAgendaView.findViewById(R.id.novo_agenda);
+        Button novaAgenda = eventosDaAgendaView.findViewById(R.id.novo_agenda);
         novaAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +128,7 @@ public class ListaEventosAgenda extends Fragment {
             }
         });
 //        mDatabaseAgenda.child(GetUser.getUserLogado());
-        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas" + "/" + GetUser.getUserLogado());
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(ConstantesDAO.AGENDA_DAO + "/" + GetUser.getUserLogado());
         mDatabaseAgenda.keepSynced(true);
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -151,22 +154,28 @@ public class ListaEventosAgenda extends Fragment {
                         setResultado(dataSnapshot);
                         agenda.setResultado(ConverteSnapshotResultado.converteSnapShotParaResultado(dataSnapshot));
 
-                        if(agenda.getIdResultado() != null){
-                            TextView time =  v.findViewById(R.id.time_evento);
+                        if (agenda.getIdResultado() != null) {
+                            TextView time = v.findViewById(R.id.time_evento);
                             time.setText(dataSnapshot.child("time1").getValue(String.class));
 
-                            TextView adv =  v.findViewById(R.id.adversario_evento);
+                            TextView adv = v.findViewById(R.id.adversario_evento);
                             adv.setText(dataSnapshot.child("time2").getValue(String.class));
 
                         }
+                        else{
+                            TextView time = v.findViewById(R.id.time_evento);
+                            time.setText(dataSnapshot.child("times").getValue(String.class));
+                            TextView adv = v.findViewById(R.id.adversario_evento);
+                            adv.setText(dataSnapshot.child("adversario").getValue(String.class));
+                        }
 
-                        TextView data =  v.findViewById(R.id.data_evento);
+                        TextView data = v.findViewById(R.id.data_evento);
                         data.setText("Data: " + FormatarData.getDf().format(agenda.getData()));
 
-                        TextView hora =  v.findViewById(R.id.hora_evento);
+                        TextView hora = v.findViewById(R.id.hora_evento);
                         hora.setText("Hora: " + (FormatarData.getDfHora().format(agenda.getHora())));
 
-                        TextView local =  v.findViewById(R.id.local_evento);
+                        TextView local = v.findViewById(R.id.local_evento);
                         local.setText("Local: " + agenda.getArena());
 
 
@@ -183,9 +192,9 @@ public class ListaEventosAgenda extends Fragment {
                     @Override
                     public void onClick(View v) {
                         AgendaDO item = getItem(pos);
-                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child("Agendas/" + GetUser.getUserLogado()
+                        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference().child(ConstantesDAO.AGENDA_DAO + "/" + GetUser.getUserLogado()
                                 + "/" + item.getIdAgenda());
-                        mResultados = FirebaseDatabase.getInstance().getReference().child("Resultados/" + agenda.getIdResultado());
+                        mResultados = FirebaseDatabase.getInstance().getReference().child(RESULTADO_DAO + "/" + agenda.getIdResultado());
                         mDatabaseAgenda.removeValue();
                         mResultados.removeValue();
                         //Acao do primeiro botao
@@ -236,13 +245,13 @@ public class ListaEventosAgenda extends Fragment {
                 boolean connected = snapshot.getValue(Boolean.class);
                 if (connected) {
                     System.out.println("connected");
-                    online[0] =true;
+                    online[0] = true;
                     if (getActivity() != null)
                         Toast.makeText(getActivity(), "Conectado", Toast.LENGTH_SHORT).show();
 
                 } else {
                     System.out.println("not connected");
-                    online[0] =false;
+                    online[0] = false;
                     if (getActivity() != null)
                         Toast.makeText(getActivity(), "Não Conectado", Toast.LENGTH_SHORT).show();
                 }
@@ -251,7 +260,7 @@ public class ListaEventosAgenda extends Fragment {
             @Override
             public void onCancelled(DatabaseError error) {
                 System.err.println("Listener was cancelled");
-                online[0] =false;
+                online[0] = false;
             }
         });
         return online[0];

@@ -37,6 +37,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import br.com.proximojogo.proximojogo.service.ProcessaCompatibilidadeAppService;
 import br.com.proximojogo.proximojogo.service.ProcessaEstatisticaJogosService;
 import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
@@ -45,6 +46,7 @@ import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
 import br.com.proximojogo.proximojogo.ui.ListaEstatisticaJogos;
 import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
 import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
+import br.com.proximojogo.proximojogo.ui.TesteFirebase;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -78,8 +80,8 @@ public class MainActivity extends AppCompatActivity
         /**
          * Agendando pelo service
          */
-//        startService(new Intent(this, VerificarEventosPassadosTask.class));
-        iniciaServices();
+        //TODO até ajustar o novo formatod dos dados esse metodo ficará comentado, pois ele faz a analise e verificação de estatistica de jogos
+//        iniciaServices();
 
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentById == null) {
@@ -160,8 +162,12 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
-        } else if (id == R.id.jogos_mais_30_dias) {
+        }
+        else if (id == R.id.jogos_mais_30_dias) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
+        }
+        else if (id == R.id.teste_push) {
+            fragmentManager.beginTransaction().replace(R.id.container, new TesteFirebase()).commit();
         }
 
 
@@ -175,7 +181,7 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log .d("APP_DEBUG", String.valueOf(requestCode));
+        Log.d("APP_DEBUG", String.valueOf(requestCode));
 
         try {
             // When an Image is picked
@@ -257,6 +263,18 @@ public class MainActivity extends AppCompatActivity
                 dispatcher.newJobBuilder()
                         .setService(ProcessaEstatisticaJogosService.class)
                         .setTag("PROCESSA_ESTATISICA_JOGOS")
+                        .setRecurring(true)
+                        .setTrigger(Trigger.executionWindow(1, 1))
+                        .build()
+        );
+        FirebaseJobDispatcher dispatcher3 =
+                new FirebaseJobDispatcher(
+                        new GooglePlayDriver(MainActivity.this)
+                );
+        dispatcher2.mustSchedule(
+                dispatcher.newJobBuilder()
+                        .setService(ProcessaCompatibilidadeAppService.class)
+                        .setTag("PROCESSA_MANTEM_COMPATIBILIDADE_APP")
                         .setRecurring(true)
                         .setTrigger(Trigger.executionWindow(1, 1))
                         .build()

@@ -12,6 +12,11 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import br.com.proximojogo.proximojogo.R;
 
@@ -41,10 +46,14 @@ public class TesteFirebase extends Fragment {
     }
 
     private void salvar(String s) {
-        String key = testeReferencia.push().getKey();
-        //teste firebase
-        testeReferencia.child(key).setValue(s);
-        edeste.setText("");
-        Toast.makeText(getActivity(), "Salvou a bagaça!", Toast.LENGTH_SHORT).show();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        FirebaseMessaging fm = FirebaseMessaging.getInstance();
+        AtomicInteger msgId = new AtomicInteger(1);
+        fm.send(new RemoteMessage.Builder(token + "@gcm.googleapis.com")
+                .setMessageId(Integer.toString(msgId.incrementAndGet()))
+                .addData("my_message", "Hello World")
+                .addData("my_action","SAY_HELLO")
+                .build());
+
     }
 }

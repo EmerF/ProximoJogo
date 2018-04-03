@@ -175,7 +175,7 @@ public class AgendaFragment extends Fragment implements View.OnClickListener {
                 if(dataFutura){
                     getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
                 }else {
-                    getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()    ).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
                 }
 
 

@@ -4,7 +4,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -15,15 +14,16 @@ import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
-import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
+
+import static br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO.AGENDA_DAO;
 
 /**
  * Created by Ale on 01/03/2018.
  */
 
 public class EstatisticaJogosBack {
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(AGENDA_DAO + "/" + GetUser.getUserLogado());
     private DatabaseReference estatisticaReference = FirebaseDatabase.getInstance().getReference("estatistica-jogos-list");
     private ArrayList<AgendaDO> eventos = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class EstatisticaJogosBack {
                 } else {
                     evento = list.get(0);
                 }
-                //TODO comentei pq agora não existe mais adversario
+                //TODO comentei pq agora não existe mais campo adversario
 //                listEstatistica.add(new EstatisticaDeJogos(evento.getData(), evento.getTimes(), evento.getAdversario(), evento.getObservacao(), list.size()));
             }
             //só para ver no console
