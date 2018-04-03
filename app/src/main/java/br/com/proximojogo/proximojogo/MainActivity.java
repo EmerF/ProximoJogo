@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     private Button btLogin;
     private GoogleAuthFragment googleAuthFragment;
     private FragmentManager fragmentManager;
-    private int RESOLVE_HINT;
+    private int RESOLVE_HINT = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -341,9 +341,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void requestHint() throws IntentSender.SendIntentException {
-        HintRequest hintRequest = new HintRequest.Builder()
-                .setPhoneNumberIdentifierSupported(true)
-                .build();
 
         GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.CREDENTIALS_API)
@@ -351,6 +348,13 @@ public class MainActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .build();
         apiClient.connect();
+
+        HintRequest hintRequest = new HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build();
+
+
+
         PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
                 apiClient, hintRequest);
         startIntentSenderForResult(intent.getIntentSender(),
