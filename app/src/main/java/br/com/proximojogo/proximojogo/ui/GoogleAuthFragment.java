@@ -1,10 +1,17 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,16 +35,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 
-import java.io.Serializable;
+import android.Manifest.*;
+
 import java.util.List;
 
-import br.com.proximojogo.proximojogo.Login;
-import br.com.proximojogo.proximojogo.MainActivity;
+import br.com.proximojogo.proximojogo.Manifest;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.Jogador;
 import br.com.proximojogo.proximojogo.helper.HelperJogador;
+
+import static android.support.v4.content.ContextCompat.checkSelfPermission;
 
 public class GoogleAuthFragment extends Fragment implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -46,6 +53,7 @@ public class GoogleAuthFragment extends Fragment implements
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -95,7 +103,7 @@ public class GoogleAuthFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_google_auth, container, false);
 
 
@@ -106,17 +114,17 @@ public class GoogleAuthFragment extends Fragment implements
         view.findViewById(R.id.disconnect_button).setOnClickListener(this);
         // [START config_signin]
         // Configure Google Sign In
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder
-                    (GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder
+                (GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
 
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
 
         // [START initialize_auth]
@@ -141,7 +149,7 @@ public class GoogleAuthFragment extends Fragment implements
         //hideProgressDialog();
 
         //if (user != null && logoff.equals("")) {
-        if (user != null ) {
+        if (user != null) {
 
             boolean salvouJogador = SalvarJogador(user.getUid(), user.getDisplayName());
             if (salvouJogador) {
@@ -150,7 +158,7 @@ public class GoogleAuthFragment extends Fragment implements
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
                 //ExibeDeslogar(user);
             } else {
-               // ExibeDeslogar(user);
+                // ExibeDeslogar(user);
 
             }
 
@@ -166,22 +174,138 @@ public class GoogleAuthFragment extends Fragment implements
             getActivity().findViewById(R.id.disconnect_button).setVisibility(View.GONE);
         }
     }
-    public boolean SalvarJogador(String userId, String userName){
+
+    public boolean SalvarJogador(String userId, String userName) {
+        TelephonyManager tMgr = (TelephonyManager) getActivity().getSystemService(getActivity().TELEPHONY_SERVICE);
+        String line1Number = "NÃO PERMITIDO";
+        if (temPermissaoNumeroTelefone()) {
+            try {
+                line1Number = tMgr.getLine1Number();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    List<SubscriptionInfo> subscription = SubscriptionManager.from(getActivity()).getActiveSubscriptionInfoList();
+                    for (int i = 0; i < subscription.size(); i++) {
+                        SubscriptionInfo info = subscription.get(i);
+                        Log.d(TAG, "number " + info.getNumber());
+                        Log.d(TAG, "network name : " + info.getCarrierName());
+                        Log.d(TAG, "country iso " + info.getCountryIso());
+                    }
+                }
+
+            } catch (SecurityException e) {
+                Log.d(TAG, "Não há permissão para pegar o número do telefone: " + e.getMessage());
+
+            }
+
+        }
+
+
         boolean salvou = false;
         Jogador jogador = new Jogador();
         jogador.set_idUser(userId);
         jogador.setTipoUser("Jogador");
-        jogador.setTelefoneUser("(41)3621-6517");// este telefone vai vir da tela de login
-                                                 // que vamos disparar após o login.
+        jogador.setTelefoneUser(line1Number);// este telefone vai vir da tela de login
+        // que vamos disparar após o login.
         jogador.setNomeUser(userName);
         jogador.setPosicao("Atacante");
 
         helperJogador = new HelperJogador();
-        salvou = helperJogador.salvar(getView(),jogador);
+        salvou = helperJogador.salvar(getView(), jogador);
 
         return salvou;
     }
-    public void ExibeDeslogar(FirebaseUser user){
+
+    public void getNumeroTelfoneUser() {
+
+
+    }
+
+    public boolean temPermissaoNumeroTelefone() {
+        int versaoAndroid = Build.VERSION.SDK_INT;
+        boolean temPermissaoNumeroTelefone = false;
+        if (versaoAndroid <= 21) {
+            temPermissaoNumeroTelefone = true;
+        }
+        if (checkSelfPermission(getActivity(), permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            testarPermissao();
+            solicitarPermissaoTelefoneUser();
+            temPermissaoNumeroTelefone = true;
+        } else {
+            // Camera permissions is already available, show the camera preview.
+            Log.i(TAG,
+                    "Já temos permissão para capturar número do telefone.");
+            temPermissaoNumeroTelefone = true;
+        }
+
+        return temPermissaoNumeroTelefone;
+    }
+    public void testarPermissao(){
+        if (checkSelfPermission(getContext(), permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions( //Method of Fragment
+                    new String[]{permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE
+            );
+        } else {
+            String teste = "1";
+        }
+    }
+
+
+    public void solicitarPermissaoTelefoneUser() {
+
+        Log.i(TAG, "Não temos permissão ainda...");
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                permission.READ_PHONE_STATE)) {
+
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+
+        } else {
+
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    String teste = "1";
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+
+    public void ExibeDeslogar(FirebaseUser user) {
         //mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
         //mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
         getActivity().findViewById(R.id.sign_in_button).setVisibility(View.GONE);
@@ -203,7 +327,7 @@ public class GoogleAuthFragment extends Fragment implements
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
                 updateUI(null);
-                Log.d("ERRO LOGIN: " , (String.valueOf(result.getStatus().getStatusCode())));
+                Log.d("ERRO LOGIN: ", (String.valueOf(result.getStatus().getStatusCode())));
                 // [END_EXCLUDE]
             }
         }
@@ -216,7 +340,7 @@ public class GoogleAuthFragment extends Fragment implements
 
 
         // [START_EXCLUDE silent]
-         //showProgressDialog();
+        //showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);

@@ -1,10 +1,15 @@
 package br.com.proximojogo.proximojogo;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +37,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.credentials.HintRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +50,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Vector;
 
 import br.com.proximojogo.proximojogo.helper.HelperJogador;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
@@ -54,9 +63,10 @@ import br.com.proximojogo.proximojogo.ui.ListaJogadoresTime;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+        View.OnClickListener, GoogleApiClient.ConnectionCallbacks {
     private static final int RESULT_SELECT_IMG = 3;
     private static final int STORAGE_PERMISSION_CODE = 123;
+    private static final int PHONE_NUMBER_PERMISSION_CODE = 132;
     private static final String TAG = "LEITURA_IMAGEM";
     private ImageView ivAvatar;
     private Bitmap bitmap;
@@ -70,6 +80,7 @@ public class MainActivity extends AppCompatActivity
     private Button btLogin;
     private GoogleAuthFragment googleAuthFragment;
     private FragmentManager fragmentManager;
+    private int RESOLVE_HINT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-
+        requestPhoneNumberPermission();
         requestStoragePermission();
         btLogin = findViewById(R.id.sign_in_button);
         fragmentManager = this.getSupportFragmentManager();
@@ -104,7 +115,6 @@ public class MainActivity extends AppCompatActivity
 
     public void inicializaTela(){
 
-
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,6 +139,13 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
+
+    public void verificarPermissaoTelefone(){
+
+
+    }
+
 
     /*Login*/
 
@@ -239,6 +256,13 @@ public class MainActivity extends AppCompatActivity
 
         Log.d("APP_DEBUG", String.valueOf(requestCode));
 
+        if (requestCode == RESOLVE_HINT) {
+            if (resultCode == RESULT_OK) {
+                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+            }
+        }
+
         try {
             // When an Image is picked
             if (requestCode == RESULT_SELECT_IMG && resultCode == Activity.RESULT_OK
@@ -301,6 +325,37 @@ public class MainActivity extends AppCompatActivity
         }
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
+    private void requestPhoneNumberPermission() {
+        try {
+            requestHint();
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                == PackageManager.PERMISSION_GRANTED)
+            return;
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+            //aqui explica pq vc precisa da permissao
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_NUMBER_PERMISSION_CODE);
+    }
+
+    private void requestHint() throws IntentSender.SendIntentException {
+        HintRequest hintRequest = new HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build();
+
+        GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.CREDENTIALS_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        apiClient.connect();
+        PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
+                apiClient, hintRequest);
+        startIntentSenderForResult(intent.getIntentSender(),
+                RESOLVE_HINT, null, 0, 0, 0);
+    }
 
     private void selectImageFromGallary() {
         Intent intent = CropImage.activity(mCropImageUri)
@@ -341,6 +396,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 }
