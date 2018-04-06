@@ -3,12 +3,14 @@ package br.com.proximojogo.proximojogo;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     private static final int RESULT_SELECT_IMG = 3;
     private static final int STORAGE_PERMISSION_CODE = 123;
     private static final String TAG = "LEITURA_IMAGEM";
+    private static final String FIREBASE_TOKEN = "Token Firebase";
     private ImageView ivAvatar;
     private Bitmap bitmap;
     private Uri mCropImageUri;
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        lerSharedpreferences();
 
         /**
          * Agendando pelo service
@@ -106,6 +111,10 @@ public class MainActivity extends AppCompatActivity
         leituraAvatar();
         navigationView.setNavigationItemSelectedListener(this);
 
+    }
+
+    private void lerSharedpreferences() {
+        new MyFirebaseInstanceIDService().onTokenRefresh();
     }
 
 
@@ -162,11 +171,9 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
-        }
-        else if (id == R.id.jogos_mais_30_dias) {
+        } else if (id == R.id.jogos_mais_30_dias) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
-        }
-        else if (id == R.id.teste_push) {
+        } else if (id == R.id.teste_push) {
             fragmentManager.beginTransaction().replace(R.id.container, new TesteFirebase()).commit();
         }
 

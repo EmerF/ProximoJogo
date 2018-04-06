@@ -8,4 +8,5 @@ public class ConstantesDAO {
      */
     public static String AGENDA_DAO = "agendas";
     public static String RESULTADO_DAO = "Resultados";
+    public static String TOKENS_FCM = "token-list";
 }
