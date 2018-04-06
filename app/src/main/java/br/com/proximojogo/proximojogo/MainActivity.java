@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import com.firebase.ui.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -80,7 +81,9 @@ public class MainActivity extends AppCompatActivity
     private Button btLogin;
     private GoogleAuthFragment googleAuthFragment;
     private FragmentManager fragmentManager;
-    private int RESOLVE_HINT = 2000;
+    private static final int RESOLVE_HINT = 101;
+    private String telefoneUser;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,22 +91,22 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        requestPhoneNumberPermission();
+
         requestStoragePermission();
         btLogin = findViewById(R.id.sign_in_button);
         fragmentManager = this.getSupportFragmentManager();
 
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() == null){
+        if (mAuth.getCurrentUser() == null) {
             //toolbar.setVisibility(View.GONE);
-            googleAuthFragment = new  GoogleAuthFragment();
-            fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment ).commit();
+
+            googleAuthFragment = new GoogleAuthFragment();
+            fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment).commit();
             inicializaTela();
 
-        }else
-        {
+        } else {
             inicializaTela();
-            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda() ).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
 
         }
 
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void inicializaTela(){
+    public void inicializaTela() {
 
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         View hView = navigationView.getHeaderView(0);
-        ivAvatar =  hView.findViewById(R.id.ivAvatar);
+        ivAvatar = hView.findViewById(R.id.ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,10 +144,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void verificarPermissaoTelefone(){
-
-
-    }
 
 
     /*Login*/
@@ -215,13 +214,12 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.container, new ListaJogadoresTime()).commit();
         } else if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
-        }else if(id == R.id.drawer_cadastrar_arena){
+        } else if (id == R.id.drawer_cadastrar_arena) {
 
             fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
         } else if (id == R.id.jogos_passados) {
             fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
-        }
-        else if (id == R.id.logout) {
+        } else if (id == R.id.logout) {
             mAuth.signOut();
 
             // Google sign out
@@ -238,7 +236,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -259,9 +257,14 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == RESOLVE_HINT) {
             if (resultCode == RESULT_OK) {
                 Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+                if(credential != null){
+                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+                    telefoneUser = credential.getId();
+                }
+
             }
         }
+
 
         try {
             // When an Image is picked
@@ -325,22 +328,8 @@ public class MainActivity extends AppCompatActivity
         }
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
-    private void requestPhoneNumberPermission() {
-        try {
-            requestHint();
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED)
-            return;
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
-            //aqui explica pq vc precisa da permissao
-        }
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_NUMBER_PERMISSION_CODE);
-    }
 
-    private void requestHint() throws IntentSender.SendIntentException {
+    private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
 
         GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
                 .addApi(Auth.CREDENTIALS_API)
@@ -352,7 +341,6 @@ public class MainActivity extends AppCompatActivity
         HintRequest hintRequest = new HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
                 .build();
-
 
 
         PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
