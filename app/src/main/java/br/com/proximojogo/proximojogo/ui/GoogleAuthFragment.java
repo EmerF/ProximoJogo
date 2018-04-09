@@ -1,6 +1,7 @@
 package br.com.proximojogo.proximojogo.ui;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -54,8 +55,6 @@ public class GoogleAuthFragment extends Fragment implements
 
 
     private HelperJogador helperJogador;
-    private TextView mDetailTextView1;
-    public Button btLogin;
     private GoogleApiClient mGoogleApiClient;
     private int RESOLVE_HINT = 9001;
     private String telefoneUser = "";
@@ -64,46 +63,31 @@ public class GoogleAuthFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        if(savedInstanceState != null){
+            telefoneUser = savedInstanceState.getString("telefoneUser");
+        }
 
     }
-//
-//    @Override
-//    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
-//        super.startActivityForResult(intent, requestCode, options);
-//
-//        if (requestCode == RESOLVE_HINT) {
-//            //if (resultCode == RESULT_OK) {
-//                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-//                // <-- E.164 format phone number on 10.2.+ devices
-//                telefoneUser = credential.getId();
-//                bundle = new Bundle();
-//                bundle.putSerializable("telefoneUser", telefoneUser);
-//            //}
-//        }
-//    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*if(savedInstanceState != null){
+        if(savedInstanceState != null){
             telefoneUser = savedInstanceState.getString("telefoneUser");
-        }*/
-
-
+        }
 
     }
 
     private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
-
+/*
         GoogleApiClient apiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(Auth.CREDENTIALS_API)
                 .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getActivity())
                 .addOnConnectionFailedListener(this)
                 .build();
-        apiClient.connect();
+        apiClient.connect();*/
+        mGoogleApiClient.connect();
 
         HintRequest hintRequest = new HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
@@ -111,7 +95,7 @@ public class GoogleAuthFragment extends Fragment implements
 
 
         PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
-                apiClient, hintRequest);
+                mGoogleApiClient, hintRequest);
         getActivity().startIntentSenderForResult(intent.getIntentSender(),
                 RESOLVE_HINT, null, 0, 0, 0);
     }
@@ -138,10 +122,18 @@ public class GoogleAuthFragment extends Fragment implements
         super.onSaveInstanceState(outState);
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
         Log.d("Pause", "Pausando Google..");
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
     }
 
     @Override
@@ -161,12 +153,16 @@ public class GoogleAuthFragment extends Fragment implements
                 (GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+
                 .build();
         // [END config_signin]
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Auth.CREDENTIALS_API)
+                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getContext())
+                .addOnConnectionFailedListener(this)
                 .build();
 
 
@@ -183,6 +179,11 @@ public class GoogleAuthFragment extends Fragment implements
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+        try {
+            usuarioInformaTelefone();
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
@@ -198,12 +199,7 @@ public class GoogleAuthFragment extends Fragment implements
             boolean salvouJogador = SalvarJogador(user.getUid(), user.getDisplayName());
             if (salvouJogador) {
                 Toast.makeText(getActivity(), "Seja bem vindo " + user.getDisplayName() + "!!!", Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(getActivity(), MainActivity.class));
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-                //ExibeDeslogar(user);
-            } else {
-                // ExibeDeslogar(user);
-
             }
 
 
@@ -218,7 +214,7 @@ public class GoogleAuthFragment extends Fragment implements
     public boolean SalvarJogador(String userId, String userName) {
         boolean salvou = false;
         Jogador jogador = new Jogador();
-        jogador.set_idUser(userId);
+        jogador.set_idUser(userName + "_41998197736" ); // substituir pelo telefone informado pelo user
         jogador.setTipoUser("Jogador");
         jogador.setTelefoneUser(telefoneUser);// este telefone vai vir da tela de login
         // que vamos disparar após o login.
@@ -285,6 +281,16 @@ public class GoogleAuthFragment extends Fragment implements
                 // [END_EXCLUDE]
             }
         }
+        if (requestCode == RESOLVE_HINT) {
+            if (resultCode == RESULT_OK) {
+                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                if(credential != null){
+                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+                    telefoneUser = credential.getId();
+                }
+
+            }
+        }
 
 
     }
@@ -309,11 +315,11 @@ public class GoogleAuthFragment extends Fragment implements
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            try {
+                            /*try {
                                 usuarioInformaTelefone();
                             } catch (IntentSender.SendIntentException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

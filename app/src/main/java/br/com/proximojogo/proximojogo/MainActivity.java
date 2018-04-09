@@ -1,16 +1,12 @@
 package br.com.proximojogo.proximojogo;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import com.firebase.ui.*;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -48,11 +44,8 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Vector;
-
 import br.com.proximojogo.proximojogo.helper.HelperJogador;
 import br.com.proximojogo.proximojogo.ui.AgendaFragment;
 import br.com.proximojogo.proximojogo.ui.ArenaFragment;
@@ -99,8 +92,17 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             //toolbar.setVisibility(View.GONE);
+            /*try {
+                usuarioInformaTelefone();
+            } catch (IntentSender.SendIntentException e) {
+                Log.d(this.getClass().getName().toUpperCase(),"ERRO CAPTURAR FONE USER!");
+                e.printStackTrace();
+            }
 
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("foneUser", telefoneUser);*/
             googleAuthFragment = new GoogleAuthFragment();
+            //googleAuthFragment.setArguments(bundle);
             fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment).commit();
             inicializaTela();
 
@@ -143,9 +145,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
-
-
     /*Login*/
 
     @Override
@@ -158,6 +157,25 @@ public class MainActivity extends AppCompatActivity
                 .build();
         mGoogleApiClient.connect();
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        /*if (telefoneUser == null || telefoneUser == "") {
+            try {
+                usuarioInformaTelefone();
+            } catch (IntentSender.SendIntentException e) {
+                Log.d(this.getClass().getName().toUpperCase(), "ERRO CAPTURAR FONE USER!");
+                e.printStackTrace();
+            }
+        }*/
     }
 
     @Override
@@ -341,6 +359,7 @@ public class MainActivity extends AppCompatActivity
         HintRequest hintRequest = new HintRequest.Builder()
                 .setPhoneNumberIdentifierSupported(true)
                 .build();
+
 
 
         PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
