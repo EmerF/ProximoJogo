@@ -161,18 +161,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        /*if (telefoneUser == null || telefoneUser == "") {
-            try {
-                usuarioInformaTelefone();
-            } catch (IntentSender.SendIntentException e) {
-                Log.d(this.getClass().getName().toUpperCase(), "ERRO CAPTURAR FONE USER!");
-                e.printStackTrace();
-            }
-        }*/
-    }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {

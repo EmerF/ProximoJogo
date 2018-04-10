@@ -33,6 +33,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.proximojogo.proximojogo.R;
@@ -79,25 +80,7 @@ public class GoogleAuthFragment extends Fragment implements
 
     }
 
-    private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
-    /*GoogleApiClient apiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(Auth.CREDENTIALS_API)
-                .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getActivity())
-                .addOnConnectionFailedListener(this)
-                .build();
-        apiClient.connect();*/
-        mGoogleApiClient.connect();
 
-        HintRequest hintRequest = new HintRequest.Builder()
-                .setPhoneNumberIdentifierSupported(true)
-                .build();
-
-
-        PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
-                mGoogleApiClient, hintRequest);
-        getActivity().startIntentSenderForResult(intent.getIntentSender(),
-                RESOLVE_HINT, null, 0, 0, 0);
-    }
 
     @Override
     public void onDestroy() {
@@ -151,8 +134,8 @@ public class GoogleAuthFragment extends Fragment implements
                 (GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-
                 .build();
+
         // [END config_signin]
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -162,6 +145,9 @@ public class GoogleAuthFragment extends Fragment implements
                 .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getContext())
                 .addOnConnectionFailedListener(this)
                 .build();
+                mGoogleApiClient.connect();
+
+
 
 
         // [START initialize_auth]
@@ -176,23 +162,25 @@ public class GoogleAuthFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        /*// Check if user is signed in (non-null) and update UI accordingly.
-        try {
+        // Check if user is signed in (non-null) and update UI accordingly.
+
+       /* try {
             usuarioInformaTelefone();
         } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
-        }*/
-
+        }
+*/
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
     // [END on_start_check_user]
 
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user)  {
         //hideProgressDialog();
 
         if (user != null) {
+
 
             boolean salvouJogador = SalvarJogador(user.getUid(), user.getDisplayName());
             if (salvouJogador) {
@@ -269,6 +257,7 @@ public class GoogleAuthFragment extends Fragment implements
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
+
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
@@ -279,20 +268,23 @@ public class GoogleAuthFragment extends Fragment implements
                 // [END_EXCLUDE]
             }
         }
-//        if (requestCode == RESOLVE_HINT) {
-//            if (resultCode == RESULT_OK) {
-//                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-//                if(credential != null){
-//                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
-//                    telefoneUser = credential.getId();
-//                }
-//
-//            }
-//        }
+       if (requestCode == RESOLVE_HINT) {
+            if (resultCode == RESULT_OK) {
+               Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                if(credential != null){
+                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+                    telefoneUser = credential.getId();
+                }
+
+            }
+        }
 
 
     }
     // [END onactivityresult]
+
+
+
 
     // [START auth_with_google](
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -330,12 +322,27 @@ public class GoogleAuthFragment extends Fragment implements
     // [END auth_with_google]
 
     // [START signin]
-    private void signIn() {
+    private void signIn() throws IntentSender.SendIntentException {
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
 
 
+    }
+    private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
+
+        HintRequest hintRequest = new HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build();
+
+
+        PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
+                mGoogleApiClient, hintRequest);
+
+        startIntentSenderForResult(intent.getIntentSender(),
+                RESOLVE_HINT, null, 0, 0, 0,null);
+       // getActivity().startIntentSenderForResult(intent.getIntentSender(),
+       //         RESOLVE_HINT, null, 0, 0, 0);
     }
 
 
@@ -381,7 +388,11 @@ public class GoogleAuthFragment extends Fragment implements
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.sign_in_button) {
-            signIn();
+            try {
+                signIn();
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
         } /*else if (i == R.id.sign_out_button) {
             //signOut();
             revokeAccess();*/
