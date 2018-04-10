@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private static final int RESOLVE_HINT = 101;
     private String telefoneUser;
-    private Bundle bundle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,18 +92,14 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             //toolbar.setVisibility(View.GONE);
-            /*try {
+            try {
                 usuarioInformaTelefone();
             } catch (IntentSender.SendIntentException e) {
                 Log.d(this.getClass().getName().toUpperCase(),"ERRO CAPTURAR FONE USER!");
                 e.printStackTrace();
             }
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("foneUser", telefoneUser);*/
-            googleAuthFragment = new GoogleAuthFragment();
-            //googleAuthFragment.setArguments(bundle);
-            fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment).commit();
+
             inicializaTela();
 
         } else {
@@ -278,6 +274,11 @@ public class MainActivity extends AppCompatActivity
                 if(credential != null){
                     credential.getId();// <-- E.164 format phone number on 10.2.+ devices
                     telefoneUser = credential.getId();
+                    Bundle bundle= new Bundle();
+                    bundle.putString("telefoneUser", telefoneUser);
+                    googleAuthFragment = new GoogleAuthFragment();
+                    googleAuthFragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment).commit();
                 }
 
             }

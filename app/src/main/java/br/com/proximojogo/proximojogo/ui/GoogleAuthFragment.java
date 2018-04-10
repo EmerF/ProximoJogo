@@ -72,16 +72,15 @@ public class GoogleAuthFragment extends Fragment implements
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if(savedInstanceState != null){
-            telefoneUser = savedInstanceState.getString("telefoneUser");
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            telefoneUser = bundle.getString("telefoneUser");
         }
 
     }
 
     private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
-/*
-        GoogleApiClient apiClient = new GoogleApiClient.Builder(getActivity())
+    /*GoogleApiClient apiClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(Auth.CREDENTIALS_API)
                 .addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getActivity())
                 .addOnConnectionFailedListener(this)
@@ -144,7 +143,6 @@ public class GoogleAuthFragment extends Fragment implements
 
         //btLogin =  view.findViewById(R.id.sign_in_button);
         //btLogin.setOnClickListener(this);
-
         view.findViewById(R.id.sign_in_button).setOnClickListener(this);
         view.findViewById(R.id.disconnect_button).setOnClickListener(this);
         // [START config_signin]
@@ -178,12 +176,12 @@ public class GoogleAuthFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        /*// Check if user is signed in (non-null) and update UI accordingly.
         try {
             usuarioInformaTelefone();
         } catch (IntentSender.SendIntentException e) {
             e.printStackTrace();
-        }
+        }*/
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
@@ -214,7 +212,7 @@ public class GoogleAuthFragment extends Fragment implements
     public boolean SalvarJogador(String userId, String userName) {
         boolean salvou = false;
         Jogador jogador = new Jogador();
-        jogador.set_idUser(userName + "_41998197736" ); // substituir pelo telefone informado pelo user
+        jogador.set_idUser(userName + "_" + telefoneUser ); // substituir pelo telefone informado pelo user
         jogador.setTipoUser("Jogador");
         jogador.setTelefoneUser(telefoneUser);// este telefone vai vir da tela de login
         // que vamos disparar após o login.
@@ -281,16 +279,16 @@ public class GoogleAuthFragment extends Fragment implements
                 // [END_EXCLUDE]
             }
         }
-        if (requestCode == RESOLVE_HINT) {
-            if (resultCode == RESULT_OK) {
-                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-                if(credential != null){
-                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
-                    telefoneUser = credential.getId();
-                }
-
-            }
-        }
+//        if (requestCode == RESOLVE_HINT) {
+//            if (resultCode == RESULT_OK) {
+//                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+//                if(credential != null){
+//                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+//                    telefoneUser = credential.getId();
+//                }
+//
+//            }
+//        }
 
 
     }
@@ -315,11 +313,6 @@ public class GoogleAuthFragment extends Fragment implements
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            /*try {
-                                usuarioInformaTelefone();
-                            } catch (IntentSender.SendIntentException e) {
-                                e.printStackTrace();
-                            }*/
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
