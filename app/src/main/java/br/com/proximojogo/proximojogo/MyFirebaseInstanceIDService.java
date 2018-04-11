@@ -51,8 +51,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Instance ID token to your app server.
 //        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //        preferences.edit().putString(FIREBASE_TOKEN, token).apply();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference(TOKENS_FCM);
-        String key = mDatabaseReference.push().getKey();
-        mDatabaseReference.child(token).setValue(token);
+        //TODO revisar a melhor pratica para capturar e armazenar o Token do FCM
+        if (token != null) {
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference(TOKENS_FCM);
+            String key = mDatabaseReference.push().getKey();
+            mDatabaseReference.child(token).setValue(token);
+        }
     }
 }
