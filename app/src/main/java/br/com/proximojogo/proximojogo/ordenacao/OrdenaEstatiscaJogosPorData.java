@@ -2,7 +2,6 @@ package br.com.proximojogo.proximojogo.ordenacao;
 
 import java.util.Comparator;
 
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
 
 /**

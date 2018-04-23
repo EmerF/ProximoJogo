@@ -1,3 +1,4 @@
+/*
 package br.com.proximojogo.proximojogo;
 
 import android.app.AlarmManager;
@@ -11,9 +12,11 @@ import java.util.Calendar;
 
 import br.com.proximojogo.proximojogo.utils.EventosPassadosAsyncTask;
 
+*/
 /**
  * Created by ale on 22/02/2018.
- */
+ *//*
+
 
 public class VerificarEventosPassadosTask extends Service {
     @Nullable
@@ -56,3 +59,4 @@ public class VerificarEventosPassadosTask extends Service {
         alarmManager.cancel(pendingIntent);
     }
 }
+*/

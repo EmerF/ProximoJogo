@@ -1,3 +1,4 @@
+/*
 package br.com.proximojogo.proximojogo.service;
 
 import android.util.Log;
@@ -8,9 +9,11 @@ import com.firebase.jobdispatcher.JobService;
 import br.com.proximojogo.proximojogo.processa.background.EstatisticaJogosBack;
 import br.com.proximojogo.proximojogo.processa.background.MantemCompatibilidadeBack;
 
+*/
 /**
  * Created by Ale on 28/02/2018.
- */
+ *//*
+
 
 public class ProcessaCompatibilidadeAppService extends JobService {
 
@@ -28,3 +31,4 @@ public class ProcessaCompatibilidadeAppService extends JobService {
     }
 
 }
+*/

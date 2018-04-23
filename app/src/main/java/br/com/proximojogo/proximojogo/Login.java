@@ -1,0 +1,25 @@
+package br.com.proximojogo.proximojogo;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+
+import br.com.proximojogo.proximojogo.ui.GoogleAuthFragment;
+
+public class Login extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        mAuth = FirebaseAuth.getInstance();
+    }
+    public boolean SalvarTelefoneUsuario(String telefone){
+
+        return false;
+    }
+}

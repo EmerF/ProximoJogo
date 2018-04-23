@@ -1,12 +1,13 @@
+/*
 package br.com.proximojogo.proximojogo.utils.snapshot;
 
 import com.google.firebase.database.DataSnapshot;
 
-import br.com.proximojogo.proximojogo.entity.Resultado;
-
+*/
 /**
  * Created by emer on 28/12/17.
- */
+ *//*
+
 
 public class ConverteSnapshotResultado {
 
@@ -24,3 +25,4 @@ public class ConverteSnapshotResultado {
 
 
 }
+*/

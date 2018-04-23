@@ -1,13 +1,13 @@
+/*
 package br.com.proximojogo.proximojogo.ordenacao;
 
 import java.util.Comparator;
 
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
-import br.com.proximojogo.proximojogo.utils.FormatarData;
-
+*/
 /**
  * Created by Ale on 26/02/2018.
- */
+ *//*
+
 
 public class OrdenaEventoTimeData implements Comparator<AgendaDO> {
     @Override
@@ -19,3 +19,4 @@ public class OrdenaEventoTimeData implements Comparator<AgendaDO> {
         return a1.getData().compareTo(a2.getData());
     }
 }
+*/

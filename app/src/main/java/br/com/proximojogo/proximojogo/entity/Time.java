@@ -1,5 +1,7 @@
 package br.com.proximojogo.proximojogo.entity;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 /**
@@ -8,10 +10,13 @@ import java.io.Serializable;
 
 public class Time implements Serializable {
     private String idTime;
-    private String idResponsavel;
+
     private String nomeTime;
     private String responsavelTime;
     private String telefoneResponsavel;
+
+    @Exclude
+    private String idResponsavel;
 
     public String getIdTime() {
         return idTime;
@@ -21,6 +26,7 @@ public class Time implements Serializable {
         this.idTime = idTime;
     }
 
+    @Exclude
     public String getIdResponsavel() {
         return idResponsavel;
     }

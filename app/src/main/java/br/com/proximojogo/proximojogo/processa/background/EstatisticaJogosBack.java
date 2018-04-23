@@ -1,3 +1,4 @@
+/*
 package br.com.proximojogo.proximojogo.processa.background;
 
 import com.google.firebase.database.DataSnapshot;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
@@ -18,9 +18,11 @@ import br.com.proximojogo.proximojogo.utils.GetUser;
 
 import static br.com.proximojogo.proximojogo.conexao.constantes.dao.ConstantesDAO.AGENDA_DAO;
 
+*/
 /**
  * Created by Ale on 01/03/2018.
- */
+ *//*
+
 
 public class EstatisticaJogosBack {
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(AGENDA_DAO + "/" + GetUser.getUserLogado());
@@ -130,3 +132,4 @@ public class EstatisticaJogosBack {
 
     }
 }
+*/

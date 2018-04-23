@@ -16,6 +16,15 @@
       "oauth_client": [
         {
           "client_id": "427658147652-21hjjjlp1njukuu0a5trk6cr1h3clsof.apps.googleusercontent.com",
+          "client_id": "562645584714-6t0de5mb1a3duf3l23hj5p3i4nq961aq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.proximojogo.proximojogo",
+            "certificate_hash": "4fd9b9f40805a4ad564b5301d1a5abba4345b59d"
+          }
+        },
+        {
+          "client_id": "562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,8 +38,20 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "562645584714-kdvhohl6qnmb049kbdb7okt08b4savrj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.proximojogo"
+              }
+            },
+            {
+              "client_id": "562645584714-47bmihqkkalcb22lie84h1b111lvkd8o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

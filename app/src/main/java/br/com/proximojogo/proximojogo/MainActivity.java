@@ -2,16 +2,19 @@ package br.com.proximojogo.proximojogo;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -22,45 +25,59 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Trigger;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.credentials.Credential;
+import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.firebase.auth.FirebaseAuth;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
-import br.com.proximojogo.proximojogo.service.ProcessaCompatibilidadeAppService;
-import br.com.proximojogo.proximojogo.service.ProcessaEstatisticaJogosService;
-import br.com.proximojogo.proximojogo.service.VerificaEventosService;
-import br.com.proximojogo.proximojogo.ui.AgendaFragment;
-import br.com.proximojogo.proximojogo.ui.ArenaFragment;
 import br.com.proximojogo.proximojogo.ui.CriarBannerConfrontoFragment;
-import br.com.proximojogo.proximojogo.ui.ListaEstatisticaJogos;
-import br.com.proximojogo.proximojogo.ui.ListaEventosAgenda;
-import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
-import br.com.proximojogo.proximojogo.ui.TesteFirebase;
+import br.com.proximojogo.proximojogo.ui.GoogleAuthFragment;
+import br.com.proximojogo.proximojogo.ui.ListaTimesUsuario;
 import br.com.proximojogo.proximojogo.ui.TimeFragment;
 
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener, GoogleApiClient.ConnectionCallbacks {
     private static final int RESULT_SELECT_IMG = 3;
     private static final int STORAGE_PERMISSION_CODE = 123;
+    private static final int PHONE_NUMBER_PERMISSION_CODE = 132;
     private static final String TAG = "LEITURA_IMAGEM";
     private static final String FIREBASE_TOKEN = "Token Firebase";
     private ImageView ivAvatar;
     private Bitmap bitmap;
     private Uri mCropImageUri;
     private String avatarProximoJogo = "avatar_proximo_jogo.png";
+    private FirebaseAuth mAuth;
+    public GoogleApiClient mGoogleApiClient;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private Button btLogin;
+    private GoogleAuthFragment googleAuthFragment;
+    private FragmentManager fragmentManager;
+    private static final int RESOLVE_HINT = 101;
+    private String telefoneUser;
+
 
 
     @Override
@@ -74,7 +91,28 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         requestStoragePermission();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        btLogin = findViewById(R.id.sign_in_button);
+        fragmentManager = this.getSupportFragmentManager();
+
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() == null) {
+            //toolbar.setVisibility(View.GONE);
+            inicializaTela();
+
+        }
+
+        leituraAvatar();
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    public void inicializaTela() {
+
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.setVisibility(View.VISIBLE);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -82,21 +120,15 @@ public class MainActivity extends AppCompatActivity
 
         lerSharedpreferences();
 
-        /**
-         * Agendando pelo service
-         */
-        //TODO até ajustar o novo formatod dos dados esse metodo ficará comentado, pois ele faz a analise e verificação de estatistica de jogos
-//        iniciaServices();
-
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.container);
         if (fragmentById == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
         }
 
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView = navigationView.getHeaderView(0);
-        ivAvatar = (ImageView) hView.findViewById(R.id.ivAvatar);
+        ivAvatar = hView.findViewById(R.id.ivAvatar);
         ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +149,31 @@ public class MainActivity extends AppCompatActivity
         new MyFirebaseInstanceIDService().onTokenRefresh();
     }
 
+    /*Login*/
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
+    }
 
     @Override
     public void onBackPressed() {
@@ -126,6 +183,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -157,38 +215,65 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            fragmentManager.beginTransaction().replace(R.id.container, new AgendaFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
-            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosAgenda()).commit();
-
-        } else if (id == R.id.drawer_cadastrar_time) {
-            fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_slideshow) {
             fragmentManager.beginTransaction().replace(R.id.container, new CriarBannerConfrontoFragment()).commit();
-        } else if (id == R.id.drawer_cadastrar_arena) {
+        } else if (id == R.id.drawer_criar_time) {
 
-            fragmentManager.beginTransaction().replace(R.id.container, new ArenaFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new TimeFragment()).commit();
         } else if (id == R.id.jogos_passados) {
-            fragmentManager.beginTransaction().replace(R.id.container, new ListaEventosPassadosAgenda()).commit();
-        } else if (id == R.id.jogos_mais_30_dias) {
-            fragmentManager.beginTransaction().replace(R.id.container, new ListaEstatisticaJogos()).commit();
-        } else if (id == R.id.teste_push) {
-            fragmentManager.beginTransaction().replace(R.id.container, new TesteFirebase()).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, new ListaTimesUsuario()).commit();
+
+        } else if (id == R.id.logout) {
+            mAuth.signOut();
+
+            // Google sign out
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(@NonNull Status status) {
+                            updateUI();
+
+
+                        }
+                    });
+
+
         }
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    private void updateUI() {
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.container, new GoogleAuthFragment()).commit();
+        navigationView.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         Log.d("APP_DEBUG", String.valueOf(requestCode));
+
+        if (requestCode == RESOLVE_HINT) {
+            if (resultCode == RESULT_OK) {
+                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
+                if(credential != null){
+                    credential.getId();// <-- E.164 format phone number on 10.2.+ devices
+                    telefoneUser = credential.getId();
+                    Bundle bundle= new Bundle();
+                    bundle.putString("telefoneUser", telefoneUser);
+                    googleAuthFragment = new GoogleAuthFragment();
+                    googleAuthFragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().replace(R.id.container, googleAuthFragment).commit();
+                }
+
+            }
+        }
+
 
         try {
             // When an Image is picked
@@ -243,10 +328,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void iniciaServices() {
-        /**
+   /* private void iniciaServices() {
+        *//**
          * Aqui agendo o serviço
-         */
+         *//*
         int seisHoras = 6 * 60 * 60;
         int tempo = 12 * 60 * 60;
 //        int seisHoras = 1;
@@ -287,7 +372,7 @@ public class MainActivity extends AppCompatActivity
                         .build()
         );
 
-    }
+    }*/
 
     private void requestStoragePermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
@@ -296,6 +381,27 @@ public class MainActivity extends AppCompatActivity
             //aqui explica pq vc precisa da permissao
         }
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+    }
+
+    private void usuarioInformaTelefone() throws IntentSender.SendIntentException {
+
+        GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.CREDENTIALS_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        apiClient.connect();
+
+        HintRequest hintRequest = new HintRequest.Builder()
+                .setPhoneNumberIdentifierSupported(true)
+                .build();
+
+
+
+        PendingIntent intent = Auth.CredentialsApi.getHintPickerIntent(
+                apiClient, hintRequest);
+        startIntentSenderForResult(intent.getIntentSender(),
+                RESOLVE_HINT, null, 0, 0, 0);
     }
 
     private void selectImageFromGallary() {
@@ -327,6 +433,26 @@ public class MainActivity extends AppCompatActivity
             ivAvatar.setImageBitmap(myBitmap);
 
         }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 }

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.ref.WeakReference;
 import java.text.ParseException;
@@ -25,6 +30,7 @@ import java.text.ParseException;
 import br.com.proximojogo.proximojogo.R;
 import br.com.proximojogo.proximojogo.entity.Time;
 import br.com.proximojogo.proximojogo.helper.HelperTime;
+import br.com.proximojogo.proximojogo.utils.GetUser;
 import br.com.proximojogo.proximojogo.utils.LimparCamposFormulario;
 
 
@@ -45,13 +51,14 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
     private Button btSalvar;
     private Button btExcluir;
     private Button btListar;
+    private DatabaseReference mDatabaseAgenda;
 
 
     static class TimeHandler extends Handler {
         WeakReference<TimeFragment> weakTimeFragment;
 
         public TimeHandler(TimeFragment timeFragment) {
-            weakTimeFragment = new WeakReference<TimeFragment>(timeFragment);
+            weakTimeFragment = new WeakReference<>(timeFragment);
         }
 
         @SuppressWarnings("unchecked")
@@ -87,6 +94,9 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
         timeView = inflater.inflate(R.layout.fragment_cadastrar_time, container, false);
         helper = new HelperTime(timeView, handler);
 
+        responsavel = timeView.findViewById(R.id.responsavel_time);
+        telefone = timeView.findViewById(R.id.telefone_responsavel_time);
+
         btSalvar =  timeView.findViewById(R.id.bt_salvar_time);
         btSalvar.setOnClickListener(this);
 
@@ -95,6 +105,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
 
         btListar =  timeView.findViewById(R.id.bt_listar_times);
         btListar.setOnClickListener(this);
+
 
 
         return timeView;
@@ -107,7 +118,6 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
             salvou = lf.validaEditTextVazio((ViewGroup) this.getView());
             if(!salvou){
                 ExibirToast.ExibirToastComIcone(activity,R.drawable.alerta,R.color.colorRed,"Preencha os campos, meu Bem!");
-
 
             }else {
                 helper.salvarTime(v);
@@ -147,7 +157,7 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Bundle bundle = getArguments();
-        if (bundle != null) {
+        if (bundle != null) {// editando time
             idTime = bundle.getString("idTime");
             Time time = new Time();
             time.setIdTime(idTime);
@@ -162,7 +172,37 @@ public class TimeFragment extends Fragment  implements View.OnClickListener {
                     e.printStackTrace();
                 }
             }
+        }else{//criando novo time
+
+            responsavel.setText(GetUser.getNomeUserLogado());
+            try {
+                BuscaUserNoBanco();
+            }catch (Exception e){
+                Log.d(TimeFragment.class.getName().toUpperCase(), e.getMessage());
+                Toast.makeText(this.activity,"Erro ao buscar telefone",Toast.LENGTH_SHORT).show();
+            }
+
         }
+    }
+
+    public void BuscaUserNoBanco(){
+        mDatabaseAgenda = FirebaseDatabase.getInstance().getReference("Users/"+ GetUser.getUserLogado());
+        mDatabaseAgenda.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                String areaName =  dataSnapshot.child("telefoneUser").getValue().toString();
+                telefone.setText(areaName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override

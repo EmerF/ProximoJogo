@@ -7,6 +7,12 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".ProximoJogoApplication"
         android:allowBackup="true"
@@ -47,21 +53,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity android:name=".Login"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <receiver android:name=".ExecutarTarefaAgendadaReceive" />
-        <service
+        <!--<service
             android:name=".VerificarEventosPassadosTask"
             android:label="My Service" >
-        </service>
-        <service android:name=".service.VerificaEventosService"
+        </service>-->
+        <!--<service android:name=".service.VerificaEventosService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
-        </service>
-        <service android:name=".service.ProcessaEstatisticaJogosService"
+        </service>-->
+        <!--<service android:name=".service.ProcessaEstatisticaJogosService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
@@ -72,7 +78,7 @@
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
-        </service>
+        </service>-->
 
         <!-- [START firebase_service] -->
         <service

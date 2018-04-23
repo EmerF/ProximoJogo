@@ -15,10 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
 import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
-import br.com.proximojogo.proximojogo.service.VerificaEventosService;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
 

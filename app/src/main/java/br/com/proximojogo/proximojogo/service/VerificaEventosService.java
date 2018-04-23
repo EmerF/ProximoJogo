@@ -1,3 +1,4 @@
+/*
 package br.com.proximojogo.proximojogo.service;
 
 import android.app.NotificationManager;
@@ -8,7 +9,6 @@ import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,26 +17,20 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
-import br.com.proximojogo.proximojogo.ordenacao.OrdenaEstatiscaJogosPorData;
-import br.com.proximojogo.proximojogo.ordenacao.OrdenaEventoTimeData;
-import br.com.proximojogo.proximojogo.ui.ListaEventosPassadosAgenda;
 import br.com.proximojogo.proximojogo.utils.EstatisticaDeJogos;
 import br.com.proximojogo.proximojogo.utils.FormatarData;
-import br.com.proximojogo.proximojogo.utils.GetUser;
 
+*/
 /**
  * Created by Ale on 28/02/2018.
- */
+ *//*
+
 
 public class VerificaEventosService extends JobService {
 //    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("agendas" + "/" + GetUser.getUserLogado());
@@ -106,3 +100,4 @@ public class VerificaEventosService extends JobService {
         postNotif(estatisticas);
     }
 }
+*/

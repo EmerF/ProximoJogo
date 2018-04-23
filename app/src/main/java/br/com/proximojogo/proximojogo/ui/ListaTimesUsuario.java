@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,17 +14,14 @@ import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
+import java.util.Objects;
 
 import br.com.proximojogo.proximojogo.MainActivity;
 import br.com.proximojogo.proximojogo.R;
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
 import br.com.proximojogo.proximojogo.entity.Time;
-import br.com.proximojogo.proximojogo.utils.FormatarData;
 import br.com.proximojogo.proximojogo.utils.GetUser;
 
 public class ListaTimesUsuario extends Fragment {
-    private DatabaseReference mDatabase;
     private ListView mListView;
     Time time;
 
@@ -33,8 +29,8 @@ public class ListaTimesUsuario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View timesUsuarioView = inflater.inflate(R.layout.fragment_lista_times_usuario, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Meus Times");
-        mListView = (ListView) timesUsuarioView.findViewById(R.id.list_view_times);
+        Objects.requireNonNull(((MainActivity) getActivity()).getSupportActionBar()).setTitle("Meus Times");
+        mListView =  timesUsuarioView.findViewById(R.id.list_view_times);
 
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -42,7 +38,7 @@ public class ListaTimesUsuario extends Fragment {
             public void onItemClick(AdapterView<?> lista, View item, int position, long id) {
                  time = (Time) lista.getItemAtPosition(position);
                 /**
-                 * esse bundle qu envia o valor para outro fragment (evitar acoplamento seria interessante
+                 * esse bundle que envia o valor para outro fragment (evitar acoplamento seria interessante
                  * utilizar uma interface) mas não vi necessidade aqui.
                  */
                 Bundle bundle = new Bundle();
@@ -58,7 +54,7 @@ public class ListaTimesUsuario extends Fragment {
             }
         });
 
-        Button novoTime = (Button) timesUsuarioView.findViewById(R.id.novo_time);
+        Button novoTime =  timesUsuarioView.findViewById(R.id.novo_time);
         novoTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +62,7 @@ public class ListaTimesUsuario extends Fragment {
             }
         });
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Times"+ "/" +GetUser.getUserLogado());
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Times" + "/" + GetUser.getUserLogado());
 
         FirebaseListAdapter<Time> firebaseListAdapter = new FirebaseListAdapter<Time>(
                 getActivity(),
@@ -78,13 +74,13 @@ public class ListaTimesUsuario extends Fragment {
         ) {
             @Override
             protected void populateView(View v, Time time, int position) {
-                TextView nome = (TextView) v.findViewById(R.id.nome_time_lista);
+                TextView nome =  v.findViewById(R.id.nome_time_lista);
                 nome.setText(time.getNomeTime());
 
-                TextView resp = (TextView) v.findViewById(R.id.responsavel_time_lista);
+                TextView resp =  v.findViewById(R.id.responsavel_time_lista);
                 resp.setText("Responsável: " +time.getResponsavelTime());
 
-                TextView tel = (TextView) v.findViewById(R.id.telefone_responsavel_time_lista);
+                TextView tel =  v.findViewById(R.id.telefone_responsavel_time_lista);
                 tel.setText("Telefone: " +time.getTelefoneResponsavel());
 
             }

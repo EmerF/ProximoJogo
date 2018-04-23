@@ -1,14 +1,15 @@
+/*
 package br.com.proximojogo.proximojogo.utils.bundle;
 
 import android.os.Bundle;
 
-import br.com.proximojogo.proximojogo.entity.AgendaDO;
-
+*/
 /**
  * Created by emer on 28/12/17.
  * Para os casos de preencher um bundle com objeto AgendaDO
  * Casos de clique na lista para detalhar objeto agenda
- */
+ *//*
+
 
 public class BundleAgenda {
    private Bundle bundle;
@@ -34,3 +35,4 @@ public class BundleAgenda {
 
 
 }
+*/
